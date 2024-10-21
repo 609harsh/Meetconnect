@@ -10,7 +10,7 @@ export const UserSchema = z.object({
   id: z.number(),
   name: z.string(),
   email: z.string().email(),
-  age: z.number(),
+  phoneNumber: z.string().regex(/^\d{10}$/, "Invalid phone number. Must be 10 digits."),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
