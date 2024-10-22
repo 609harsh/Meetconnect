@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("mongodb+srv://harsh609:1234@project.6px6x.mongodb.net/meetconnect")
+  url      = env("DATABASE_URL")
 }
 
 model User {
