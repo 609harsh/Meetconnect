@@ -7,6 +7,7 @@ import Login from "./pages/Login.tsx";
 import Signin from "./pages/Signin.tsx";
 import Home from "./pages/Home.tsx";
 import Forgot from "./pages/Forgot.tsx";
+import Profile from "./pages/Profile.tsx";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: "/forgot",
     element: <Forgot />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
   },
 ]);
 
