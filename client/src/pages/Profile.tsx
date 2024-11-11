@@ -25,28 +25,165 @@ const profile = [
     data: "Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim incididunt cillum culpa consequat. Excepteur qui ipsum aliquip consequat sint. Sit id mollit nulla mollit nostrud in ea officia proident. Irure nostrud pariatur mollit ad adipisicing reprehenderit deserunt qui eu.",
     edit: true,
   },
+  // {
+  //   key: "education",
+  //   label: "Highest Education",
+  //   data: "IIIT Kottayam, 2018-2023",
+  //   edit: true,
+  //   plcaeholder: "RV College, 2019-2024, B.Tech, CSE",
+  // },
+];
+
+const address = [
+  {
+    key: "line1",
+    label: "Line1",
+    value: "Add",
+    placeholder: "D-2/609",
+  },
+  {
+    key: "line2",
+    label: "Line2",
+    value: "",
+    placeholder: "Sector-F Jankipuram",
+  },
+  {
+    key: "state",
+    label: "State",
+    value: "",
+    placeholder: "Uttar Pradesh",
+  },
+  {
+    key: "country",
+    label: "Country",
+    value: "",
+    placeholder: "India",
+  },
+  {
+    key: "city",
+    label: "City",
+    value: "",
+    placeholder: "Lucknow",
+  },
+  {
+    key: "pincode",
+    label: "Pincode",
+    value: "",
+    placeholder: "226021",
+  },
+];
+
+const education = [
+  [
+    {
+      key: "school",
+      value: "",
+      placeholder: "Indian Institute of Information Technology, Kottayam",
+    },
+    {
+      key: "degree",
+      value: "",
+      placeholder: "B.Tech",
+    },
+    {
+      key: "fieldOfStudy",
+      value: "",
+      placeholder: "CSE",
+    },
+    {
+      key: "duration",
+      value: "",
+      placeholder: "2019-2024",
+    },
+    {
+      key: "grade",
+      value: "",
+      placeholder: "8.72",
+    },
+  ],
 ];
 
 export default function Profile() {
   const [activeField, setActiveField] = useState<string>("");
   const [activeFieldData, setActiveFieldData] = useState<string>("");
+  const [preview, setPreview] = useState("/profile.jpg");
+  const [activeAddress, setActiveAddress] = useState<string>("");
+  const [activeAddressData, setActiveAddressData] = useState<string>("");
+  const [activeEducation, setActiveEducation] = useState<string>("");
+  const [activeEducationData, setActiveEducationData] = useState<string>("");
+
+  const setImage = () => {
+    const val = document.getElementById("fileInput")?.click();
+    console.log(val);
+  };
+
+  const getFile = (e) => {
+    const file = e.target.files[0];
+    const objectUrl = URL.createObjectURL(file);
+    console.log(objectUrl);
+
+    setPreview(objectUrl.slice(5));
+    console.log(preview);
+    URL.revokeObjectURL(objectUrl);
+    // console.log(file);
+    // if (file) {
+    //   // Create FormData and append the file
+    //   const formData = new FormData();
+    //   formData.append("file", file);
+    //   console.log(formData);
+    //   for (let pair of formData.entries()) {
+    //     console.log(pair[0], pair[1]); // Should log 'file' and the file object
+    //   }
+    // }
+  };
 
   const saveChanges = () => {
+    //make api call
+    setActiveField("");
+  };
+
+  const cancelChanges = () => {
     setActiveField("");
     setActiveFieldData("");
   };
 
+  const saveAddressChanges = () => {
+    //make api call
+    setActiveAddress("");
+  };
+
+  const cancelAddressChanges = () => {
+    setActiveAddress("");
+    setActiveAddressData("");
+  };
+
+  const saveEducationChanges = () => {
+    setActiveEducation("");
+  };
+  const cancelEducationChanges = () => {
+    setActiveEducation("");
+    setActiveEducationData("");
+  };
   return (
     <div className="mx-auto border-b shadow-md rounded-md max-w-4xl p-4 my-6">
       <div className="px-4 sm:px-0 flex justify-between items-center">
         <h3 className="text-3xl font-semibold leading-7 text-gray-900 ">
           Your Profile
         </h3>
-        <div>
-          <input type="file" />
+        <div className="relative border-2 border-solid border-black w-fit mr-4">
+          <input
+            type="file"
+            className="hidden"
+            id="fileInput"
+            accept="image/png, image/jpeg"
+            onChange={(e) => getFile(e)}
+          />
           <div
-            style={{ backgroundImage: `url(/profile.jpg)` }}
-            className="h-28 w-28 mr-4 rounded-full border-2 border-solid border-gray-200"
+            style={{
+              backgroundImage: ``,
+            }}
+            className="z-10 h-28 w-28 bg-cover  border-2 border-solid border-gray-200 "
+            onClick={() => setImage()}
           ></div>
         </div>
       </div>
@@ -65,31 +202,217 @@ export default function Profile() {
                   {field.key === activeField ? (
                     <input
                       className="w-full p-1 mr-2 pl-2 border-2 border-solid border-slate-200 rounded-md outline-none"
-                      value={field.data}
-                      onChange={(e) => setActiveField(e.target.value)}
-                    ></input>
+                      value={activeFieldData}
+                      onChange={(e) => {
+                        setActiveFieldData(e.target.value);
+                        field.data = e.target.value;
+                      }}
+                      // placeholder={field?.plcaeholder}
+                    />
                   ) : (
                     <li>{field.data}</li>
                   )}
                   {field.key === activeField ? (
-                    <li
-                      className="font-medium text-white bg-indigo-600  rounded-md px-4 py-2 hover:cursor-pointer"
-                      onClick={() => saveChanges()}
-                    >
-                      Save
+                    <li className="font-medium rounded-md hover:cursor-pointer flex flex-row justify-around items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6 text-green-700 font-bold hover:bg-green-100 rounded-full"
+                        onClick={() => saveChanges()}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                        />
+                      </svg>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6 text-gray-700 hover:bg-gray-100 rounded-full"
+                        onClick={() => cancelChanges()}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                        />
+                      </svg>
+                    </li>
+                  ) : (
+                    field.edit && (
+                      <li
+                        onClick={() => {
+                          setActiveField(field.key);
+                          setActiveFieldData(field.data);
+                        }}
+                        className="font-medium text-indigo-600 hover:text-indigo-500 pr-5 hover:cursor-pointer"
+                      >
+                        Update
+                      </li>
+                    )
+                  )}
+                </ul>
+              </dd>
+            </div>
+          ))}
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">
+              {"Address"}
+            </dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+              {address.map((field) => (
+                <ul className="flex justify-between items-center" role="list">
+                  <li className="w-full mr-2">
+                    <p className="font-semibold text-sm">{field.label}</p>
+                    {activeAddress === field.key ? (
+                      <input
+                        key={field.key}
+                        className="w-full p-1 mr-2 pl-2 border-2 border-solid border-slate-200 rounded-md outline-none"
+                        value={activeAddressData}
+                        onChange={(e) => {
+                          setActiveAddressData(e.target.value);
+                          field.value = e.target.value;
+                        }}
+                      />
+                    ) : (
+                      <p>{field.value}</p>
+                    )}
+                  </li>
+                  {activeAddress === field.key ? (
+                    <li className="font-medium rounded-md hover:cursor-pointer flex flex-row self-end mb-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6 text-green-700 font-bold hover:bg-green-100 rounded-full"
+                        onClick={() => saveAddressChanges()}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                        />
+                      </svg>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6 text-gray-700 hover:bg-gray-100 rounded-full"
+                        onClick={() => cancelAddressChanges()}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                        />
+                      </svg>
                     </li>
                   ) : (
                     <li
-                      onClick={() => setActiveField(field.key)}
+                      onClick={() => {
+                        setActiveAddress(field.key);
+                        setActiveAddressData(field.value);
+                      }}
                       className="font-medium text-indigo-600 hover:text-indigo-500 pr-5 hover:cursor-pointer"
                     >
                       Update
                     </li>
                   )}
                 </ul>
-              </dd>
-            </div>
-          ))}
+              ))}
+            </dd>
+          </div>
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">
+              {"Education"}
+            </dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+              {education.map((field: any) =>
+                field.map((info: any) =>
+                  activeEducation === info.key ? (
+                    <ul
+                      className="flex justify-between items-center"
+                      role="list"
+                    >
+                      <li className="w-full mr-2">
+                        <input
+                          key={info.key}
+                          className="w-full p-1 mr-2 pl-2 border-2 border-solid border-slate-200 rounded-md outline-none"
+                          value={activeEducationData}
+                          placeholder={info.placeholder}
+                          onChange={(e) => {
+                            setActiveEducationData(e.target.value);
+                            info.value = e.target.value;
+                          }}
+                        />
+                      </li>
+                      <li className="font-medium rounded-md hover:cursor-pointer flex flex-row self-end mb-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="size-6 text-green-700 font-bold hover:bg-green-100 rounded-full"
+                          onClick={() => saveEducationChanges()}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                          />
+                        </svg>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="size-6 text-gray-700 hover:bg-gray-100 rounded-full"
+                          onClick={() => cancelEducationChanges()}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                          />
+                        </svg>
+                      </li>
+                    </ul>
+                  ) : (
+                    <ul
+                      className="flex justify-between items-center"
+                      role="list"
+                    >
+                      <li className="w-full mr-2">
+                        <p>{info.value === "" ? info.key : info.value}</p>
+                      </li>
+                      <li
+                        onClick={() => {
+                          setActiveEducation(info.key);
+                          setActiveEducationData(info.value);
+                        }}
+                        className="font-medium text-indigo-600 hover:text-indigo-500 pr-5 hover:cursor-pointer"
+                      >
+                        Update
+                      </li>
+                    </ul>
+                  )
+                )
+              )}
+            </dd>
+          </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt className="text-sm font-medium leading-6 text-gray-900">
               Attachments
