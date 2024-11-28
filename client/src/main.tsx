@@ -8,6 +8,7 @@ import Signin from "./pages/Signin.tsx";
 import Home from "./pages/Home.tsx";
 import Forgot from "./pages/Forgot.tsx";
 import Profile from "./pages/Profile.tsx";
+import Dashboard from "./pages/Dashboard.tsx";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: "/profile",
     element: <Profile />,
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
   },
 ]);
 
