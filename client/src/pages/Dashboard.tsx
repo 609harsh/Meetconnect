@@ -1,3 +1,5 @@
+import Interview from "../components/Interview";
+import InterviewList from "../components/InterviewList";
 import Navbar from "../components/Navbar";
 import Schedule from "../components/Schedule";
 
@@ -6,8 +8,9 @@ function Dashboard() {
     <div className="w-full">
       <Navbar />
       <div>
-        <p>Helllllo jhfhjb </p>
-        <Schedule />
+        <Interview />
+        <InterviewList />
+        {/* <Schedule /> */}
       </div>
     </div>
   );
