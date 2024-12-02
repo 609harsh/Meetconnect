@@ -8,3 +8,9 @@ export interface Interview {
   link: string;
   guest?: string;
 }
+
+export interface Stage {
+  id: number;
+  name: string;
+  label: string;
+}
