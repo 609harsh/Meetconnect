@@ -9,6 +9,7 @@ import Home from "./pages/Home.tsx";
 import Forgot from "./pages/Forgot.tsx";
 import Profile from "./pages/Profile.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
+import Resources from "./pages/Resources.tsx";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <Dashboard />,
+  },
+  {
+    path: "/resources",
+    element: <Resources />,
   },
 ]);
 
