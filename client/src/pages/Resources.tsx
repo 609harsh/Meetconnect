@@ -70,7 +70,7 @@ const Resources = () => {
               </h1>
               <div className="flex flex-col md:flex-row justify-between">
                 <div className="space-y-4">
-                  <h2 className="font-bold text-xl">Easy</h2>
+                  <h2 className="font-bold text-xl text-center">Easy</h2>
                   <Swiper
                     effect={"cards"}
                     grabCursor={true}
@@ -96,7 +96,7 @@ const Resources = () => {
                   </Swiper>
                 </div>
                 <div className="space-y-4">
-                  <h2 className="font-bold text-xl">Medium</h2>
+                  <h2 className="font-bold text-xl text-center">Medium</h2>
                   <Swiper
                     effect={"cards"}
                     grabCursor={true}
@@ -121,7 +121,7 @@ const Resources = () => {
                   </Swiper>
                 </div>
                 <div className="space-y-4">
-                  <h2 className="font-bold text-xl">Hard</h2>
+                  <h2 className="font-bold text-xl text-center">Hard</h2>
                   <Swiper
                     effect={"cards"}
                     grabCursor={true}
