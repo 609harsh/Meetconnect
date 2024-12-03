@@ -1,3 +1,4 @@
+import AddJob from "../components/AddJob";
 import Interview from "../components/Interview";
 import Navbar from "../components/Navbar";
 import Schedule from "../components/Schedule";
@@ -10,6 +11,7 @@ function Dashboard() {
       <div>
         {/* <Interview /> */}
         <Tracker />
+        <AddJob />
         {/* <Schedule /> */}
       </div>
     </div>
