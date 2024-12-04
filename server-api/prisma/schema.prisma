@@ -17,5 +17,32 @@ datasource db {
 model Resources {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
-  title     String
+  label     String
+  easy      EasyQuestion[] 
+  medium    MediumQuestion[] 
+  hard      HardQuestion[] 
 }
+
+model EasyQuestion{
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  question   String
+  solution   String
+  resource   Resources? @relation(fields: [resoucesId], references: [id])
+  resoucesId String?  @db.ObjectId
+}
+
+model MediumQuestion{
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  question   String
+  solution   String
+  resource   Resources? @relation(fields: [resoucesId], references: [id])
+  resoucesId String?  @db.ObjectId
+}
+model HardQuestion{
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  question   String
+  solution   String
+  resource   Resources? @relation(fields: [resoucesId], references: [id])
+  resoucesId String?  @db.ObjectId
+}
+
