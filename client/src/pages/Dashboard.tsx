@@ -11,7 +11,7 @@ function Dashboard() {
       <div>
         {/* <Interview /> */}
         <Tracker />
-        <AddJob />
+        {/* <AddJob /> */}
         {/* <Schedule /> */}
       </div>
     </div>

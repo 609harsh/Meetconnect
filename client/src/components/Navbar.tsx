@@ -28,7 +28,7 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
-              <Link to="#" className="flex items-center">
+              <Link to="/resources" className="flex items-center">
                 Resources
               </Link>
             </li>
