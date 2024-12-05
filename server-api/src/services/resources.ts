@@ -7,6 +7,11 @@ import {
 
 const prisma = new PrismaClient();
 
+export const getResources = async () => {
+  const data = await prisma.resources.findMany();
+  return data;
+};
+
 export const createResource = async (
   label: string,
   easy: EasyQuestion[],
