@@ -1,17 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
-import { createResource } from "../services/resources";
-
-const prisma = new PrismaClient();
+import { createResource, fetchResources } from "../services/resources";
 
 export const getResources = async (req: Request, res: Response) => {
-  const data = await prisma.resources.findMany({
-    include: {
-      easy: true,
-      medium: true,
-      hard: true,
-    },
-  });
+  const data = await fetchResources();
   res.status(200).json({ success: true, data });
 };
 

@@ -7,8 +7,14 @@ import {
 
 const prisma = new PrismaClient();
 
-export const getResources = async () => {
-  const data = await prisma.resources.findMany();
+export const fetchResources = async () => {
+  const data = await prisma.resources.findMany({
+    include: {
+      easy: true,
+      medium: true,
+      hard: true,
+    },
+  });
   return data;
 };
 
