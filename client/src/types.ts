@@ -14,3 +14,32 @@ export interface Stage {
   name: string;
   label: string;
 }
+
+export interface Resources {
+  id: string;
+  label: string;
+  createdAt: string;
+  easy: EasyQuestions[];
+  medium: MediumQuestions[];
+  hard: HardQuestions[];
+}
+
+export interface EasyQuestions {
+  id: string;
+  question: string;
+  solution: string;
+  resourcesId: string;
+}
+
+export interface MediumQuestions {
+  id: string;
+  question: string;
+  solution: string;
+  resourcesId: string;
+}
+export interface HardQuestions {
+  id: string;
+  question: string;
+  solution: string;
+  resourcesId: string;
+}
