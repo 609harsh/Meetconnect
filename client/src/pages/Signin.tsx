@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signin = () => {
   const [error, setError] = useState<string>("");
@@ -7,11 +7,13 @@ const Signin = () => {
   const [password, setPassword] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const navigation = useNavigate();
 
   useEffect(() => {
     setError("");
   }, [email, password]);
-  const submitForm = () => {
+
+  const submitForm = async () => {
     if (!email || !password || !name || !phoneNumber) {
       setError("All fields required");
       return;
@@ -60,7 +62,22 @@ const Signin = () => {
       return;
     }
     //Write api call
-    console.log(email, password);
+    const response = await fetch("http://localhost:3000/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        phoneNumber,
+        password,
+      }),
+    });
+    const data = await response.json();
+    localStorage.setItem("token", data.data);
+    console.log(data);
+    navigation("/dashboard");
   };
 
   return (
