@@ -38,7 +38,13 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
-              <Link to="#" className="flex items-center">
+              <Link
+                to="/login"
+                className="flex items-center"
+                onClick={() => {
+                  localStorage.removeItem("token");
+                }}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
