@@ -13,6 +13,13 @@ export interface Stage {
   id: number;
   name: string;
   label: string;
+  jobCards: JobCardData[];
+}
+export interface JobCardData {
+  id: string;
+  jobTitle: string;
+  company: string;
+  date: string;
 }
 
 export interface Resources {
