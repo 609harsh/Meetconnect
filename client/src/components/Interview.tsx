@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import InterviewList from "./InterviewList";
+import { Interview } from "../types";
 
 interface Tabs {
   id: number;
@@ -23,12 +24,36 @@ const data: Tabs[] = [
     name: "All",
   },
 ];
-const Interview = () => {
-  const [currId, setCurrId] = useState(0);
+const InterviewSection = () => {
+  const [currId, setCurrId] = useState(1);
   const [tabs, setTabs] = useState<Tabs[]>();
-
+  const [interviewsData, setInterviewData] = useState<Interview[][]>([]);
   useEffect(() => {
     setTabs((prev) => [...data]);
+    const fetchInterviews = async () => {
+      const response = await fetch("http://localhost:3000/interviews");
+      const { success, data } = await response.json();
+
+      const dateNow = new Date()
+        .toLocaleDateString("en-GB", { timeZone: "IST" })
+        .split("/");
+
+      const liveDate = dateNow[2] + "-" + dateNow[1] + "-" + dateNow[0];
+      console.log(liveDate);
+      const live = data.filter((interview: Interview) => {
+        return interview.date === liveDate;
+      });
+      const upcoming = data.filter((interview: Interview) => {
+        return interview.date > liveDate;
+      });
+      const past = data.filter((interview: Interview) => {
+        return interview.date < liveDate;
+      });
+      const allData = [live, upcoming, past, data];
+      console.log(allData);
+      setInterviewData((prev) => [...allData]);
+    };
+    fetchInterviews();
   }, []);
   return (
     <div>
@@ -57,9 +82,9 @@ const Interview = () => {
           })}
         </ul>
       </div>
-      <InterviewList />
+      <InterviewList data={interviewsData[currId - 1]} />
     </div>
   );
 };
 
-export default Interview;
+export default InterviewSection;

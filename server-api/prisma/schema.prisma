@@ -64,7 +64,8 @@ model Interview{
   company       String
   date          String
   duration      String
-  details       String
-  notification  String
+  guest         String?
+  notification  String?
   createdAt     DateTime @default(now())
+  link          String?
 }

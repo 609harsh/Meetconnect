@@ -1,12 +1,14 @@
 export interface Interview {
   title: string;
-  key: number;
+  id: string;
   company: string;
   type: string;
   date: string;
   duration: string;
   link: string;
   guest?: string;
+  userId?: string;
+  notification?: string;
 }
 
 export interface Stage {
