@@ -43,3 +43,12 @@ export interface HardQuestions {
   solution: string;
   resourcesId: string;
 }
+
+export enum NavbarMenu {
+  SCHEDULE,
+  INTERVIEW,
+  TRACKER,
+  RESOURCES,
+  PROFILE,
+  ADDJOB,
+}

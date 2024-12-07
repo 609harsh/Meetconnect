@@ -1,4 +1,10 @@
+import { useAppDispatch } from "../redux/hooks";
+import { changeMenuTo } from "../redux/menuSlice";
+import { NavbarMenu } from "../types";
+
 const Schedule = () => {
+  const dispatch = useAppDispatch();
+
   const changes = (e) => {
     e.preventDefault();
     console.log(e.target[0]);
@@ -15,7 +21,10 @@ const Schedule = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6"
+            className="size-6 cursor-pointer"
+            onClick={() =>
+              dispatch(changeMenuTo({ value: NavbarMenu.INTERVIEW }))
+            }
           >
             <path
               strokeLinecap="round"
@@ -213,6 +222,9 @@ const Schedule = () => {
             <button
               type="button"
               className="text-sm/6 font-semibold text-gray-900"
+              onClick={() =>
+                dispatch(changeMenuTo({ value: NavbarMenu.INTERVIEW }))
+              }
             >
               Cancel
             </button>
