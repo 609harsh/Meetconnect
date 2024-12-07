@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { createResources, getResources } from "../controllers/resources";
 import { authController } from "../controllers/auth";
 const authRouter: Router = Router();
 

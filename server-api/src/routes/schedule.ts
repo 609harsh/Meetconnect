@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { scheduleInterviews } from "../controllers/schedule";
+import { scheduleController } from "../controllers/schedule";
 const schdeule: Router = Router();
 
-schdeule.post("/schedule", scheduleInterviews.postInterviews);
+schdeule.post("/schedule", scheduleController.postInterviews);
 
 export default schdeule;
