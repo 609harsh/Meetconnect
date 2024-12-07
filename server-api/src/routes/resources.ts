@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { createResources, getResources } from "../controllers/resources";
+import { resourcesController } from "../controllers/resources";
 const router: Router = Router();
 
-router.get("/resources", getResources);
-router.post("/resources", createResources);
+router.get("/resources", resourcesController.getResources);
+router.post("/resources", resourcesController.createResources);
 
 export default router;

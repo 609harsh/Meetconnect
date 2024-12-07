@@ -10,4 +10,4 @@ class ScheduleInterviews {
   };
 }
 
-export const scheduleInterviews = new ScheduleInterviews();
+export const scheduleController = new ScheduleInterviews();
