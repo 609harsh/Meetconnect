@@ -20,7 +20,7 @@ model User{
   password    String   
   phoneNumber String   @unique 
   createdAt   DateTime @default(now())
-
+  interview   Interview[]
 }
 
 model Resources {
@@ -33,25 +33,37 @@ model Resources {
 }
 
 model EasyQuestion{
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  question   String
-  solution   String
-  resource   Resources? @relation(fields: [resoucesId], references: [id])
-  resoucesId String?  @db.ObjectId
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  question        String
+  solution        String
+  resource        Resources? @relation(fields: [resoucesId], references: [id])
+  resoucesId      String?  @db.ObjectId
 }
 
 model MediumQuestion{
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  question   String
-  solution   String
-  resource   Resources? @relation(fields: [resoucesId], references: [id])
-  resoucesId String?  @db.ObjectId
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  question      String
+  solution      String
+  resource      Resources? @relation(fields: [resoucesId], references: [id])
+  resoucesId    String?  @db.ObjectId
 }
 model HardQuestion{
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  question   String
-  solution   String
-  resource   Resources? @relation(fields: [resoucesId], references: [id])
-  resoucesId String?  @db.ObjectId
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  question      String
+  solution      String
+  resource      Resources? @relation(fields: [resoucesId], references: [id])
+  resoucesId    String?  @db.ObjectId
 }
 
+model Interview{
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String @db.ObjectId
+  user          User @relation(fields: [userId], references: [id])
+  title         String
+  type          String
+  company       String
+  date          String
+  duration      String
+  details       String
+  notification  String
+}
