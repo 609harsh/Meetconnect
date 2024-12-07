@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InterviewList from "./InterviewList";
 
-const tabs = [
+interface Tabs {
+  id: number;
+  name: string;
+}
+const data: Tabs[] = [
   {
     id: 1,
     name: "Live",
@@ -21,11 +25,16 @@ const tabs = [
 ];
 const Interview = () => {
   const [currId, setCurrId] = useState(0);
+  const [tabs, setTabs] = useState<Tabs[]>();
+
+  useEffect(() => {
+    setTabs((prev) => [...data]);
+  }, []);
   return (
     <div>
       <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700 mx-auto max-w-5xl my-5 md:mt-10">
         <ul className="flex flex-wrap -mb-px">
-          {tabs.map((tab) => {
+          {tabs?.map((tab) => {
             return (
               <li className="me-2" key={tab.id}>
                 {tab.id === currId ? (

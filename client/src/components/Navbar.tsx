@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
+import { useAppDispatch } from "../redux/hooks";
+import { changeMenuTo } from "../redux/menuSlice";
+import { NavbarMenu } from "../types";
 
 const Navbar = () => {
+  const dispatch = useAppDispatch();
   return (
     <nav className="block w-full px-4 py-2 mx-auto bg-white bg-opacity-90 top-3 shadow lg:px-8 lg:py-3 backdrop-blur-lg backdrop-saturate-150">
       <div className="container flex flex-wrap items-center justify-between mx-auto text-slate-800">
@@ -13,27 +17,57 @@ const Navbar = () => {
         <div className="hidden lg:block">
           <ul className="flex flex-col gap-2 mt-2 mb-4 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
             <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
-              <Link to="#" className="flex items-center">
+              <Link
+                to="/dashboard"
+                className="flex items-center"
+                onClick={() =>
+                  dispatch(changeMenuTo({ value: NavbarMenu.SCHEDULE }))
+                }
+              >
                 Schedule
               </Link>
             </li>
             <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
-              <Link to="#" className="flex items-center">
+              <Link
+                to="/dashboard"
+                className="flex items-center"
+                onClick={() =>
+                  dispatch(changeMenuTo({ value: NavbarMenu.INTERVIEW }))
+                }
+              >
                 Interviews
               </Link>
             </li>
             <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
-              <Link to="#" className="flex items-center">
+              <Link
+                to="/dashboard"
+                className="flex items-center"
+                onClick={() =>
+                  dispatch(changeMenuTo({ value: NavbarMenu.TRACKER }))
+                }
+              >
                 Tracker
               </Link>
             </li>
             <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
-              <Link to="/resources" className="flex items-center">
+              <Link
+                to="/resources"
+                className="flex items-center"
+                onClick={() =>
+                  dispatch(changeMenuTo({ value: NavbarMenu.RESOURCES }))
+                }
+              >
                 Resources
               </Link>
             </li>
             <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
-              <Link to="#" className="flex items-center">
+              <Link
+                to="/profile"
+                className="flex items-center"
+                onClick={() =>
+                  dispatch(changeMenuTo({ value: NavbarMenu.SCHEDULE }))
+                }
+              >
                 Profile
               </Link>
             </li>
