@@ -3,7 +3,7 @@ import { Interview } from "../types";
 const InterviewCard = ({ data }: { data: Interview }) => {
   return (
     <div
-      key={data.key}
+      key={data.id}
       className="relative flex flex-col my-6 bg-white shadow-md border border-slate-200 rounded-lg w-96 hover:scale-110 transform transition-all duration-300 "
     >
       <div className="mx-3 mb-0 border-b border-slate-200 pt-3 pb-2 px-1">
