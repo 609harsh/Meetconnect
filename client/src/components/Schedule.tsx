@@ -5,9 +5,23 @@ import { NavbarMenu } from "../types";
 const Schedule = () => {
   const dispatch = useAppDispatch();
 
-  const changes = (e) => {
+  const changes = async (e) => {
     e.preventDefault();
-    console.log(e.target[0]);
+    const formData: any = {};
+    for (let element of e?.target.elements) {
+      if (element.name) formData[element.name] = element.value;
+    }
+    const createInterview = await fetch("http://localhost:3000/schedule", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+    const data = await createInterview.json();
+    console.log(data);
+    dispatch(changeMenuTo({ value: NavbarMenu.INTERVIEW }));
+    // console.log(formData);
   };
 
   return (
@@ -59,23 +73,26 @@ const Schedule = () => {
                 </div>
                 <div className="sm:col-span-3">
                   <label
-                    htmlFor="interview-type"
+                    htmlFor="type"
                     className="block text-sm/6 font-medium text-gray-900"
                   >
                     Type
                   </label>
                   <div className="mt-2">
                     <select
-                      id="interview-type"
-                      name="interview-type"
+                      id="type"
+                      name="type"
                       autoComplete="interview-type"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm/6"
                     >
-                      <option>Technical Round</option>
-                      <option>Managerial Round</option>
-                      <option>HR Round</option>
-                      <option>Coding Round</option>
-                      <option>CEO/CTO Round</option>
+                      <option value={"Technical Round"}>Technical Round</option>
+                      <option value={"Managerial Round"}>
+                        Managerial Round
+                      </option>
+                      <option value={"HR Round"}>HR Round</option>
+                      <option value={"Coding Round"}>Coding Round</option>
+                      <option value={"CEO/CTO Round"}>CEO/CTO Round</option>
+                      <option value={"Other"}>Other</option>
                     </select>
                   </div>
                 </div>
@@ -131,8 +148,8 @@ const Schedule = () => {
                       <input
                         id="duration"
                         name="duration"
-                        type="number"
-                        placeholder="1"
+                        type="text"
+                        placeholder="1hr"
                         autoComplete="duration"
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm/6"
                       />
@@ -142,78 +159,40 @@ const Schedule = () => {
 
                 <div className="col-span-full">
                   <label
-                    htmlFor="about"
+                    htmlFor="guest"
                     className="block text-sm/6 font-medium text-gray-900"
                   >
                     Participants/Guest details
                   </label>
                   <div className="mt-2">
                     <textarea
-                      id="about"
-                      name="about"
+                      id="guest"
+                      name="guest"
                       rows={2}
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                      className="block w-full rounded-md border-0 py-1.5 pl-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
                       defaultValue={""}
                     />
                   </div>
                 </div>
-              </div>
-            </div>
-
-            <div className="border-b border-gray-900/10 pb-6">
-              <h2 className="text-base/7 font-semibold text-gray-900">
-                Notifications
-              </h2>
-              <div className="space-y-5">
-                <fieldset>
-                  <legend className="text-sm/6 font-semibold text-gray-900">
-                    By Email
-                  </legend>
-                  <div className="mt-3 space-y-3">
-                    <div className="flex items-center gap-x-3">
+                <div className="sm:col-span-4">
+                  <label
+                    htmlFor="link"
+                    className="block text-sm/6 font-medium text-gray-900"
+                  >
+                    Meet Link
+                  </label>
+                  <div className="mt-2">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                       <input
-                        id="push-everything"
-                        name="push-notifications"
-                        type="radio"
-                        className="size-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                        id="link"
+                        name="link"
+                        type="text"
+                        placeholder="meet.google.com"
+                        className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm/6"
                       />
-                      <label
-                        htmlFor="push-everything"
-                        className="block text-sm/6 font-medium text-gray-900"
-                      >
-                        15 min before
-                      </label>
-                    </div>
-                    <div className="flex items-center gap-x-3">
-                      <input
-                        id="push-email"
-                        name="push-notifications"
-                        type="radio"
-                        className="size-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                      />
-                      <label
-                        htmlFor="push-email"
-                        className="block text-sm/6 font-medium text-gray-900"
-                      >
-                        Morning
-                      </label>
-                    </div>
-                    <div className="flex items-center gap-x-3">
-                      <input
-                        id="push-nothing"
-                        name="push-notifications"
-                        type="radio"
-                        className="size-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                      />
-                      <label
-                        htmlFor="push-nothing"
-                        className="block text-sm/6 font-medium text-gray-900"
-                      >
-                        No notifications
-                      </label>
                     </div>
                   </div>
-                </fieldset>
+                </div>
               </div>
             </div>
           </div>

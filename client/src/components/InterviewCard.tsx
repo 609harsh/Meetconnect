@@ -1,13 +1,17 @@
-import { useNavigate } from "react-router-dom";
-import { Interview } from "../types";
+import { Interview, NavbarMenu } from "../types";
+import { useAppDispatch } from "../redux/hooks";
+import { changeMenuTo } from "../redux/menuSlice";
 
 const InterviewCard = ({ data }: { data: Interview }) => {
-  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const deleteInterview = async (id: string) => {
     const response = await fetch(`http://localhost:3000/interviews/${id}`, {
       method: "DELETE",
     });
     const data = await response.json();
+    console.log(data);
+
+    if (data.success) dispatch(changeMenuTo({ value: NavbarMenu.INTERVIEW }));
   };
   return (
     <div
