@@ -1,9 +1,15 @@
+import { jwtDecode } from "jwt-decode";
+import { useCreateEducationProfileMutation } from "../../redux/meetApi";
+import { Payload } from "../../types";
+
 const AddEducation = ({
   formEducationAction,
 }: {
   formEducationAction: Function;
 }) => {
-  const saveChanges = (e: any) => {
+  const [saveEducation] = useCreateEducationProfileMutation();
+
+  const saveChanges = async (e: any) => {
     e.preventDefault();
     let formData: any = {};
     for (let elements of e.target) {
@@ -12,7 +18,14 @@ const AddEducation = ({
       }
     }
     console.log(formData);
-    formEducationAction();
+    const token = localStorage.getItem("token") as string;
+    const decode = jwtDecode(token) as Payload;
+
+    const save = await saveEducation({
+      userId: decode.id,
+      body: formData,
+    }).unwrap();
+    if (save.success) formEducationAction();
   };
   return (
     <form

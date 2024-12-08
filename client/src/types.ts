@@ -64,6 +64,14 @@ export interface Skill {
   id: string;
   value: string;
 }
+export interface Education {
+  id?: string;
+  school: string;
+  degree: string;
+  fieldOfStudy: string;
+  duration: string;
+  grade: string;
+}
 export enum NavbarMenu {
   SCHEDULE,
   INTERVIEW,
