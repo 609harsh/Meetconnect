@@ -75,6 +75,27 @@ export const meetApi = createApi({
       }),
       transformResponse: (response: ApiUserResponse) => response?.data,
     }),
+    addSkillProfile: builder.mutation<boolean, { id: string; skill: any }>({
+      query: ({ id, skill }) => ({
+        url: `skills/${id}`,
+        method: "PUT",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(skill),
+      }),
+      transformResponse: (response: { success: boolean }) => response.success,
+    }),
+    removeSkillProfile: builder.mutation<boolean, string>({
+      query: (skillId) => ({
+        url: `skills/${skillId}`,
+        method: "DELETE",
+        headers: {
+          "content-type": "application/json",
+        },
+      }),
+      transformResponse: (response: { success: boolean }) => response.success,
+    }),
   }),
 });
 
@@ -85,4 +106,6 @@ export const {
   useFetchResourcesQuery,
   useUserLoginMutation,
   useUserSignupMutation,
+  useAddSkillProfileMutation,
+  useRemoveSkillProfileMutation,
 } = meetApi;
