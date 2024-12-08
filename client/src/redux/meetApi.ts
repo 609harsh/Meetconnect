@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Interview, Resources } from "../types";
+const api_url: string = import.meta.env.VITE_API_HOST;
 
 export interface ApiResponse<T> {
   success: boolean;
@@ -14,7 +15,7 @@ export interface ApiUserResponse {
 export const meetApi = createApi({
   reducerPath: "meetApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3000/",
+    baseUrl: api_url,
   }),
   endpoints: (builder) => ({
     getInterviews: builder.query<Interview[], void>({
