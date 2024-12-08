@@ -1,53 +1,37 @@
 import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import {
+  useAddSkillProfileMutation,
+  useRemoveSkillProfileMutation,
+} from "../../redux/meetApi";
+import { Payload, Skill } from "../../types";
+import { skillsData } from "../../data";
 
-let skillsData: Skill[] = [
-  {
-    key: "react",
-    value: "React",
-  },
-  {
-    key: "mongodb",
-    value: "MongoDB",
-  },
-  {
-    key: "express",
-    value: "Express",
-  },
-  {
-    key: "prisma",
-    value: "Prisma",
-  },
-];
 let list: Skill[] = [
   {
-    key: "react",
+    id: "react",
     value: "React",
   },
   {
-    key: "mongodb",
+    id: "mongodb",
     value: "MongoDB",
   },
   {
-    key: "express",
+    id: "express",
     value: "Express",
   },
   {
-    key: "prisma",
+    id: "prisma",
     value: "Prisma",
   },
 ];
-interface Skill {
-  key: string;
-  value: string;
-}
+
 const SkillsProfile = () => {
   const [skills, setSkills] = useState(skillsData);
   const [skillList, setSkillsList] = useState<Skill[]>([]);
   const [disable, setDisable] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-  }, []);
+  const [saveSkill] = useAddSkillProfileMutation();
+  const [deleteSkill] = useRemoveSkillProfileMutation();
 
   const searchSkill = (val: string) => {
     if (val === "") {
@@ -59,13 +43,22 @@ const SkillsProfile = () => {
     );
     setSkillsList((prev) => [...data]);
   };
-  const addSkill = (key: string, value: string) => {
-    skills.push({ key, value });
-    setSkills((prev) => [...prev]);
-    setSkillsList([]);
+  const addSkill = async (key: string, value: string) => {
+    const token = localStorage.getItem("token") as string;
+    const decode = jwtDecode(token) as Payload;
+    const save = await saveSkill({
+      id: decode.id,
+      skill: { id: key, value },
+    }).unwrap();
+    if (save) {
+      skills.push({ id: key, value });
+      setSkills((prev) => [...prev]);
+      setSkillsList([]);
+    }
   };
-  const removeKey = (key: string) => {
-    setSkills(skills.filter((skill) => skill.key !== key));
+  const removeKey = async (key: string) => {
+    const remove = await deleteSkill(key).unwrap();
+    if (remove) setSkills(skills.filter((skill) => skill.id !== key));
   };
 
   return (
@@ -75,7 +68,7 @@ const SkillsProfile = () => {
         <div className="flex flex-row flex-wrap">
           {skills.map((skill) => (
             <span
-              key={skill.key}
+              key={skill.id}
               className="inline-flex items-center rounded-sm bg-gray-50 px-2 py-1 mr-2 mb-3 text-sm font-normal text-black ring-1 ring-inset ring-gray-500/10"
             >
               {skill.value}
@@ -87,7 +80,7 @@ const SkillsProfile = () => {
                   strokeWidth={1.5}
                   stroke="currentColor"
                   className="size-4 hover:cursor-pointer text-gray-600 "
-                  onClick={() => removeKey(skill.key)}
+                  onClick={() => removeKey(skill.id)}
                 >
                   <path
                     strokeLinecap="round"
@@ -130,9 +123,9 @@ const SkillsProfile = () => {
                 <ul>
                   {skillList.map((skill) => (
                     <li
-                      key={skill.key}
+                      key={skill.id}
                       className="border-solid border-t-2 border-gray-200 p-2 hover:bg-indigo-200"
-                      onClick={() => addSkill(skill.key, skill.value)}
+                      onClick={() => addSkill(skill.id, skill.value)}
                     >
                       {skill.value}
                     </li>

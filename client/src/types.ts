@@ -52,7 +52,18 @@ export interface HardQuestions {
   solution: string;
   resourcesId: string;
 }
+export interface Payload {
+  id: string;
+  name: string;
+  email: string;
+  iat: number;
+  exp: number;
+}
 
+export interface Skill {
+  id: string;
+  value: string;
+}
 export enum NavbarMenu {
   SCHEDULE,
   INTERVIEW,
