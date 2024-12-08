@@ -1,26 +1,20 @@
 import { useAppDispatch } from "../redux/hooks";
+import { useCreateInterviewsMutation } from "../redux/meetApi";
 import { changeMenuTo } from "../redux/menuSlice";
 import { NavbarMenu } from "../types";
 
 const Schedule = () => {
   const dispatch = useAppDispatch();
-
-  const changes = async (e) => {
+  const [saveInterview] = useCreateInterviewsMutation();
+  const changes = async (e: any) => {
     e.preventDefault();
     const formData: any = {};
     for (let element of e?.target.elements) {
       if (element.name) formData[element.name] = element.value;
     }
-    const createInterview = await fetch("http://localhost:3000/schedule", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-    const data = await createInterview.json();
-    console.log(data);
-    dispatch(changeMenuTo({ value: NavbarMenu.INTERVIEW }));
+    const interview = await saveInterview(formData);
+    if (interview.data?.success)
+      dispatch(changeMenuTo({ value: NavbarMenu.INTERVIEW }));
     // console.log(formData);
   };
 

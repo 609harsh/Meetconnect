@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useUserSignupMutation } from "../redux/meetApi";
 
 const Signin = () => {
   const [error, setError] = useState<string>("");
@@ -8,6 +9,7 @@ const Signin = () => {
   const [name, setName] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const navigation = useNavigate();
+  const [userSignup] = useUserSignupMutation();
 
   useEffect(() => {
     setError("");
@@ -61,22 +63,13 @@ const Signin = () => {
       setError("Password should have at least one special character");
       return;
     }
-    //Write api call
-    const response = await fetch("http://localhost:3000/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        phoneNumber,
-        password,
-      }),
-    });
-    const data = await response.json();
-    localStorage.setItem("token", data.data);
-    console.log(data);
+    const token = await userSignup({
+      name,
+      email,
+      password,
+      phoneNumber,
+    }).unwrap();
+    localStorage.setItem("token", token);
     navigation("/dashboard");
   };
 

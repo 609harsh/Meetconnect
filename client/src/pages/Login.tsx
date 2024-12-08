@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useUserLoginMutation } from "../redux/meetApi";
 
 const Login = () => {
   const [error, setError] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigation = useNavigate();
+  const [userLogin] = useUserLoginMutation();
 
   useEffect(() => {
     setError("");
@@ -47,19 +49,8 @@ const Login = () => {
       return;
     }
     //Write api call
-    const response = await fetch("http://localhost:3000/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
-    const data = await response.json();
-    localStorage.setItem("token", data.data);
-    console.log(data);
+    const token = await userLogin({ email, password }).unwrap();
+    localStorage.setItem("token", token);
     navigation("/dashboard");
   };
 

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import InterviewList from "./InterviewList";
 import { Interview } from "../types";
+import { useGetInterviewsQuery } from "../redux/meetApi";
 
 interface Tabs {
   id: number;
   name: string;
 }
-const data: Tabs[] = [
+const tabsData: Tabs[] = [
   {
     id: 1,
     name: "Live",
@@ -28,33 +29,38 @@ const InterviewSection = () => {
   const [currId, setCurrId] = useState(1);
   const [tabs, setTabs] = useState<Tabs[]>();
   const [interviewsData, setInterviewData] = useState<Interview[][]>([]);
+  const {
+    data: interviews = [],
+    isSuccess,
+    isFetching,
+    isError,
+    error,
+  } = useGetInterviewsQuery();
+  console.log(interviews);
   useEffect(() => {
-    setTabs((prev) => [...data]);
+    setTabs((prev) => [...tabsData]);
     const fetchInterviews = async () => {
-      const response = await fetch("http://localhost:3000/interviews");
-      const { success, data } = await response.json();
-
       const dateNow = new Date()
         .toLocaleDateString("en-GB", { timeZone: "IST" })
         .split("/");
 
       const liveDate = dateNow[2] + "-" + dateNow[1] + "-" + dateNow[0];
       console.log(liveDate);
-      const live = data.filter((interview: Interview) => {
+      const live = interviews?.filter((interview: Interview) => {
         return interview.date === liveDate;
       });
-      const upcoming = data.filter((interview: Interview) => {
+      const upcoming = interviews?.filter((interview: Interview) => {
         return interview.date > liveDate;
       });
-      const past = data.filter((interview: Interview) => {
+      const past = interviews?.filter((interview: Interview) => {
         return interview.date < liveDate;
       });
-      const allData = [live, upcoming, past, data];
+      const allData = [live, upcoming, past, interviews];
       console.log(allData);
-      setInterviewData((prev) => [...allData]);
+      if (isSuccess) setInterviewData((prev) => [...allData]);
     };
     fetchInterviews();
-  }, []);
+  }, [interviews]);
   return (
     <div>
       <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700 mx-auto max-w-5xl my-5 md:mt-10">
