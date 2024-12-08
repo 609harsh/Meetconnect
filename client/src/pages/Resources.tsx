@@ -3,27 +3,17 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-cards";
 import Navbar from "../components/Navbar";
-import { Resources } from "../types";
-import { useEffect, useState } from "react";
+import { useFetchResourcesQuery } from "../redux/meetApi";
 
 const resources = () => {
-  const [data, setData] = useState<Resources[]>();
-
-  useEffect(() => {
-    const fetchResouces = async () => {
-      const responsse = await fetch("http://localhost:3000/resources");
-      const data = await responsse.json();
-      setData(data.data);
-    };
-    fetchResouces();
-  }, []);
+  const { data, isFetching, isError } = useFetchResourcesQuery();
   return (
     <div>
       <Navbar />
       <div className="max-w-5xl mx-auto">
         {data?.map((ele, idx) => {
           return (
-            <div key={idx}>
+            <div key={ele.id + "" + idx}>
               <h1 className="text-center font-bold text-4xl my-10">
                 Top {ele.label} questions!!{" "}
               </h1>
@@ -37,20 +27,22 @@ const resources = () => {
                     className="mySwiper max-w-xs"
                   >
                     {ele.easy.map((list) => (
-                      <SwiperSlide
-                        className="p-5 space-y-4 leading-6 "
-                        style={{
-                          height: "320px",
-                          overflow: "scroll",
-                          scrollbarWidth: "none",
-                        }}
-                      >
-                        <p className="text-black font-bold text-lg">
-                          {list.question}
-                        </p>
+                      <div key={idx + "" + list.id}>
+                        <SwiperSlide
+                          className="p-5 space-y-4 leading-6 "
+                          style={{
+                            height: "320px",
+                            overflow: "scroll",
+                            scrollbarWidth: "none",
+                          }}
+                        >
+                          <p className="text-black font-bold text-lg">
+                            {list.question}
+                          </p>
 
-                        <p>{list.solution}</p>
-                      </SwiperSlide>
+                          <p>{list.solution}</p>
+                        </SwiperSlide>
+                      </div>
                     ))}
                   </Swiper>
                 </div>
@@ -63,19 +55,21 @@ const resources = () => {
                     className="mySwiper max-w-xs"
                   >
                     {ele.medium.map((list) => (
-                      <SwiperSlide
-                        className="p-5 space-y-4 leading-6"
-                        style={{
-                          height: "320px",
-                          overflow: "scroll",
-                          scrollbarWidth: "none",
-                        }}
-                      >
-                        <p className="text-black font-bold text-lg">
-                          {list.question}
-                        </p>
-                        <p>{list.solution}</p>
-                      </SwiperSlide>
+                      <div key={idx + "" + list.id}>
+                        <SwiperSlide
+                          className="p-5 space-y-4 leading-6"
+                          style={{
+                            height: "320px",
+                            overflow: "scroll",
+                            scrollbarWidth: "none",
+                          }}
+                        >
+                          <p className="text-black font-bold text-lg">
+                            {list.question}
+                          </p>
+                          <p>{list.solution}</p>
+                        </SwiperSlide>
+                      </div>
                     ))}
                   </Swiper>
                 </div>
@@ -87,20 +81,22 @@ const resources = () => {
                     modules={[EffectCards]}
                     className="mySwiper max-w-xs"
                   >
-                    {ele.hard.map((list) => (
-                      <SwiperSlide
-                        className="p-5 space-y-4 leading-6"
-                        style={{
-                          height: "320px",
-                          overflow: "scroll",
-                          scrollbarWidth: "none",
-                        }}
-                      >
-                        <p className="text-black font-bold text-lg">
-                          {list.question}
-                        </p>
-                        <p>{list.solution}</p>
-                      </SwiperSlide>
+                    {ele.hard.map((list, idx) => (
+                      <div key={idx + "" + list.id}>
+                        <SwiperSlide
+                          className="p-5 space-y-4 leading-6"
+                          style={{
+                            height: "320px",
+                            overflow: "scroll",
+                            scrollbarWidth: "none",
+                          }}
+                        >
+                          <p className="text-black font-bold text-lg">
+                            {list.question}
+                          </p>
+                          <p>{list.solution}</p>
+                        </SwiperSlide>
+                      </div>
                     ))}
                   </Swiper>
                 </div>

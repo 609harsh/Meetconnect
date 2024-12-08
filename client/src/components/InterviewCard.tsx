@@ -1,17 +1,11 @@
-import { Interview, NavbarMenu } from "../types";
-import { useAppDispatch } from "../redux/hooks";
-import { changeMenuTo } from "../redux/menuSlice";
+import { useDeleteInterviewsMutation } from "../redux/meetApi";
+import { Interview } from "../types";
 
 const InterviewCard = ({ data }: { data: Interview }) => {
-  const dispatch = useAppDispatch();
-  const deleteInterview = async (id: string) => {
-    const response = await fetch(`http://localhost:3000/interviews/${id}`, {
-      method: "DELETE",
-    });
-    const data = await response.json();
-    console.log(data);
-
-    if (data.success) dispatch(changeMenuTo({ value: NavbarMenu.INTERVIEW }));
+  const [deleteInterview, { isLoading }] = useDeleteInterviewsMutation();
+  const handleDelete = async (id: string) => {
+    const response = await deleteInterview(id).unwrap();
+    console.log(response);
   };
   return (
     <div
@@ -25,7 +19,7 @@ const InterviewCard = ({ data }: { data: Interview }) => {
           viewBox="0 0 20 20"
           fill="currentColor"
           className="size-5 text-red-600 hover:cursor-pointer"
-          onClick={() => deleteInterview(data.id)}
+          onClick={() => handleDelete(data.id)}
         >
           <path
             fillRule="evenodd"
