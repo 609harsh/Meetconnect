@@ -1,34 +1,23 @@
 import { useState } from "react";
 import AddEducation from "./AddEducation";
+import { Education } from "../../types";
 
-const education = [
-  [
-    {
-      key: "school",
-      value: "",
-      placeholder: "Indian Institute of Information Technology, Kottayam",
-    },
-    {
-      key: "degree",
-      value: "",
-      placeholder: "B.Tech",
-    },
-    {
-      key: "fieldOfStudy",
-      value: "",
-      placeholder: "CSE",
-    },
-    {
-      key: "duration",
-      value: "",
-      placeholder: "2019-2024",
-    },
-    {
-      key: "grade",
-      value: "",
-      placeholder: "8.72",
-    },
-  ],
+const fieldEducaionList = [
+  "school",
+  "degree",
+  "fieldOfStudy",
+  "duration",
+  "grade",
+];
+const educations: Education[] = [
+  {
+    id: "1",
+    school: "Indian Institute of Information Technology, Kottayam",
+    degree: "B.Tech",
+    fieldOfStudy: "CSE",
+    duration: "2019-2020",
+    grade: "8.72",
+  },
 ];
 
 const EducationProfile = () => {
@@ -38,7 +27,9 @@ const EducationProfile = () => {
   const formEducationAction = () => {
     setOpenEducation(!openEducation);
   };
-  const saveEducationChanges = () => {
+  const saveEducationChanges = (field: string, idx: number) => {
+    //make api call
+    educations[idx][field] = activeEducationData;
     setActiveEducation("");
   };
   const cancelEducationChanges = () => {
@@ -51,19 +42,19 @@ const EducationProfile = () => {
         {"Education"}
       </dt>
       <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-        {education.map((field: any) =>
-          field.map((info: any) =>
-            activeEducation === info.key ? (
+        {educations.map((education: any, idx: number) =>
+          fieldEducaionList.map((field: any) =>
+            activeEducation === field ? (
               <ul className="flex justify-between items-center" role="list">
                 <li className="w-full mr-2">
                   <input
-                    key={info.key}
+                    key={field}
                     className="w-full p-1 mr-2 pl-2 border-2 border-solid border-slate-200 rounded-md outline-none"
-                    value={activeEducationData}
-                    placeholder={info.placeholder}
+                    // value={activeEducationData}
+                    placeholder={field}
                     onChange={(e) => {
+                      // education[field] = e.target.value;
                       setActiveEducationData(e.target.value);
-                      info.value = e.target.value;
                     }}
                   />
                 </li>
@@ -75,7 +66,7 @@ const EducationProfile = () => {
                     strokeWidth={1.5}
                     stroke="currentColor"
                     className="size-6 text-green-700 font-bold hover:bg-green-100 rounded-full"
-                    onClick={() => saveEducationChanges()}
+                    onClick={() => saveEducationChanges(field, idx)}
                   >
                     <path
                       strokeLinecap="round"
@@ -102,13 +93,15 @@ const EducationProfile = () => {
               </ul>
             ) : (
               <ul className="flex justify-between items-center" role="list">
-                <li className="w-full mr-2">
-                  <p>{info.value === "" ? info.key : info.value}</p>
+                <li className="w-full mr-2 ">
+                  <p className="font-semibold">
+                    {education[field] === "" ? field : education[field]}
+                  </p>
                 </li>
                 <li
                   onClick={() => {
-                    setActiveEducation(info.key);
-                    setActiveEducationData(info.value);
+                    setActiveEducation(field);
+                    setActiveEducationData(field);
                   }}
                   className="font-medium text-indigo-600 hover:text-indigo-500 pr-5 hover:cursor-pointer"
                 >
