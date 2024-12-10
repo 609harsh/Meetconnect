@@ -34,6 +34,16 @@ model UserAddress{
   city        String?
   pincode     String?
 }
+
+model UserEducation{
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  username      String
+  school        String?
+  degree        String?
+  fieldOfStudy  String?
+  duration      String?
+  grade         String?
+}
 model Resources {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())

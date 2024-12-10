@@ -16,6 +16,13 @@ export interface UserAddress {
   city?: string;
 }
 
+export interface UserEducation {
+  school?: string;
+  degree?: string;
+  grade?: string;
+  fieldOfStudy?: string;
+  duration?: string;
+}
 export const getProfile = async (username: string) => {
   const profile = await prisma.user.findFirst({
     where: {
@@ -62,4 +69,37 @@ export const patchAddress = async (username: string, data: UserAddress) => {
     },
   });
   return address;
+};
+
+export const getEducation = async (username: string) => {
+  const education = await prisma.userEducation.findMany({
+    where: {
+      username: username,
+    },
+  });
+  return education;
+};
+
+export const patchEducation = async (
+  username: string,
+  id: string,
+  data: UserEducation
+) => {
+  // console.log(id);
+  if (id) {
+    const education = await prisma.userEducation.update({
+      where: {
+        id,
+      },
+      data: data,
+    });
+    return education;
+  }
+  const education = await prisma.userEducation.create({
+    data: {
+      username: username,
+      ...data,
+    },
+  });
+  return education;
 };
