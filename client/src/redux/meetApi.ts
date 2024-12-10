@@ -50,28 +50,43 @@ export const meetApi = createApi({
       }),
       transformResponse: (response: ApiResponse<Resources[]>) => response?.data,
     }),
-    userLogin: builder.mutation<string, { email: string; password: string }>({
-      query: (body) => ({
+    userLogin: builder.mutation<
+      string,
+      { email: string; password?: string; google?: boolean }
+    >({
+      query: ({ email, password, google = false }) => ({
         url: `login`,
         method: "POST",
         headers: {
           "content-type": "application/json",
         },
-        body: JSON.stringify(body),
+        body: JSON.stringify({ email, password, google }),
       }),
       transformResponse: (response: ApiUserResponse) => response?.data,
     }),
     userSignup: builder.mutation<
       string,
-      { name: string; email: string; password: string; phoneNumber: string }
+      {
+        name: string;
+        email: string;
+        password?: string;
+        phoneNumber?: string;
+        google?: boolean;
+      }
     >({
-      query: (body) => ({
+      query: ({ name, email, password, phoneNumber, google = false }) => ({
         url: `signup`,
         method: "POST",
         headers: {
           "content-type": "application/json",
         },
-        body: JSON.stringify(body),
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          phoneNumber,
+          google,
+        }),
       }),
       transformResponse: (response: ApiUserResponse) => response?.data,
     }),

@@ -53,7 +53,7 @@ export interface HardQuestions {
   resourcesId: string;
 }
 export interface Payload {
-  id: string;
+  id?: string;
   name: string;
   email: string;
   iat: number;
