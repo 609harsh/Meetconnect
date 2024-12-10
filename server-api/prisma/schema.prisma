@@ -20,6 +20,7 @@ model User{
   password    String?   
   phoneNumber String?   @unique 
   createdAt   DateTime @default(now())
+  about       String?
   interview   Interview[]
 }
 
