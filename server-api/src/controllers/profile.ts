@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
 import {
   getAddress,
+  getEducation,
   getProfile,
   patchAddress,
+  patchEducation,
   patchProfile,
 } from "../services/profile";
 
@@ -21,6 +23,18 @@ class Profile {
   };
   public updateAddress = async (req: Request, res: Response) => {
     const data = await patchAddress(req.params.username, req.body);
+    res.json({ success: true, data });
+  };
+  public getEducation = async (req: Request, res: Response) => {
+    const data = await getEducation(req.params.username);
+    res.json({ success: true, data });
+  };
+  public updateEducation = async (req: Request, res: Response) => {
+    const data = await patchEducation(
+      req.params.username,
+      req.params.id,
+      req.body
+    );
     res.json({ success: true, data });
   };
 }
