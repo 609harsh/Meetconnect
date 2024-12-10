@@ -7,9 +7,14 @@ dotenv.config();
 const prisma = new PrismaClient();
 
 export const createUser = async (data: any) => {
-  data.password = await bcrypt.hash(data.password, 10);
+  if (!data.google) data.password = await bcrypt.hash(data.password, 10);
   const user = await prisma.user.create({
-    data: data,
+    data: {
+      name: data.name,
+      email: data.email,
+      password: data?.password,
+      phoneNumber: data.phoneNumber,
+    },
   });
   const token = jwt.sign(
     { name: user.name, email: user.email, id: user.id },
@@ -28,9 +33,11 @@ export const userLogin = async (data: any) => {
       email: data.email,
     },
   });
-  const hash = await bcrypt.compare(data?.password, user?.password + "");
-  if (!hash) {
-    return "User email/password does not match";
+  if (!data.google) {
+    const hash = await bcrypt.compare(data?.password, user?.password + "");
+    if (!hash) {
+      return "User email/password does not match";
+    }
   }
   const token = jwt.sign(
     { name: user?.name, email: user?.email, id: user?.id },

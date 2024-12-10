@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserSignupMutation } from "../redux/meetApi";
+import { jwtDecode } from "jwt-decode";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import { Payload } from "../types";
 
 const Signin = () => {
   const [error, setError] = useState<string>("");
@@ -73,6 +76,14 @@ const Signin = () => {
     navigation("/dashboard");
   };
 
+  const handleCredentialResponse = async (credentialResponse: string) => {
+    console.log("Encoded JWT ID token:", credentialResponse);
+    const { email, name } = jwtDecode(credentialResponse) as Payload;
+    const token = await userSignup({ name, email, google: true }).unwrap();
+    localStorage.setItem("token", token);
+    navigation("/dashboard");
+  };
+
   return (
     <div className="w-full h-full flex justify-center items-center">
       <div className="flex w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-lg  lg:max-w-5xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -91,10 +102,8 @@ const Signin = () => {
               alt=""
             />
           </div>
-
           <p className="mt-3 text-xl text-center text-gray-600 ">Welcome!</p>
-
-          <Link
+          {/* <Link
             to="#"
             className="flex items-center justify-center mt-4 text-gray-600 transition-colors duration-300 transform border rounded-lg  hover:bg-gray-50 "
           >
@@ -122,7 +131,23 @@ const Signin = () => {
             <span className="w-5/6 px-4 py-3 font-bold text-center">
               Sign up with Google
             </span>
-          </Link>
+          </Link> */}
+          <GoogleOAuthProvider clientId="497631762778-bshl03f2nhuiblkqfklithtq502mkf6t.apps.googleusercontent.com">
+            <div
+              className="flex justify-center mt-4 rounded-lg  hover:bg-gray-50 px-4 py-2"
+              id="buttonDiv"
+            >
+              <GoogleLogin
+                onSuccess={(credentialResponse) =>
+                  handleCredentialResponse(credentialResponse.credential + "")
+                }
+                onError={() => {
+                  console.log("Login Failed");
+                }}
+              />
+              ;
+            </div>
+          </GoogleOAuthProvider>
 
           <div className="flex items-center justify-between mt-4">
             <span className="w-1/5 border-b  lg:w-1/4"></span>
@@ -136,7 +161,6 @@ const Signin = () => {
 
             <span className="w-1/5 border-b  lg:w-1/4"></span>
           </div>
-
           <div className="mt-4">
             <label
               className="block mb-2 text-sm font-medium text-gray-600 "
@@ -194,9 +218,7 @@ const Signin = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-
           {error !== "" && <p className="text-sm text-red-600 mt-1">{error}</p>}
-
           <div className="mt-6">
             <button
               onClick={() => submitForm()}
@@ -205,7 +227,6 @@ const Signin = () => {
               Sign Up
             </button>
           </div>
-
           <div className="flex items-center justify-between mt-4">
             <span className="w-1/5 border-b  md:w-1/4"></span>
 
