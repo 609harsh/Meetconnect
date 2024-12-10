@@ -7,6 +7,15 @@ export interface UserUpdate {
   name?: string;
 }
 
+export interface UserAddress {
+  line1?: string;
+  line2?: string;
+  state?: string;
+  country?: string;
+  pincode?: string;
+  city?: string;
+}
+
 export const getProfile = async (username: string) => {
   const profile = await prisma.user.findFirst({
     where: {
@@ -28,4 +37,29 @@ export const patchProfile = async (username: string, data: UserUpdate) => {
     data: { ...data },
   });
   return profile;
+};
+
+export const getAddress = async (username: string) => {
+  const address = await prisma.userAddress.findFirst({
+    where: {
+      username,
+    },
+  });
+  return address;
+};
+
+export const patchAddress = async (username: string, data: UserAddress) => {
+  const address = await prisma.userAddress.upsert({
+    where: {
+      username: username,
+    },
+    update: {
+      ...data,
+    },
+    create: {
+      username: username,
+      ...data,
+    },
+  });
+  return address;
 };

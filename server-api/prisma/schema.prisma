@@ -24,6 +24,16 @@ model User{
   interview   Interview[]
 }
 
+model UserAddress{
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  username    String   @unique
+  line1       String? 
+  line2       String?
+  state       String?
+  country     String?
+  city        String?
+  pincode     String?
+}
 model Resources {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
