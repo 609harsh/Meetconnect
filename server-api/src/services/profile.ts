@@ -28,6 +28,13 @@ export interface Skill {
   value: string;
   label: string;
 }
+
+export interface WorkExperience {
+  title?: string;
+  company?: string;
+  duration?: string;
+  about?: string;
+}
 export const getProfile = async (username: string) => {
   const profile = await prisma.user.findFirst({
     where: {
@@ -87,7 +94,7 @@ export const getEducation = async (username: string) => {
 
 export const patchEducation = async (
   username: string,
-  id: string,
+  id: string | undefined,
   data: UserEducation
 ) => {
   // console.log(id);
@@ -131,4 +138,37 @@ export const patchSkills = async (username: string, skill: Skill[]) => {
     },
   });
   return skills;
+};
+
+export const getWorkExperience = async (username: string) => {
+  const works = await prisma.userWorkExperience.findMany({
+    where: {
+      username: username,
+    },
+  });
+  return works;
+};
+
+export const patchWorkExperience = async (
+  username: string,
+  id: string | undefined,
+  data: WorkExperience
+) => {
+  console.log(id);
+  if (id) {
+    const work = await prisma.userWorkExperience.update({
+      where: {
+        id,
+      },
+      data: data,
+    });
+    return work;
+  }
+  const work = await prisma.userWorkExperience.create({
+    data: {
+      username: username,
+      ...data,
+    },
+  });
+  return work;
 };

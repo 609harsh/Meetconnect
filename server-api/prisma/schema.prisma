@@ -45,6 +45,15 @@ model UserEducation{
   grade         String?
 }
 
+model UserWorkExperience{
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  username      String
+  title         String?
+  company       String?
+  duration      String?
+  about         String?
+}
+
 model UserSkills{
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   username      String  @unique
