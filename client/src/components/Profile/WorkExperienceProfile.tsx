@@ -21,7 +21,7 @@ const experience = [
   },
 ];
 
-const WorkExperienceProfile = () => {
+const WorkExperienceProfile = ({ disable }: { disable: boolean }) => {
   const [openExperience, setOpenExperience] = useState<boolean>(false);
   const formExperienceAction = () => {
     setOpenExperience(!openExperience);
@@ -44,12 +44,14 @@ const WorkExperienceProfile = () => {
                 {exp.description}
               </li>
             </ul>
-            <p className="font-medium text-indigo-600 hover:text-indigo-500  hover:cursor-pointer">
-              Update
-            </p>
+            {!disable && (
+              <p className="font-medium text-indigo-600 hover:text-indigo-500  hover:cursor-pointer">
+                Update
+              </p>
+            )}
           </div>
         ))}
-        {!openExperience && (
+        {!openExperience && !disable && (
           <p
             className="text-blue-500 font-medium hover:cursor-pointer mt-4"
             onClick={() => setOpenExperience(true)}

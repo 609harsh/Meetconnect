@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Education, Interview, Resources } from "../types";
+import { Address, Education, Interview, Resources } from "../types";
 const api_url: string = import.meta.env.VITE_API_HOST;
 
 export interface ApiResponse<T> {
@@ -139,6 +139,33 @@ export const meetApi = createApi({
       }),
       transformResponse: (response: ApiResponse<Education>) => response,
     }),
+    fetchAddressProfile: builder.mutation<
+      ApiResponse<Address>,
+      { username: string }
+    >({
+      query: ({ username }) => ({
+        url: `address/${username}`,
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+        },
+      }),
+    }),
+    patchAddressProfile: builder.mutation<
+      ApiResponse<Address>,
+      { username: String; body: Address }
+    >({
+      query: ({ username, body }) => {
+        return {
+          url: `address/${username}`,
+          method: "PATCH",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ ...body }),
+        };
+      },
+    }),
   }),
 });
 
@@ -153,4 +180,6 @@ export const {
   useRemoveSkillProfileMutation,
   usePatchEducationProfileMutation,
   useCreateEducationProfileMutation,
+  useFetchAddressProfileMutation,
+  usePatchAddressProfileMutation,
 } = meetApi;

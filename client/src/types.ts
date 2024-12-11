@@ -60,6 +60,16 @@ export interface Payload {
   exp: number;
 }
 
+export interface Address {
+  id?: string;
+  line1?: string;
+  line2?: string;
+  state?: string;
+  country?: string;
+  city?: string;
+  pincode?: string;
+}
+
 export interface Skill {
   id: string;
   value: string;
