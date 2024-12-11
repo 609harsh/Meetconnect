@@ -20,7 +20,7 @@ const educations: Education[] = [
   },
 ];
 
-const EducationProfile = () => {
+const EducationProfile = ({ disable }: { disable: boolean }) => {
   const [openEducation, setOpenEducation] = useState<boolean>(false);
   const [activeEducation, setActiveEducation] = useState<string>("");
   const [activeEducationData, setActiveEducationData] = useState<string>("");
@@ -98,20 +98,22 @@ const EducationProfile = () => {
                     {education[field] === "" ? field : education[field]}
                   </p>
                 </li>
-                <li
-                  onClick={() => {
-                    setActiveEducation(field);
-                    setActiveEducationData(field);
-                  }}
-                  className="font-medium text-indigo-600 hover:text-indigo-500 pr-5 hover:cursor-pointer"
-                >
-                  Update
-                </li>
+                {!disable && (
+                  <li
+                    onClick={() => {
+                      setActiveEducation(field);
+                      setActiveEducationData(field);
+                    }}
+                    className="font-medium text-indigo-600 hover:text-indigo-500 pr-5 hover:cursor-pointer"
+                  >
+                    Update
+                  </li>
+                )}
               </ul>
             )
           )
         )}
-        {!openEducation && (
+        {!openEducation && !disable && (
           <p
             className="text-blue-500 font-medium hover:cursor-pointer mt-4"
             onClick={() => setOpenEducation(true)}
