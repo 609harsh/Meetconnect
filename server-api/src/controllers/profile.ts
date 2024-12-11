@@ -4,11 +4,14 @@ import {
   getEducation,
   getProfile,
   getSkills,
+  getWorkExperience,
   patchAddress,
   patchEducation,
   patchProfile,
   patchSkills,
+  patchWorkExperience,
 } from "../services/profile";
+import { log } from "console";
 
 class Profile {
   public getProfile = async (req: Request, res: Response) => {
@@ -34,7 +37,7 @@ class Profile {
   public updateEducation = async (req: Request, res: Response) => {
     const data = await patchEducation(
       req.params.username,
-      req.params.id,
+      req.query.id as string,
       req.body
     );
     res.json({ success: true, data });
@@ -45,6 +48,20 @@ class Profile {
   };
   public updateSkills = async (req: Request, res: Response) => {
     const data = await patchSkills(req.params.username, req.body);
+    res.json({ success: true, data });
+  };
+
+  public getWorkExperience = async (req: Request, res: Response) => {
+    const data = await getWorkExperience(req.params.username);
+    res.json({ success: true, data });
+  };
+
+  public updateWorkExperience = async (req: Request, res: Response) => {
+    const data = await patchWorkExperience(
+      req.params.username,
+      req.query.id as string,
+      req.body
+    );
     res.json({ success: true, data });
   };
 }
