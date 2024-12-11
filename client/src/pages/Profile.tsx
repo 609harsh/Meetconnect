@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SkillsProfile from "../components/Profile/SkillsProfile";
 import AttachmentsProfile from "../components/Profile/AttachmentsProfile";
 import WorkExperienceProfile from "../components/Profile/WorkExperienceProfile";
 import EducationProfile from "../components/Profile/EducationProfile";
 import AddressProfile from "../components/Profile/AddressProfile";
+import { useUploadProfileMutation } from "../redux/cloudinaryApi";
+import { useParams } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import { Payload } from "../types";
 
 const profile = [
   {
@@ -42,31 +46,42 @@ const profile = [
 export default function Profile() {
   const [activeField, setActiveField] = useState<string>("");
   const [activeFieldData, setActiveFieldData] = useState<string>("");
+  const [uploadProfile] = useUploadProfileMutation();
   const [preview, setPreview] = useState("/profile.jpg");
+  const [disable, setDisable] = useState<boolean>(true);
+  const { username } = useParams<{ username: string }>();
+  const checkUpdateFeature = () => {
+    const token = localStorage.getItem("token") as string;
+    if (!token || token.trim() === "") {
+      return;
+    }
+    const payload = jwtDecode(token) as Payload;
+    if (username === payload.email.split("@")[0]) {
+      setDisable(false);
+      return;
+    }
+  };
+  useEffect(() => {
+    checkUpdateFeature();
+  }, []);
 
   const setImage = () => {
     const val = document.getElementById("fileInput")?.click();
     console.log(val);
   };
 
-  const getFile = (e: any) => {
+  const getFile = async (e: any) => {
     const file = e.target.files[0];
-    const objectUrl = URL.createObjectURL(file);
-    console.log(objectUrl);
-
-    setPreview(objectUrl.slice(5));
-    console.log(preview);
-    URL.revokeObjectURL(objectUrl);
-    // console.log(file);
-    // if (file) {
-    //   // Create FormData and append the file
-    //   const formData = new FormData();
-    //   formData.append("file", file);
-    //   console.log(formData);
-    //   for (let pair of formData.entries()) {
-    //     console.log(pair[0], pair[1]); // Should log 'file' and the file object
-    //   }
-    // }
+    if (!file) return;
+    const formdata = new FormData();
+    formdata.append("file", file);
+    formdata.append(
+      "upload_preset",
+      import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+    );
+    formdata.append("api_key", import.meta.env.VITE_CLOUDINARY_API_KEY);
+    const response = await uploadProfile({ formData: formdata }).unwrap();
+    if (response.success) setPreview(response.data as string);
   };
 
   const saveChanges = () => {
@@ -90,16 +105,14 @@ export default function Profile() {
             type="file"
             className="hidden"
             id="fileInput"
-            accept="image/png, image/jpeg"
-            onChange={(e) => getFile(e)}
+            accept="image/png, image/jpeg, image/jpg"
+            onChange={getFile}
           />
-          <div
-            style={{
-              backgroundImage: ``,
-            }}
-            className="z-10 h-28 w-28 bg-cover  border-2 border-solid border-gray-200 "
+          <img
+            src={`${preview}`}
+            className="z-10 h-28 w-28 bg-cover"
             onClick={() => setImage()}
-          ></div>
+          ></img>
         </div>
       </div>
       <div className="mt-6 border-t border-gray-100">
@@ -161,7 +174,8 @@ export default function Profile() {
                       </svg>
                     </li>
                   ) : (
-                    field.edit && (
+                    field.edit &&
+                    !disable && (
                       <li
                         onClick={() => {
                           setActiveField(field.key);
@@ -177,11 +191,11 @@ export default function Profile() {
               </dd>
             </div>
           ))}
-          <AddressProfile />
-          <EducationProfile />
-          <SkillsProfile />
-          <WorkExperienceProfile />
-          <AttachmentsProfile />
+          <AddressProfile disable={disable} username={username + ""} />
+          <EducationProfile disable={disable} />
+          {/* <SkillsProfile disable={disable} /> */}
+          <WorkExperienceProfile disable={disable} />
+          {/* <AttachmentsProfile disable={disable} /> */}
         </dl>
       </div>
     </div>
