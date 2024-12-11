@@ -44,6 +44,12 @@ model UserEducation{
   duration      String?
   grade         String?
 }
+
+model UserSkills{
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  username      String  @unique
+  skills        Skills[]
+}
 model Resources {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
@@ -89,4 +95,9 @@ model Interview{
   notification  String?
   createdAt     DateTime @default(now())
   link          String?
+}
+
+type Skills{
+  value String
+  label String
 }

@@ -3,9 +3,11 @@ import {
   getAddress,
   getEducation,
   getProfile,
+  getSkills,
   patchAddress,
   patchEducation,
   patchProfile,
+  patchSkills,
 } from "../services/profile";
 
 class Profile {
@@ -35,6 +37,14 @@ class Profile {
       req.params.id,
       req.body
     );
+    res.json({ success: true, data });
+  };
+  public getSkills = async (req: Request, res: Response) => {
+    const data = await getSkills(req.params.username);
+    res.json({ success: true, data });
+  };
+  public updateSkills = async (req: Request, res: Response) => {
+    const data = await patchSkills(req.params.username, req.body);
     res.json({ success: true, data });
   };
 }
