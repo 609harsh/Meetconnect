@@ -23,6 +23,11 @@ export interface UserEducation {
   fieldOfStudy?: string;
   duration?: string;
 }
+
+export interface Skill {
+  value: string;
+  label: string;
+}
 export const getProfile = async (username: string) => {
   const profile = await prisma.user.findFirst({
     where: {
@@ -102,4 +107,28 @@ export const patchEducation = async (
     },
   });
   return education;
+};
+
+export const getSkills = async (username: string) => {
+  const skills = await prisma.userSkills.findFirst({
+    where: {
+      username: username,
+    },
+  });
+  return skills;
+};
+
+export const patchSkills = async (username: string, skill: Skill[]) => {
+  const skills = await prisma.userSkills.upsert({
+    create: {
+      username: username,
+    },
+    where: {
+      username: username,
+    },
+    update: {
+      skills: skill,
+    },
+  });
+  return skills;
 };
