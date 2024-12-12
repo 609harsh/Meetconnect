@@ -1,37 +1,52 @@
-import { useState } from "react";
-import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
 import {
-  useAddSkillProfileMutation,
-  useRemoveSkillProfileMutation,
+  useFetchSkillsProfileMutation,
+  usePatchSkillsProfileMutation,
 } from "../../redux/meetApi";
-import { Payload, Skill } from "../../types";
-import { skillsData } from "../../data";
+import { Skill } from "../../types";
 
 let list: Skill[] = [
   {
-    id: "react",
+    label: "react",
     value: "React",
   },
   {
-    id: "mongodb",
+    label: "mongodb",
     value: "MongoDB",
   },
   {
-    id: "express",
+    label: "express",
     value: "Express",
   },
   {
-    id: "prisma",
+    label: "prisma",
     value: "Prisma",
   },
 ];
 
-const SkillsProfile = ({ disable }: { disable: boolean }) => {
-  const [skills, setSkills] = useState(skillsData);
+const SkillsProfile = ({
+  disable,
+  username,
+}: {
+  disable: boolean;
+  username: string;
+}) => {
+  const [skills, setSkills] = useState<Skill[]>([]);
   const [skillList, setSkillsList] = useState<Skill[]>([]);
-  // const [disable, setDisable] = useState(false);
-  const [saveSkill] = useAddSkillProfileMutation();
-  const [deleteSkill] = useRemoveSkillProfileMutation();
+  const [fetchSkills] = useFetchSkillsProfileMutation();
+  const [patchSkills] = usePatchSkillsProfileMutation();
+
+  useEffect(() => {
+    const getSkills = async () => {
+      const response = await fetchSkills({
+        username,
+      }).unwrap();
+      if (response.data) {
+        setSkills(() => [...response.data.skills]);
+      }
+    };
+    getSkills();
+  }, []);
 
   const searchSkill = (val: string) => {
     if (val === "") {
@@ -43,22 +58,16 @@ const SkillsProfile = ({ disable }: { disable: boolean }) => {
     );
     setSkillsList((prev) => [...data]);
   };
-  const addSkill = async (key: string, value: string) => {
-    const token = localStorage.getItem("token") as string;
-    const decode = jwtDecode(token) as Payload;
-    const save = await saveSkill({
-      id: decode.id,
-      skill: { id: key, value },
-    }).unwrap();
-    if (save) {
-      skills.push({ id: key, value });
-      setSkills((prev) => [...prev]);
-      setSkillsList([]);
-    }
+  const addSkill = async (label: string, value: string) => {
+    const newSkills = [...skills, { label, value }];
+    await patchSkills({ username, body: newSkills }).unwrap();
+    setSkills((prev) => newSkills);
+    setSkillsList([]);
   };
-  const removeKey = async (key: string) => {
-    const remove = await deleteSkill(key).unwrap();
-    if (remove) setSkills(skills.filter((skill) => skill.id !== key));
+  const removeKey = async (label: string) => {
+    const newSkills = skills.filter((skill) => skill.label !== label);
+    await patchSkills({ username, body: newSkills }).unwrap();
+    setSkills((prev) => newSkills);
   };
 
   return (
@@ -68,7 +77,7 @@ const SkillsProfile = ({ disable }: { disable: boolean }) => {
         <div className="flex flex-row flex-wrap">
           {skills.map((skill) => (
             <span
-              key={skill.id}
+              key={skill.label}
               className="inline-flex items-center rounded-sm bg-gray-50 px-2 py-1 mr-2 mb-3 text-sm font-normal text-black ring-1 ring-inset ring-gray-500/10"
             >
               {skill.value}
@@ -80,7 +89,7 @@ const SkillsProfile = ({ disable }: { disable: boolean }) => {
                   strokeWidth={1.5}
                   stroke="currentColor"
                   className="size-4 hover:cursor-pointer text-gray-600 "
-                  onClick={() => removeKey(skill.id)}
+                  onClick={() => removeKey(skill.label)}
                 >
                   <path
                     strokeLinecap="round"
@@ -124,9 +133,9 @@ const SkillsProfile = ({ disable }: { disable: boolean }) => {
                   <ul>
                     {skillList.map((skill) => (
                       <li
-                        key={skill.id}
+                        key={skill.label}
                         className="border-solid border-t-2 border-gray-200 p-2 hover:bg-indigo-200"
-                        onClick={() => addSkill(skill.id, skill.value)}
+                        onClick={() => addSkill(skill.label, skill.value)}
                       >
                         {skill.value}
                       </li>
