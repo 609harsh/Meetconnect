@@ -10,10 +10,18 @@ import {
   patchProfile,
   patchSkills,
   patchWorkExperience,
+  updateProfileImage,
 } from "../services/profile";
 import { log } from "console";
 
 class Profile {
+  public updateProfileImage = async (req: Request, res: Response) => {
+    const data = await updateProfileImage(
+      req.params.username,
+      req.query.url as string
+    );
+    res.json({ success: true, data });
+  };
   public getProfile = async (req: Request, res: Response) => {
     const data = await getProfile(req.params.username);
     res.json({ success: true, data });

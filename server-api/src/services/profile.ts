@@ -35,12 +35,23 @@ export interface WorkExperience {
   duration?: string;
   about?: string;
 }
+
+export const updateProfileImage = async (username: string, url: string) => {
+  const user = await prisma.user.update({
+    where: {
+      username,
+    },
+    data: {
+      profileImg: url,
+    },
+  });
+  return user;
+};
+
 export const getProfile = async (username: string) => {
   const profile = await prisma.user.findFirst({
     where: {
-      email: {
-        contains: username,
-      },
+      username,
     },
   });
   return profile;
@@ -49,9 +60,7 @@ export const getProfile = async (username: string) => {
 export const patchProfile = async (username: string, data: UserUpdate) => {
   const profile = await prisma.user.updateMany({
     where: {
-      email: {
-        contains: username,
-      },
+      username,
     },
     data: { ...data },
   });
