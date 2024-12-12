@@ -1,29 +1,58 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddExperience from "./AddExperience";
+import {
+  useFetchWorkExperienceMutation,
+  useUpdateWorkExperienceMutation,
+} from "../../redux/meetApi";
+import { Experience } from "../../types";
 
-const experience = [
-  {
-    company: "Forescribe",
-    jobTitle: "Backend Developer Intern",
-    duration: "2019-2023",
-    description:
-      " created amazing website created amazing website created amazing website created amazing website created amazing website",
-  },
-  {
-    company: "Forescribe",
-    jobTitle: "Backend Developer Intern",
-    duration: "2019-2023",
-  },
-  {
-    company: "Forescribe",
-    jobTitle: "Backend Developer Intern",
-    duration: "2019-2023",
-  },
-];
+// const experience = [
+//   {
+//     company: "Forescribe",
+//     jobTitle: "Backend Developer Intern",
+//     duration: "2019-2023",
+//     description:
+//       " created amazing website created amazing website created amazing website created amazing website created amazing website",
+//   },
+//   {
+//     company: "Forescribe",
+//     jobTitle: "Backend Developer Intern",
+//     duration: "2019-2023",
+//   },
+//   {
+//     company: "Forescribe",
+//     jobTitle: "Backend Developer Intern",
+//     duration: "2019-2023",
+//   },
+// ];
 
-const WorkExperienceProfile = ({ disable }: { disable: boolean }) => {
+const WorkExperienceProfile = ({
+  disable,
+  username,
+}: {
+  disable: boolean;
+  username: string;
+}) => {
   const [openExperience, setOpenExperience] = useState<boolean>(false);
-  const formExperienceAction = () => {
+  const [getDetails] = useFetchWorkExperienceMutation();
+  const [addExperience] = useUpdateWorkExperienceMutation();
+  const [experience, setExperience] = useState<Experience[]>([]);
+
+  useEffect(() => {
+    const fetchDetails = async () => {
+      const res = await getDetails({ username }).unwrap();
+      setExperience((prev) => [...res.data]);
+    };
+    fetchDetails();
+  }, []);
+  const formExperienceAction = async (formData?: Experience) => {
+    console.log("formData", formData);
+    if (!formData) return;
+    const res = await addExperience({
+      username,
+      newExperience: formData,
+    }).unwrap();
+    setExperience((prev) => [...prev, { ...res.data }]);
     setOpenExperience(!openExperience);
   };
   return (
@@ -35,13 +64,13 @@ const WorkExperienceProfile = ({ disable }: { disable: boolean }) => {
         {experience.map((exp, idx) => (
           <div className="flex justify-between w-full border-2 border-solid border-gray-300 px-5 py-2 border-b-4 rounded-md bg-gray-50 mb-2">
             <ul key={idx}>
-              <li className="font-bold text-lg">{exp.jobTitle}</li>
+              <li className="font-bold text-lg">{exp.title}</li>
               <li className="font-normal text-base text-blue-600">
                 {exp.company}
               </li>
               <li className="font-semibold text-gray-400">{exp.duration}</li>
               <li className="mt-2 font-normal text-base text-black">
-                {exp.description}
+                {exp.about}
               </li>
             </ul>
             {!disable && (

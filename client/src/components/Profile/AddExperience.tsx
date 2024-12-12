@@ -1,3 +1,9 @@
+import { Experience } from "../../types";
+
+interface FormExperience extends Experience {
+  startYear?: string;
+  endYear?: string;
+}
 const AddExperience = ({
   formExperienceAction,
 }: {
@@ -5,14 +11,18 @@ const AddExperience = ({
 }) => {
   const saveChanges = (e: any) => {
     e.preventDefault();
-    let formData: any = {};
+    let formData: FormExperience = {};
     for (let elements of e.target) {
       if (elements.name) {
-        formData[elements.name] = elements.value;
+        formData[elements.name as keyof Experience] = elements.value;
       }
     }
     // console.log(formData);
-    formExperienceAction();
+    const duration = formData.startYear + "-" + formData.endYear;
+    delete formData.startYear;
+    delete formData.endYear;
+    formData.duration = duration;
+    formExperienceAction(formData);
   };
   return (
     <form
@@ -36,8 +46,8 @@ const AddExperience = ({
               <div className="mt-2">
                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                   <input
-                    id="jobTitle"
-                    name="jobTitle"
+                    id="title"
+                    name="title"
                     type="text"
                     placeholder="Backend"
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm/6"

@@ -83,6 +83,15 @@ export interface Education {
   grade?: string;
   username?: string;
 }
+
+export interface Experience {
+  id?: string;
+  username?: string;
+  title?: string;
+  company?: string;
+  duration?: string;
+  about?: string;
+}
 export enum NavbarMenu {
   SCHEDULE,
   INTERVIEW,
