@@ -76,11 +76,12 @@ export interface Skill {
 }
 export interface Education {
   id?: string;
-  school: string;
-  degree: string;
-  fieldOfStudy: string;
-  duration: string;
-  grade: string;
+  school?: string;
+  degree?: string;
+  fieldOfStudy?: string;
+  duration?: string;
+  grade?: string;
+  username?: string;
 }
 export enum NavbarMenu {
   SCHEDULE,

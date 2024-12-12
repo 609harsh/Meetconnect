@@ -192,7 +192,7 @@ export default function Profile() {
             </div>
           ))}
           <AddressProfile disable={disable} username={username + ""} />
-          <EducationProfile disable={disable} />
+          <EducationProfile disable={disable} username={username + ""} />
           <SkillsProfile disable={disable} username={username + ""} />
           <WorkExperienceProfile disable={disable} />
           {/* <AttachmentsProfile disable={disable} /> */}

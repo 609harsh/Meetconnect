@@ -99,33 +99,31 @@ export const meetApi = createApi({
       }),
       transformResponse: (response: ApiUserResponse) => response?.data,
     }),
-    patchEducationProfile: builder.mutation<
-      boolean,
-      { id: string; field: string; value: string }
+
+    fetchEducation: builder.mutation<
+      ApiResponse<Education[]>,
+      { username: string }
     >({
-      query: ({ id, field, value }) => ({
-        url: `address/${id}`,
-        method: "PATCH",
+      query: ({ username }) => ({
+        url: `education/${username}`,
+        method: "GET",
         headers: {
           "content-type": "application/json",
         },
-        body: JSON.stringify({ field, value }),
       }),
-      transformResponse: (response: { success: boolean }) => response.success,
     }),
-    createEducationProfile: builder.mutation<
+    patchEducationProfile: builder.mutation<
       ApiResponse<Education>,
-      { userId: string; body: Education }
+      { username: string; id?: string; body: object }
     >({
-      query: ({ userId, body }) => ({
-        url: `education/${userId}`,
-        method: "POST",
+      query: ({ username, id, body }) => ({
+        url: `education/${username}?id=${id}`,
+        method: "PATCH",
         headers: {
           "content-type": "application/json",
         },
         body: JSON.stringify(body),
       }),
-      transformResponse: (response: ApiResponse<Education>) => response,
     }),
     fetchAddressProfile: builder.mutation<
       ApiResponse<Address>,
@@ -193,8 +191,8 @@ export const {
   useFetchResourcesQuery,
   useUserLoginMutation,
   useUserSignupMutation,
+  useFetchEducationMutation,
   usePatchEducationProfileMutation,
-  useCreateEducationProfileMutation,
   useFetchAddressProfileMutation,
   usePatchAddressProfileMutation,
   useFetchSkillsProfileMutation,

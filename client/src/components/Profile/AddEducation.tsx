@@ -1,13 +1,15 @@
-import { jwtDecode } from "jwt-decode";
-import { useCreateEducationProfileMutation } from "../../redux/meetApi";
-import { Payload } from "../../types";
+import { usePatchEducationProfileMutation } from "../../redux/meetApi";
 
 const AddEducation = ({
   formEducationAction,
+  username,
+  addEducation,
 }: {
   formEducationAction: Function;
+  username: string;
+  addEducation: Function;
 }) => {
-  const [saveEducation] = useCreateEducationProfileMutation();
+  const [updateEducation] = usePatchEducationProfileMutation();
 
   const saveChanges = async (e: any) => {
     e.preventDefault();
@@ -17,15 +19,21 @@ const AddEducation = ({
         formData[elements.name] = elements.value;
       }
     }
-    console.log(formData);
-    const token = localStorage.getItem("token") as string;
-    const decode = jwtDecode(token) as Payload;
+    const data = {
+      school: formData.school,
+      grade: formData.grade,
+      degree: formData.degree,
+      fieldOfStudy: formData.fieldOfStudy,
+      duration: formData.startYear + "-" + formData.endYear,
+    };
 
-    const save = await saveEducation({
-      userId: decode.id,
-      body: formData,
+    const save = await updateEducation({
+      username,
+      body: data,
     }).unwrap();
+    console.log(save);
     if (save.success) formEducationAction();
+    addEducation(save.data);
   };
   return (
     <form
@@ -79,9 +87,9 @@ const AddEducation = ({
               </div>
             </div>
 
-            <div className="sm:col-span-3">
+            <div className="sm:col-span-4">
               <label
-                htmlFor="startYear"
+                htmlFor="fieldOfStudy"
                 className="block text-sm/6 font-medium text-gray-900"
               >
                 Field of Study
@@ -92,7 +100,7 @@ const AddEducation = ({
                     id="fieldOfStudy"
                     name="fieldOfStudy"
                     type="text"
-                    placeholder="2019"
+                    placeholder="CSE"
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm/6"
                   />
                 </div>
@@ -100,7 +108,7 @@ const AddEducation = ({
             </div>
             <div className="sm:col-span-3">
               <label
-                htmlFor="endYear"
+                htmlFor="startYear"
                 className="block text-sm/6 font-medium text-gray-900"
               >
                 Start Year

@@ -94,16 +94,22 @@ export const getEducation = async (username: string) => {
 
 export const patchEducation = async (
   username: string,
-  id: string | undefined,
+  id: string,
   data: UserEducation
 ) => {
-  // console.log(id);
-  if (id) {
+  if (id !== "undefined" && id.trim() !== "") {
     const education = await prisma.userEducation.update({
       where: {
         id,
       },
-      data: data,
+      data: {
+        username: username,
+        school: data.school,
+        degree: data.degree,
+        fieldOfStudy: data.fieldOfStudy,
+        duration: data.duration,
+        grade: data.grade,
+      },
     });
     return education;
   }
