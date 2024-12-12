@@ -129,6 +129,7 @@ export const patchSkills = async (username: string, skill: Skill[]) => {
   const skills = await prisma.userSkills.upsert({
     create: {
       username: username,
+      skills: skill,
     },
     where: {
       username: username,

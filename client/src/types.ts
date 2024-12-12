@@ -71,8 +71,8 @@ export interface Address {
 }
 
 export interface Skill {
-  id: string;
   value: string;
+  label: string;
 }
 export interface Education {
   id?: string;

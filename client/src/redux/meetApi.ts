@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Address, Education, Interview, Resources } from "../types";
+import { Address, Education, Interview, Resources, Skill } from "../types";
 const api_url: string = import.meta.env.VITE_API_HOST;
 
 export interface ApiResponse<T> {
@@ -10,6 +10,15 @@ export interface ApiResponse<T> {
 export interface ApiUserResponse {
   success: boolean;
   data: string;
+}
+
+export interface ApiSkillResponse {
+  success: boolean;
+  data: {
+    skills: Skill[];
+    id: string;
+    username: string;
+  };
 }
 
 export const meetApi = createApi({
@@ -90,27 +99,6 @@ export const meetApi = createApi({
       }),
       transformResponse: (response: ApiUserResponse) => response?.data,
     }),
-    addSkillProfile: builder.mutation<boolean, { id: string; skill: any }>({
-      query: ({ id, skill }) => ({
-        url: `skills/${id}`,
-        method: "PUT",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(skill),
-      }),
-      transformResponse: (response: { success: boolean }) => response.success,
-    }),
-    removeSkillProfile: builder.mutation<boolean, string>({
-      query: (skillId) => ({
-        url: `skills/${skillId}`,
-        method: "DELETE",
-        headers: {
-          "content-type": "application/json",
-        },
-      }),
-      transformResponse: (response: { success: boolean }) => response.success,
-    }),
     patchEducationProfile: builder.mutation<
       boolean,
       { id: string; field: string; value: string }
@@ -166,6 +154,35 @@ export const meetApi = createApi({
         };
       },
     }),
+    fetchSkillsProfile: builder.mutation<
+      ApiSkillResponse,
+      { username: string }
+    >({
+      query: ({ username }) => {
+        return {
+          url: `skills/${username}`,
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+          },
+        };
+      },
+    }),
+    patchSkillsProfile: builder.mutation<
+      ApiSkillResponse,
+      { username: string; body: Skill[] }
+    >({
+      query: ({ username, body }) => {
+        return {
+          url: `skills/${username}`,
+          method: "PATCH",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(body),
+        };
+      },
+    }),
   }),
 });
 
@@ -176,10 +193,10 @@ export const {
   useFetchResourcesQuery,
   useUserLoginMutation,
   useUserSignupMutation,
-  useAddSkillProfileMutation,
-  useRemoveSkillProfileMutation,
   usePatchEducationProfileMutation,
   useCreateEducationProfileMutation,
   useFetchAddressProfileMutation,
   usePatchAddressProfileMutation,
+  useFetchSkillsProfileMutation,
+  usePatchSkillsProfileMutation,
 } = meetApi;
