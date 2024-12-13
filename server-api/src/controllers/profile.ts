@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import {
   getAddress,
   getEducation,
@@ -12,65 +12,187 @@ import {
   patchWorkExperience,
   updateProfileImage,
 } from "../services/profile";
-import { log } from "console";
+import { CustomRequest } from "../authorizationMiddleware";
+import { CustomError } from "../globalErrorHandler";
 
 class Profile {
-  public updateProfileImage = async (req: Request, res: Response) => {
-    const data = await updateProfileImage(
-      req.params.username,
+  public updateProfileImage = async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    if (!req.username) {
+      res.status(401).json({ error: "UserName Does not exist" });
+      return;
+    }
+    const response = await updateProfileImage(
+      req.username,
       req.query.url as string
     );
-    res.json({ success: true, data });
+    if (!response.success) {
+      next(new CustomError(response.error as string, 400));
+    }
+    res.json({ success: true, data: response.data });
   };
-  public getProfile = async (req: Request, res: Response) => {
-    const data = await getProfile(req.params.username);
-    res.json({ success: true, data });
+  public getProfile = async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    if (!req.username) {
+      res.status(401).json({ error: "UserName Does not exist" });
+      return;
+    }
+    const response = await getProfile(req.username);
+    if (!response.success) {
+      next(new CustomError(response.error as string, 400));
+    }
+    res.json({ success: true, data: response.data });
   };
-  public updateProfile = async (req: Request, res: Response) => {
-    const data = await patchProfile(req.params.username, req.body);
-    res.json({ success: true, data });
+  public updateProfile = async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    if (!req.username) {
+      res.status(401).json({ error: "UserName Does not exist" });
+      return;
+    }
+    const response = await patchProfile(req.username, req.body);
+    if (!response.success) {
+      next(new CustomError(response.error as string, 400));
+    }
+    res.json({ success: true, data: response.data });
   };
-  public getAddress = async (req: Request, res: Response) => {
-    const data = await getAddress(req.params.username);
-    res.json({ success: true, data });
+  public getAddress = async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    if (!req.username) {
+      res.status(401).json({ error: "UserName Does not exist" });
+      return;
+    }
+    const response = await getAddress(req.username);
+    if (!response.success) {
+      next(new CustomError(response.error as string, 400));
+    }
+    res.json({ success: true, data: response.data });
   };
-  public updateAddress = async (req: Request, res: Response) => {
-    const data = await patchAddress(req.params.username, req.body);
-    res.json({ success: true, data });
+  public updateAddress = async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    if (!req.username) {
+      res.status(401).json({ error: "UserName Does not exist" });
+      return;
+    }
+    const response = await patchAddress(req.username, req.body);
+    if (!response.success) {
+      next(new CustomError(response.error as string, 400));
+    }
+    res.json({ success: true, data: response.data });
   };
-  public getEducation = async (req: Request, res: Response) => {
-    const data = await getEducation(req.params.username);
-    res.json({ success: true, data });
+  public getEducation = async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    if (!req.username) {
+      res.status(401).json({ error: "UserName Does not exist" });
+      return;
+    }
+    const response = await getEducation(req.username);
+    if (!response.success) {
+      next(new CustomError(response.error as string, 400));
+    }
+    res.json({ success: true, data: response.data });
   };
-  public updateEducation = async (req: Request, res: Response) => {
-    const data = await patchEducation(
-      req.params.username,
+  public updateEducation = async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    if (!req.username) {
+      res.status(401).json({ error: "UserName Does not exist" });
+      return;
+    }
+    const response = await patchEducation(
+      req.username,
       req.query.id as string,
       req.body
     );
-    res.json({ success: true, data });
+    if (!response.success) {
+      next(new CustomError(response.error as string, 400));
+    }
+    res.json({ success: true, data: response.data });
   };
-  public getSkills = async (req: Request, res: Response) => {
-    const data = await getSkills(req.params.username);
-    res.json({ success: true, data });
+  public getSkills = async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    if (!req.username) {
+      res.status(401).json({ error: "UserName Does not exist" });
+      return;
+    }
+    const response = await getSkills(req.username);
+    if (!response.success) {
+      next(new CustomError(response.error as string, 400));
+    }
+    res.json({ success: true, data: response.data });
   };
-  public updateSkills = async (req: Request, res: Response) => {
-    const data = await patchSkills(req.params.username, req.body);
-    res.json({ success: true, data });
+  public updateSkills = async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    if (!req.username) {
+      res.status(401).json({ error: "UserName Does not exist" });
+      return;
+    }
+    const response = await patchSkills(req.username, req.body);
+    if (!response.success) {
+      next(new CustomError(response.error as string, 400));
+    }
+    res.json({ success: true, data: response.data });
   };
 
-  public getWorkExperience = async (req: Request, res: Response) => {
-    const data = await getWorkExperience(req.params.username);
-    res.json({ success: true, data });
+  public getWorkExperience = async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    if (!req.username) {
+      res.status(401).json({ error: "UserName Does not exist" });
+      return;
+    }
+    const response = await getWorkExperience(req.username);
+    if (!response.success) {
+      next(new CustomError(response.error as string, 400));
+    }
+    res.json({ success: true, data: response.data });
   };
 
-  public updateWorkExperience = async (req: Request, res: Response) => {
-    const data = await patchWorkExperience(
-      req.params.username,
+  public updateWorkExperience = async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    if (!req.username) {
+      res.status(401).json({ error: "UserName Does not exist" });
+      return;
+    }
+    const response = await patchWorkExperience(
+      req.username,
       req.query.id as string,
       req.body
     );
-    res.json({ success: true, data });
+    if (!response.success) {
+      next(new CustomError(response.error as string, 400));
+    }
+    res.json({ success: true, data: response.data });
   };
 }
 

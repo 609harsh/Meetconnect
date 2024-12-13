@@ -5,6 +5,7 @@ import authRouter from "./routes/auth";
 import schedule from "./routes/schedule";
 import interviews from "./routes/interviews";
 import profile from "./routes/profile";
+import { CustomError, globalErrorHandler } from "./globalErrorHandler";
 const app: Express = express();
 
 app.use(express.urlencoded({ extended: true }));
@@ -16,4 +17,9 @@ app.use(interviews);
 app.use(resources);
 app.use(profile);
 
+app.all("*", (req, res, next) => {
+  next(new CustomError("Invalid URL", 404));
+});
+
+app.use(globalErrorHandler);
 export default app;
