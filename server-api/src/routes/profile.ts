@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { profileController } from "../controllers/profile";
+import { authorization } from "../authorizationMiddleware";
 const profile: Router = Router();
 
 // Public Route
@@ -10,13 +11,14 @@ profile.get("/skills/:username", profileController.getSkills);
 profile.get("/workexperience/:username", profileController.getWorkExperience);
 
 //Protected Route
-profile.patch("/image/:username", profileController.updateProfileImage);
-profile.patch("/profile/:username", profileController.updateProfile);
-profile.patch("/address/:username", profileController.updateAddress);
-profile.patch("/education/:username", profileController.updateEducation);
-profile.patch("/skills/:username", profileController.updateSkills);
+profile.patch("/image", authorization, profileController.updateProfileImage);
+profile.patch("/profile", authorization, profileController.updateProfile);
+profile.patch("/address", authorization, profileController.updateAddress);
+profile.patch("/education", authorization, profileController.updateEducation);
+profile.patch("/skills", authorization, profileController.updateSkills);
 profile.patch(
-  "/workexperience/:username",
+  "/workexperience",
+  authorization,
   profileController.updateWorkExperience
 );
 

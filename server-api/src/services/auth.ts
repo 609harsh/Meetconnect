@@ -15,7 +15,8 @@ export const createUser = async (data: any) => {
         email: data.email,
         password: data?.password,
         phoneNumber: data?.phoneNumber,
-        username: data.email.split("@")[0] + "_" + Math.random() * 1000,
+        username:
+          data.email.split("@")[0] + "_" + ((Math.random() * 10000) | 0),
       },
     });
     const token = jwt.sign(

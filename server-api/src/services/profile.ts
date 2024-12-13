@@ -141,7 +141,7 @@ export const patchEducation = async (
   data: UserEducation
 ) => {
   try {
-    if (id !== "undefined" && id.trim() !== "") {
+    if (id && id !== "undefined" && id.trim() !== "") {
       const education = await prisma.userEducation.update({
         where: {
           id,
@@ -221,7 +221,7 @@ export const patchWorkExperience = async (
   data: WorkExperience
 ) => {
   try {
-    if (id) {
+    if (id && id !== "undefined" && id.trim() !== "") {
       const work = await prisma.userWorkExperience.update({
         where: {
           id,
