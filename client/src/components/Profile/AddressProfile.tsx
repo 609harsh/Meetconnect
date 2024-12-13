@@ -62,8 +62,12 @@ const AddressProfile = ({
         "Loading"
       ) : (
         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-          {labels.map((field) => (
-            <ul className="flex justify-between items-center" role="list">
+          {labels.map((field, idx) => (
+            <ul
+              className="flex justify-between items-center"
+              role="list"
+              key={idx}
+            >
               <li className="w-full mr-2">
                 <p className="font-semibold text-sm">{field}</p>
                 {activeAddress === field ? (

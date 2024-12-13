@@ -13,16 +13,6 @@ const fieldEducaionList = [
   "duration",
   "grade",
 ];
-// const educations: Education[] = [
-//   {
-//     id: "1",
-//     school: "Indian Institute of Information Technology, Kottayam",
-//     degree: "B.Tech",
-//     fieldOfStudy: "CSE",
-//     duration: "2019-2020",
-//     grade: "8.72",
-//   },
-// ];
 
 interface ActiveEducation {
   field: string;
@@ -94,15 +84,18 @@ const EducationProfile = ({
         {"Education"}
       </dt>
       <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-        {educations.map((education: any, idx: number) => (
-          <div className="border-b-2 rounded-b-lg py-2">
-            {fieldEducaionList.map((field: any) =>
+        {educations.map((education: any) => (
+          <div className="border-b-2 rounded-b-lg py-2" key={education.id}>
+            {fieldEducaionList.map((field: any, idx: number) =>
               activeEducation.field === field &&
               activeEducation.id === education.id ? (
-                <ul className="flex justify-between items-center" role="list">
+                <ul
+                  className="flex justify-between items-center"
+                  role="list"
+                  key={education.id + "$" + idx}
+                >
                   <li className="w-full mr-2">
                     <input
-                      key={field}
                       className="w-full p-1 mr-2 pl-2 border-2 border-solid border-slate-200 rounded-md outline-none"
                       // value={activeEducationData}
                       placeholder={field}
@@ -148,7 +141,11 @@ const EducationProfile = ({
                   </li>
                 </ul>
               ) : (
-                <ul className="flex justify-between items-center" role="list">
+                <ul
+                  className="flex justify-between items-center"
+                  role="list"
+                  key={education.id + "$" + idx}
+                >
                   <li className="w-full mr-2 ">
                     <p className="font-semibold">
                       {education[field] === null ? field : education[field]}

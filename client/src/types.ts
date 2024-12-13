@@ -58,6 +58,7 @@ export interface Payload {
   email: string;
   iat: number;
   exp: number;
+  username: string;
 }
 
 export interface Address {
@@ -91,6 +92,15 @@ export interface Experience {
   company?: string;
   duration?: string;
   about?: string;
+}
+
+export interface User {
+  username?: string;
+  email?: string;
+  phoneNumber?: string;
+  about?: string;
+  profileImg?: string;
+  name?: string;
 }
 export enum NavbarMenu {
   SCHEDULE,

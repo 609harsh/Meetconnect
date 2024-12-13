@@ -6,26 +6,6 @@ import {
 } from "../../redux/meetApi";
 import { Experience } from "../../types";
 
-// const experience = [
-//   {
-//     company: "Forescribe",
-//     jobTitle: "Backend Developer Intern",
-//     duration: "2019-2023",
-//     description:
-//       " created amazing website created amazing website created amazing website created amazing website created amazing website",
-//   },
-//   {
-//     company: "Forescribe",
-//     jobTitle: "Backend Developer Intern",
-//     duration: "2019-2023",
-//   },
-//   {
-//     company: "Forescribe",
-//     jobTitle: "Backend Developer Intern",
-//     duration: "2019-2023",
-//   },
-// ];
-
 const WorkExperienceProfile = ({
   disable,
   username,
@@ -62,7 +42,10 @@ const WorkExperienceProfile = ({
       </dt>
       <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
         {experience.map((exp, idx) => (
-          <div className="flex justify-between w-full border-2 border-solid border-gray-300 px-5 py-2 border-b-4 rounded-md bg-gray-50 mb-2">
+          <div
+            key={exp.id}
+            className="flex justify-between w-full border-2 border-solid border-gray-300 px-5 py-2 border-b-4 rounded-md bg-gray-50 mb-2"
+          >
             <ul key={idx}>
               <li className="font-bold text-lg">{exp.title}</li>
               <li className="font-normal text-base text-blue-600">
