@@ -35,23 +35,34 @@ export interface WorkExperience {
   duration?: string;
   about?: string;
 }
-export const getProfile = async (username: string) => {
-  const profile = await prisma.user.findFirst({
+
+export const updateProfileImage = async (username: string, url: string) => {
+  const user = await prisma.user.update({
     where: {
-      email: {
-        contains: username,
-      },
+      username,
+    },
+    data: {
+      profileImg: url,
     },
   });
+  return user;
+};
+
+export const getProfile = async (username: string) => {
+  console.log(username);
+  const profile = await prisma.user.findFirst({
+    where: {
+      username,
+    },
+  });
+  console.log(profile);
   return profile;
 };
 
 export const patchProfile = async (username: string, data: UserUpdate) => {
-  const profile = await prisma.user.updateMany({
+  const profile = await prisma.user.update({
     where: {
-      email: {
-        contains: username,
-      },
+      username,
     },
     data: { ...data },
   });

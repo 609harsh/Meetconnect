@@ -6,6 +6,7 @@ import {
   Interview,
   Resources,
   Skill,
+  User,
 } from "../types";
 const api_url: string = import.meta.env.VITE_API_HOST;
 
@@ -34,6 +35,14 @@ export const meetApi = createApi({
     baseUrl: api_url,
   }),
   endpoints: (builder) => ({
+    fetchProfile: builder.mutation<ApiResponse<User>, { username: string }>({
+      query: ({ username }) => {
+        return {
+          url: `profile/${username}`,
+          method: "GET",
+        };
+      },
+    }),
     getInterviews: builder.query<Interview[], void>({
       query: () => ({
         url: `interviews`,
@@ -215,10 +224,37 @@ export const meetApi = createApi({
         body: JSON.stringify(newExperience),
       }),
     }),
+    updateProfileImage: builder.mutation<
+      ApiResponse<User>,
+      { username: string; url: string }
+    >({
+      query: ({ username, url }) => ({
+        url: `image/${username}?url=${url}`,
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({}),
+      }),
+    }),
+    updateProfile: builder.mutation<
+      ApiResponse<User>,
+      { username: string; body: User }
+    >({
+      query: ({ username, body }) => ({
+        url: `profile/${username}`,
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(body),
+      }),
+    }),
   }),
 });
 
 export const {
+  useFetchProfileMutation,
   useGetInterviewsQuery,
   useDeleteInterviewsMutation,
   useCreateInterviewsMutation,
@@ -233,4 +269,6 @@ export const {
   usePatchSkillsProfileMutation,
   useFetchWorkExperienceMutation,
   useUpdateWorkExperienceMutation,
+  useUpdateProfileImageMutation,
+  useUpdateProfileMutation,
 } = meetApi;

@@ -2,6 +2,7 @@ import { Router } from "express";
 import { profileController } from "../controllers/profile";
 const profile: Router = Router();
 
+profile.patch("/image/:username", profileController.updateProfileImage);
 profile.get("/profile/:username", profileController.getProfile);
 profile.patch("/profile/:username", profileController.updateProfile);
 profile.get("/address/:username", profileController.getAddress);

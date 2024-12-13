@@ -75,9 +75,9 @@ const SkillsProfile = ({
       <dt className="text-sm font-medium leading-6 text-gray-900">Skills</dt>
       <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
         <div className="flex flex-row flex-wrap">
-          {skills.map((skill) => (
+          {skills.map((skill, idx) => (
             <span
-              key={skill.label}
+              key={idx}
               className="inline-flex items-center rounded-sm bg-gray-50 px-2 py-1 mr-2 mb-3 text-sm font-normal text-black ring-1 ring-inset ring-gray-500/10"
             >
               {skill.value}
@@ -131,9 +131,9 @@ const SkillsProfile = ({
               {skillList.length > 0 && (
                 <div className="max-h-40 overflow-auto">
                   <ul>
-                    {skillList.map((skill) => (
+                    {skillList.map((skill, idx) => (
                       <li
-                        key={skill.label}
+                        key={skill.label + "$idx"}
                         className="border-solid border-t-2 border-gray-200 p-2 hover:bg-indigo-200"
                         onClick={() => addSkill(skill.label, skill.value)}
                       >

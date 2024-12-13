@@ -13,11 +13,17 @@ export const createUser = async (data: any) => {
       name: data.name,
       email: data.email,
       password: data?.password,
-      phoneNumber: data.phoneNumber,
+      phoneNumber: data?.phoneNumber,
+      username: data.email.split("@")[0] + "_" + Math.random() * 1000,
     },
   });
   const token = jwt.sign(
-    { name: user.name, email: user.email, id: user.id },
+    {
+      name: user.name,
+      email: user.email,
+      id: user.id,
+      username: user.username,
+    },
     process.env.TOKEN_SECRET + "",
     {
       expiresIn: process.env.TOKEN_VALIDITY + "",
@@ -40,7 +46,12 @@ export const userLogin = async (data: any) => {
     }
   }
   const token = jwt.sign(
-    { name: user?.name, email: user?.email, id: user?.id },
+    {
+      name: user?.name,
+      email: user?.email,
+      id: user?.id,
+      username: user?.username,
+    },
     process.env.TOKEN_SECRET + "",
     {
       expiresIn: process.env.TOKEN_VALIDITY + "",

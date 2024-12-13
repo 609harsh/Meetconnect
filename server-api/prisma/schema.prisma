@@ -21,6 +21,8 @@ model User{
   phoneNumber String?   @unique 
   createdAt   DateTime @default(now())
   about       String?
+  username    String   @unique
+  profileImg  String?
   interview   Interview[]
 }
 

@@ -20,7 +20,10 @@ export const cloudinaryApi = createApi({
       }),
       transformResponse: (response: any) => {
         console.log(response);
-        return { success: response?.url ? true : false, data: response?.url };
+        return {
+          success: response?.url ? true : false,
+          data: response?.secure_url,
+        };
       },
     }),
   }),
