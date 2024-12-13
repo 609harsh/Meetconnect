@@ -1,16 +1,4 @@
-import { usePatchEducationProfileMutation } from "../../redux/meetApi";
-
-const AddEducation = ({
-  formEducationAction,
-  username,
-  addEducation,
-}: {
-  formEducationAction: Function;
-  username: string;
-  addEducation: Function;
-}) => {
-  const [updateEducation] = usePatchEducationProfileMutation();
-
+const AddEducation = ({ addEducation }: { addEducation: Function }) => {
   const saveChanges = async (e: any) => {
     e.preventDefault();
     let formData: any = {};
@@ -27,13 +15,7 @@ const AddEducation = ({
       duration: formData.startYear + "-" + formData.endYear,
     };
 
-    const save = await updateEducation({
-      username,
-      body: data,
-    }).unwrap();
-    console.log(save);
-    if (save.success) formEducationAction();
-    addEducation(save.data);
+    addEducation(data, true);
   };
   return (
     <form
@@ -172,7 +154,7 @@ const AddEducation = ({
 
       <div className="mt-6 flex items-center justify-end gap-x-6">
         <button
-          onClick={() => formEducationAction()}
+          onClick={() => addEducation({}, false)}
           type="button"
           className="text-sm/6 font-semibold text-gray-900"
         >
