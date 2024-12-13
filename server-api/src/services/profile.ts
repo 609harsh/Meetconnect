@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 export interface UserUpdate {
@@ -36,71 +36,103 @@ export interface WorkExperience {
   about?: string;
 }
 
+const errorFunction = (err: unknown) => {
+  if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    return `Prisma error: ${err.message}`;
+  } else if (err instanceof Prisma.PrismaClientValidationError) {
+    return `Prisma error: ${err.message}`;
+  } else if (err instanceof Error) {
+    return err.message;
+  }
+  return "An unknown error occurred";
+};
 export const updateProfileImage = async (username: string, url: string) => {
-  const user = await prisma.user.update({
-    where: {
-      username,
-    },
-    data: {
-      profileImg: url,
-    },
-  });
-  return user;
+  try {
+    const user = await prisma.user.update({
+      where: {
+        username,
+      },
+      data: {
+        profileImg: url,
+      },
+    });
+    return { success: true, data: user };
+  } catch (err) {
+    return { success: false, error: errorFunction(err) };
+  }
 };
 
 export const getProfile = async (username: string) => {
-  console.log(username);
-  const profile = await prisma.user.findFirst({
-    where: {
-      username,
-    },
-  });
-  console.log(profile);
-  return profile;
+  try {
+    const profile = await prisma.user.findFirst({
+      where: {
+        username,
+      },
+    });
+    return { success: true, data: profile };
+  } catch (err) {
+    return { success: false, error: errorFunction(err) };
+  }
 };
 
 export const patchProfile = async (username: string, data: UserUpdate) => {
-  const profile = await prisma.user.update({
-    where: {
-      username,
-    },
-    data: { ...data },
-  });
-  return profile;
+  try {
+    const profile = await prisma.user.update({
+      where: {
+        username,
+      },
+      data: { ...data },
+    });
+    return { success: true, data: profile };
+  } catch (err) {
+    return { success: false, error: errorFunction(err) };
+  }
 };
 
 export const getAddress = async (username: string) => {
-  const address = await prisma.userAddress.findFirst({
-    where: {
-      username,
-    },
-  });
-  return address;
+  try {
+    const address = await prisma.userAddress.findFirst({
+      where: {
+        username,
+      },
+    });
+    return { success: true, data: address };
+  } catch (err) {
+    return { success: false, error: errorFunction(err) };
+  }
 };
 
 export const patchAddress = async (username: string, data: UserAddress) => {
-  const address = await prisma.userAddress.upsert({
-    where: {
-      username: username,
-    },
-    update: {
-      ...data,
-    },
-    create: {
-      username: username,
-      ...data,
-    },
-  });
-  return address;
+  try {
+    const address = await prisma.userAddress.upsert({
+      where: {
+        username: username,
+      },
+      update: {
+        ...data,
+      },
+      create: {
+        username: username,
+        ...data,
+      },
+    });
+    return { success: true, data: address };
+  } catch (err) {
+    return { success: false, error: errorFunction(err) };
+  }
 };
 
 export const getEducation = async (username: string) => {
-  const education = await prisma.userEducation.findMany({
-    where: {
-      username: username,
-    },
-  });
-  return education;
+  try {
+    const education = await prisma.userEducation.findMany({
+      where: {
+        username: username,
+      },
+    });
+    return { success: true, data: education };
+  } catch (err) {
+    return { success: false, error: errorFunction(err) };
+  }
 };
 
 export const patchEducation = async (
@@ -108,63 +140,79 @@ export const patchEducation = async (
   id: string,
   data: UserEducation
 ) => {
-  if (id !== "undefined" && id.trim() !== "") {
-    const education = await prisma.userEducation.update({
-      where: {
-        id,
-      },
+  try {
+    if (id !== "undefined" && id.trim() !== "") {
+      const education = await prisma.userEducation.update({
+        where: {
+          id,
+        },
+        data: {
+          username: username,
+          school: data.school,
+          degree: data.degree,
+          fieldOfStudy: data.fieldOfStudy,
+          duration: data.duration,
+          grade: data.grade,
+        },
+      });
+      return { success: true, data: education };
+    }
+    const education = await prisma.userEducation.create({
       data: {
         username: username,
-        school: data.school,
-        degree: data.degree,
-        fieldOfStudy: data.fieldOfStudy,
-        duration: data.duration,
-        grade: data.grade,
+        ...data,
       },
     });
-    return education;
+    return { success: true, data: education };
+  } catch (err) {
+    return { success: false, error: errorFunction(err) };
   }
-  const education = await prisma.userEducation.create({
-    data: {
-      username: username,
-      ...data,
-    },
-  });
-  return education;
 };
 
 export const getSkills = async (username: string) => {
-  const skills = await prisma.userSkills.findFirst({
-    where: {
-      username: username,
-    },
-  });
-  return skills;
+  try {
+    const skills = await prisma.userSkills.findFirst({
+      where: {
+        username: username,
+      },
+    });
+    return { success: true, data: skills };
+  } catch (err) {
+    return { success: false, error: errorFunction(err) };
+  }
 };
 
 export const patchSkills = async (username: string, skill: Skill[]) => {
-  const skills = await prisma.userSkills.upsert({
-    create: {
-      username: username,
-      skills: skill,
-    },
-    where: {
-      username: username,
-    },
-    update: {
-      skills: skill,
-    },
-  });
-  return skills;
+  try {
+    const skills = await prisma.userSkills.upsert({
+      create: {
+        username: username,
+        skills: skill,
+      },
+      where: {
+        username: username,
+      },
+      update: {
+        skills: skill,
+      },
+    });
+    return { success: true, data: skills };
+  } catch (err) {
+    return { success: false, error: errorFunction(err) };
+  }
 };
 
 export const getWorkExperience = async (username: string) => {
-  const works = await prisma.userWorkExperience.findMany({
-    where: {
-      username: username,
-    },
-  });
-  return works;
+  try {
+    const works = await prisma.userWorkExperience.findMany({
+      where: {
+        username: username,
+      },
+    });
+    return { success: true, data: works };
+  } catch (err) {
+    return { success: false, error: errorFunction(err) };
+  }
 };
 
 export const patchWorkExperience = async (
@@ -172,21 +220,24 @@ export const patchWorkExperience = async (
   id: string | undefined,
   data: WorkExperience
 ) => {
-  console.log(id);
-  if (id) {
-    const work = await prisma.userWorkExperience.update({
-      where: {
-        id,
+  try {
+    if (id) {
+      const work = await prisma.userWorkExperience.update({
+        where: {
+          id,
+        },
+        data: data,
+      });
+      return { success: true, data: work };
+    }
+    const work = await prisma.userWorkExperience.create({
+      data: {
+        username: username,
+        ...data,
       },
-      data: data,
     });
-    return work;
+    return { success: true, data: work };
+  } catch (err) {
+    return { success: false, error: errorFunction(err) };
   }
-  const work = await prisma.userWorkExperience.create({
-    data: {
-      username: username,
-      ...data,
-    },
-  });
-  return work;
 };
