@@ -9,7 +9,6 @@ import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { Payload, User } from "../types";
 import {
-  useFetchProfileMutation,
   useUpdateProfileImageMutation,
   useUpdateProfileMutation,
 } from "../redux/meetApi";
@@ -17,6 +16,7 @@ import NameProfile from "../components/Profile/NameProfile";
 import EmailProfile from "../components/Profile/EmailProfile";
 import PhoneNumberProfile from "../components/Profile/PhoneNumberProfile";
 import AboutProfile from "../components/Profile/AboutProfile";
+import { useFetchProfileMutation } from "../redux/publicApi";
 
 export default function Profile() {
   const [uploadProfile] = useUploadProfileMutation();
@@ -71,12 +71,11 @@ export default function Profile() {
         method: "PATCH",
       }
     );
-    const result = await res.json();
+    await res.json();
     if (response.success) setPreview(response.data as string);
   };
   const updateProfile = async (body: User) => {
     await patchProfile({
-      username: username + "",
       body,
     }).unwrap();
   };

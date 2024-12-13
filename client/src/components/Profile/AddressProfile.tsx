@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import {
-  useFetchAddressProfileMutation,
-  usePatchAddressProfileMutation,
-} from "../../redux/meetApi";
+import { usePatchAddressProfileMutation } from "../../redux/meetApi";
 import { Address } from "../../types";
+import { useFetchAddressProfileMutation } from "../../redux/publicApi";
 
 const labels = ["line1", "line2", "city", "state", "country", "pincode"];
 const add: Address = {
@@ -31,7 +29,7 @@ const AddressProfile = ({
   const [address, setAddress] = useState<Address>(add);
   useEffect(() => {
     const getDetails = async () => {
-      const { error, data } = await fetchAddressDetails({ username });
+      const { data } = await fetchAddressDetails({ username });
       if (data?.success) {
         setAddress({ ...add, ...data.data });
       }
@@ -41,8 +39,7 @@ const AddressProfile = ({
   const saveAddressChanges = async () => {
     //make api call
     add[activeAddress as keyof Address] = activeAddressData;
-    const response = await updateAddressDetails({
-      username,
+    await updateAddressDetails({
       body: { ...add },
     }).unwrap();
 

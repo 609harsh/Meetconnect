@@ -4,7 +4,6 @@ import {
   Education,
   Experience,
   Interview,
-  Resources,
   Skill,
   User,
 } from "../types";
@@ -33,16 +32,15 @@ export const meetApi = createApi({
   reducerPath: "meetApi",
   baseQuery: fetchBaseQuery({
     baseUrl: api_url,
+    prepareHeaders: (headers, api) => {
+      const token = localStorage.getItem("token") as string;
+      if (token) {
+        headers.set("authorization", `Bearer ${token}`);
+      }
+      return headers;
+    },
   }),
   endpoints: (builder) => ({
-    fetchProfile: builder.mutation<ApiResponse<User>, { username: string }>({
-      query: ({ username }) => {
-        return {
-          url: `profile/${username}`,
-          method: "GET",
-        };
-      },
-    }),
     getInterviews: builder.query<Interview[], void>({
       query: () => ({
         url: `interviews`,
@@ -67,13 +65,6 @@ export const meetApi = createApi({
         },
         body: JSON.stringify(body),
       }),
-    }),
-    fetchResources: builder.query<Resources[], void>({
-      query: () => ({
-        url: `resources`,
-        method: "GET",
-      }),
-      transformResponse: (response: ApiResponse<Resources[]>) => response?.data,
     }),
     userLogin: builder.mutation<
       string,
@@ -115,25 +106,12 @@ export const meetApi = createApi({
       }),
       transformResponse: (response: ApiUserResponse) => response?.data,
     }),
-
-    fetchEducation: builder.mutation<
-      ApiResponse<Education[]>,
-      { username: string }
-    >({
-      query: ({ username }) => ({
-        url: `education/${username}`,
-        method: "GET",
-        headers: {
-          "content-type": "application/json",
-        },
-      }),
-    }),
     patchEducationProfile: builder.mutation<
       ApiResponse<Education>,
-      { username: string; id?: string; body: object }
+      { body: object }
     >({
-      query: ({ username, id, body }) => ({
-        url: `education/${username}?id=${id}`,
+      query: ({ body }) => ({
+        url: `education`,
         method: "PATCH",
         headers: {
           "content-type": "application/json",
@@ -141,25 +119,13 @@ export const meetApi = createApi({
         body: JSON.stringify(body),
       }),
     }),
-    fetchAddressProfile: builder.mutation<
-      ApiResponse<Address>,
-      { username: string }
-    >({
-      query: ({ username }) => ({
-        url: `address/${username}`,
-        method: "GET",
-        headers: {
-          "content-type": "application/json",
-        },
-      }),
-    }),
     patchAddressProfile: builder.mutation<
       ApiResponse<Address>,
-      { username: String; body: Address }
+      { body: Address }
     >({
-      query: ({ username, body }) => {
+      query: ({ body }) => {
         return {
-          url: `address/${username}`,
+          url: `address`,
           method: "PATCH",
           headers: {
             "content-type": "application/json",
@@ -168,27 +134,10 @@ export const meetApi = createApi({
         };
       },
     }),
-    fetchSkillsProfile: builder.mutation<
-      ApiSkillResponse,
-      { username: string }
-    >({
-      query: ({ username }) => {
+    updateSkills: builder.mutation<ApiSkillResponse, { body: Skill[] }>({
+      query: ({ body }) => {
         return {
-          url: `skills/${username}`,
-          method: "GET",
-          headers: {
-            "content-type": "application/json",
-          },
-        };
-      },
-    }),
-    patchSkillsProfile: builder.mutation<
-      ApiSkillResponse,
-      { username: string; body: Skill[] }
-    >({
-      query: ({ username, body }) => {
-        return {
-          url: `skills/${username}`,
+          url: `skills`,
           method: "PATCH",
           headers: {
             "content-type": "application/json",
@@ -197,26 +146,12 @@ export const meetApi = createApi({
         };
       },
     }),
-    fetchWorkExperience: builder.mutation<
-      ApiResponse<Experience[]>,
-      { username: string }
-    >({
-      query: ({ username }) => {
-        return {
-          url: `workexperience/${username}`,
-          method: "GET",
-          headers: {
-            "content-type": "application/json",
-          },
-        };
-      },
-    }),
     updateWorkExperience: builder.mutation<
       ApiResponse<Experience>,
-      { username: string; newExperience: Experience }
+      { newExperience: Experience }
     >({
-      query: ({ username, newExperience }) => ({
-        url: `workexperience/${username}`,
+      query: ({ newExperience }) => ({
+        url: `workexperience`,
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -224,25 +159,9 @@ export const meetApi = createApi({
         body: JSON.stringify(newExperience),
       }),
     }),
-    updateProfileImage: builder.mutation<
-      ApiResponse<User>,
-      { username: string; url: string }
-    >({
-      query: ({ username, url }) => ({
-        url: `image/${username}?url=${url}`,
-        method: "PATCH",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({}),
-      }),
-    }),
-    updateProfile: builder.mutation<
-      ApiResponse<User>,
-      { username: string; body: User }
-    >({
-      query: ({ username, body }) => ({
-        url: `profile/${username}`,
+    updateProfile: builder.mutation<ApiResponse<User>, { body: User }>({
+      query: ({ body }) => ({
+        url: `profile`,
         method: "PATCH",
         headers: {
           "content-type": "application/json",
@@ -250,24 +169,28 @@ export const meetApi = createApi({
         body: JSON.stringify(body),
       }),
     }),
+    updateProfileImage: builder.mutation<ApiResponse<User>, { url: string }>({
+      query: ({ url }) => ({
+        url: `image?url=${url}`,
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({}),
+      }),
+    }),
   }),
 });
 
 export const {
-  useFetchProfileMutation,
   useGetInterviewsQuery,
   useDeleteInterviewsMutation,
   useCreateInterviewsMutation,
-  useFetchResourcesQuery,
   useUserLoginMutation,
   useUserSignupMutation,
-  useFetchEducationMutation,
   usePatchEducationProfileMutation,
-  useFetchAddressProfileMutation,
   usePatchAddressProfileMutation,
-  useFetchSkillsProfileMutation,
-  usePatchSkillsProfileMutation,
-  useFetchWorkExperienceMutation,
+  useUpdateSkillsMutation,
   useUpdateWorkExperienceMutation,
   useUpdateProfileImageMutation,
   useUpdateProfileMutation,

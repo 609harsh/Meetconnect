@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import AddExperience from "./AddExperience";
-import {
-  useFetchWorkExperienceMutation,
-  useUpdateWorkExperienceMutation,
-} from "../../redux/meetApi";
+import { useUpdateWorkExperienceMutation } from "../../redux/meetApi";
 import { Experience } from "../../types";
+import { useFetchWorkExperienceMutation } from "../../redux/publicApi";
 
 const WorkExperienceProfile = ({
   disable,
@@ -29,7 +27,6 @@ const WorkExperienceProfile = ({
     console.log("formData", formData);
     if (!formData) return;
     const res = await addExperience({
-      username,
       newExperience: formData,
     }).unwrap();
     setExperience((prev) => [...prev, { ...res.data }]);

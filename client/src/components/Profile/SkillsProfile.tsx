@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import {
-  useFetchSkillsProfileMutation,
-  usePatchSkillsProfileMutation,
-} from "../../redux/meetApi";
+import { useUpdateSkillsMutation } from "../../redux/meetApi";
 import { Skill } from "../../types";
+import { useFetchSkillsProfileMutation } from "../../redux/publicApi";
 
 let list: Skill[] = [
   {
@@ -34,7 +32,7 @@ const SkillsProfile = ({
   const [skills, setSkills] = useState<Skill[]>([]);
   const [skillList, setSkillsList] = useState<Skill[]>([]);
   const [fetchSkills] = useFetchSkillsProfileMutation();
-  const [patchSkills] = usePatchSkillsProfileMutation();
+  const [patchSkills] = useUpdateSkillsMutation();
 
   useEffect(() => {
     const getSkills = async () => {
@@ -56,17 +54,17 @@ const SkillsProfile = ({
     const data = list.filter((skill) =>
       skill.value.toLowerCase().includes(val.toLowerCase())
     );
-    setSkillsList((prev) => [...data]);
+    setSkillsList((prev) => data);
   };
   const addSkill = async (label: string, value: string) => {
     const newSkills = [...skills, { label, value }];
-    await patchSkills({ username, body: newSkills }).unwrap();
+    await patchSkills({ body: newSkills }).unwrap();
     setSkills((prev) => newSkills);
     setSkillsList([]);
   };
   const removeKey = async (label: string) => {
     const newSkills = skills.filter((skill) => skill.label !== label);
-    await patchSkills({ username, body: newSkills }).unwrap();
+    await patchSkills({ body: newSkills }).unwrap();
     setSkills((prev) => newSkills);
   };
 
@@ -133,7 +131,7 @@ const SkillsProfile = ({
                   <ul>
                     {skillList.map((skill, idx) => (
                       <li
-                        key={skill.label + "$idx"}
+                        key={skill.label + "$" + idx}
                         className="border-solid border-t-2 border-gray-200 p-2 hover:bg-indigo-200"
                         onClick={() => addSkill(skill.label, skill.value)}
                       >
