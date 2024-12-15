@@ -9,6 +9,13 @@ const prisma = new PrismaClient();
 export const createUser = async (data: any) => {
   if (!data.google) data.password = await bcrypt.hash(data.password, 10);
   try {
+    const findUser = await prisma.user.findFirst({
+      where: {
+        email: data.email,
+        phoneNumber: data?.phoneNumber,
+      },
+    });
+    if (findUser) throw new Error("User Already Exist");
     const user = await prisma.user.create({
       data: {
         name: data.name,
@@ -35,7 +42,8 @@ export const createUser = async (data: any) => {
     return { success: true, data: token };
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
-      return { success: false, error: `Prisma error: ${err.message}` };
+      console.log(err.meta);
+      return { success: false, error: `Prisma error: ${err?.meta?.target}` };
     } else if (err instanceof Prisma.PrismaClientValidationError) {
       return { success: false, error: `Prisma error: ${err.message}` };
     } else if (err instanceof Error) {
@@ -52,6 +60,7 @@ export const userLogin = async (data: any) => {
         email: data.email,
       },
     });
+    if (!user) throw new Error("User email/password does not match");
     if (!data.google) {
       const hash = await bcrypt.compare(data?.password, user?.password + "");
       if (!hash) {
@@ -73,7 +82,7 @@ export const userLogin = async (data: any) => {
     return { success: true, data: token };
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
-      return { success: false, error: `Prisma error: ${err.message}` };
+      return { success: false, error: `Prisma error: ${err.meta?.target}` };
     } else if (err instanceof Prisma.PrismaClientValidationError) {
       return { success: false, error: `Prisma error: ${err.message}` };
     } else if (err instanceof Error) {

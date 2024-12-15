@@ -14,5 +14,7 @@ export const globalErrorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  res.status(err.status).json({ error: err.message });
+  console.log(err.status);
+  console.log(err.message);
+  res.status(err.status).json({ success: false, error: err.message });
 };
