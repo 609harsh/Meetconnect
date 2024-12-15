@@ -1,10 +1,19 @@
 import { Link } from "react-router-dom";
 import { useAppDispatch } from "../redux/hooks";
 import { changeMenuTo } from "../redux/menuSlice";
-import { NavbarMenu } from "../types";
+import { NavbarMenu, Payload } from "../types";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
+  const [username, setUsername] = useState<string>("");
+  useEffect(() => {
+    const token = localStorage.getItem("token") as string;
+    const user = jwtDecode(token) as Payload;
+    console.log(user);
+    setUsername(user.username);
+  }, []);
   return (
     <nav className="block w-full px-4 py-2 mx-auto bg-white bg-opacity-90 top-3 shadow lg:px-8 lg:py-3 backdrop-blur-lg backdrop-saturate-150">
       <div className="container flex flex-wrap items-center justify-between mx-auto text-slate-800">
@@ -62,7 +71,7 @@ const Navbar = () => {
             </li>
             <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
               <Link
-                to="/profile"
+                to={`/profile/${username}`}
                 className="flex items-center"
                 onClick={() =>
                   dispatch(changeMenuTo({ value: NavbarMenu.SCHEDULE }))

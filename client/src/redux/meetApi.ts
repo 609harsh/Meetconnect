@@ -7,6 +7,7 @@ import {
   Skill,
   User,
 } from "../types";
+import { ErrorResponse } from "react-router-dom";
 const api_url: string = import.meta.env.VITE_API_HOST;
 
 export interface ApiResponse<T> {
@@ -78,7 +79,12 @@ export const meetApi = createApi({
         },
         body: JSON.stringify({ email, password, google }),
       }),
-      transformResponse: (response: ApiUserResponse) => response?.data,
+      transformResponse: (response: ApiUserResponse) => {
+        return response?.data;
+      },
+      transformErrorResponse: (response) => {
+        return response?.data;
+      },
     }),
     userSignup: builder.mutation<
       string,
@@ -104,7 +110,12 @@ export const meetApi = createApi({
           google,
         }),
       }),
-      transformResponse: (response: ApiUserResponse) => response?.data,
+      transformResponse: (response: ApiUserResponse) => {
+        return response?.data;
+      },
+      transformErrorResponse: (response) => {
+        return response?.data;
+      },
     }),
     patchEducationProfile: builder.mutation<
       ApiResponse<Education>,

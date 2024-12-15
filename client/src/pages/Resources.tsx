@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-cards";
 import Navbar from "../components/Navbar";
-import { useFetchResourcesQuery } from "../redux/meetApi";
+import { useFetchResourcesQuery } from "../redux/publicApi";
 
 const resources = () => {
   const { data, isFetching, isError } = useFetchResourcesQuery();
