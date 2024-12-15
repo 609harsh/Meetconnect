@@ -4,6 +4,7 @@ import { useUserLoginMutation } from "../redux/meetApi";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { Payload } from "../types";
+import { Bounce, toast } from "react-toastify";
 
 const Login = () => {
   const [error, setError] = useState<string>("");
@@ -52,17 +53,68 @@ const Login = () => {
       return;
     }
     //Write api call
-    const token = await userLogin({ email, password }).unwrap();
-    localStorage.setItem("token", token);
-    navigation("/dashboard");
+    try {
+      const token = await toast.promise(
+        userLogin({ email, password }).unwrap(),
+        {
+          pending: "Logging in.. ",
+          success: "Welcome",
+        },
+        {
+          autoClose: 3000,
+          closeOnClick: true,
+          draggable: true,
+        }
+      );
+      localStorage.setItem("token", token);
+      navigation("/dashboard");
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err.error, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
   };
 
   const handleCredentialResponse = async (credentialResponse: string) => {
-    console.log("Encoded JWT ID token:", credentialResponse);
-    const { email } = jwtDecode(credentialResponse) as Payload;
-    const token = await userLogin({ email, google: true }).unwrap();
-    localStorage.setItem("token", token);
-    navigation("/dashboard");
+    try {
+      const { email } = jwtDecode(credentialResponse) as Payload;
+      const token = await toast.promise(
+        userLogin({ email, password }).unwrap(),
+        {
+          pending: "Logging in.. ",
+          success: "Welcome",
+        },
+        {
+          autoClose: 3000,
+          closeOnClick: true,
+          draggable: true,
+        }
+      );
+      localStorage.setItem("token", token);
+      navigation("/dashboard");
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err.error, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
   };
   return (
     <div className="w-full h-full flex justify-center items-center">

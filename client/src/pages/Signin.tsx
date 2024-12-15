@@ -4,6 +4,7 @@ import { useUserSignupMutation } from "../redux/meetApi";
 import { jwtDecode } from "jwt-decode";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { Payload } from "../types";
+import { Bounce, toast } from "react-toastify";
 
 const Signin = () => {
   const [error, setError] = useState<string>("");
@@ -66,22 +67,43 @@ const Signin = () => {
       setError("Password should have at least one special character");
       return;
     }
-    const token = await userSignup({
-      name,
-      email,
-      password,
-      phoneNumber,
-    }).unwrap();
-    localStorage.setItem("token", token);
-    navigation("/dashboard");
+    try {
+      const token = await toast.promise(
+        userSignup({
+          name,
+          email,
+          password,
+          phoneNumber,
+        }).unwrap(),
+        {
+          pending: "Creating Account",
+          success: "Account Created",
+        }
+      );
+      localStorage.setItem("token", token);
+      navigation("/dashboard");
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err.error);
+    }
   };
 
   const handleCredentialResponse = async (credentialResponse: string) => {
-    console.log("Encoded JWT ID token:", credentialResponse);
-    const { email, name } = jwtDecode(credentialResponse) as Payload;
-    const token = await userSignup({ name, email, google: true }).unwrap();
-    localStorage.setItem("token", token);
-    navigation("/dashboard");
+    try {
+      const { email, name } = jwtDecode(credentialResponse) as Payload;
+      const token = await toast.promise(
+        userSignup({ name, email, google: true }).unwrap(),
+        {
+          pending: "Creating Account",
+          success: "Account Created",
+        }
+      );
+      localStorage.setItem("token", token);
+      navigation("/dashboard");
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err.error);
+    }
   };
 
   return (
