@@ -28,8 +28,8 @@ export interface ApiSkillResponse {
   };
 }
 
-export const meetApi = createApi({
-  reducerPath: "meetApi",
+export const publicApi = createApi({
+  reducerPath: "publicApi",
   baseQuery: fetchBaseQuery({
     baseUrl: api_url,
   }),
@@ -60,6 +60,10 @@ export const meetApi = createApi({
           "content-type": "application/json",
         },
       }),
+      // transformResponse: (response) => {
+      //   console.log(response);
+      //   return response;
+      // },
     }),
     fetchAddressProfile: builder.mutation<
       ApiResponse<Address>,
@@ -111,4 +115,4 @@ export const {
   useFetchAddressProfileMutation,
   useFetchSkillsProfileMutation,
   useFetchWorkExperienceMutation,
-} = meetApi;
+} = publicApi;
