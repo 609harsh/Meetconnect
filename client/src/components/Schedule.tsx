@@ -1,7 +1,9 @@
+import { toast } from "react-toastify";
 import { useAppDispatch } from "../redux/hooks";
 import { useCreateInterviewsMutation } from "../redux/meetApi";
 import { changeMenuTo } from "../redux/menuSlice";
 import { NavbarMenu } from "../types";
+import { addInterview } from "../redux/interviewsSlice";
 
 const Schedule = () => {
   const dispatch = useAppDispatch();
@@ -12,16 +14,43 @@ const Schedule = () => {
     for (let element of e?.target.elements) {
       if (element.name) formData[element.name] = element.value;
     }
-    const interview = await saveInterview(formData);
-    if (interview.data?.success)
-      dispatch(changeMenuTo({ value: NavbarMenu.INTERVIEW }));
     // console.log(formData);
+    if (formData.title.length < 2) {
+      toast.error("Enter Valid Job Title");
+      return;
+    }
+    if (formData.company.length <= 2) {
+      toast.error("Enter Valid Company Title");
+      return;
+    }
+    if (formData.date <= 2) {
+      toast.error("Enter Date");
+      return;
+    }
+    formData.date = formData.date.replace("T", " ");
+    // console.log(formData);
+    try {
+      const interview = await toast.promise(saveInterview(formData).unwrap(), {
+        pending: "Creating Interview",
+        success: "Interview Created",
+      });
+      if (interview.success) {
+        console.log("New Interview", interview.data);
+        dispatch(addInterview(interview.data));
+        dispatch(changeMenuTo({ value: NavbarMenu.INTERVIEW }));
+      }
+
+      // console.log(interview);
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err.error);
+    }
   };
 
   return (
     <div className="flex justify-center z-10 fixed h-full w-full bg-black bg-opacity-5 backdrop-blur-sm left-0 top-0">
       <div className="rounded-lg bg-white shadow-xl my-10 max-h-fit w-full max-w-sm p-4 overflow-scroll">
-        <p className="flex flex-row justify-between border-b border-gray-900/10 pb-4">
+        <header className="flex flex-row justify-between border-b border-gray-900/10 pb-4">
           <h2 className="text-lg font-semibold ">Schedule Interview</h2>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +69,7 @@ const Schedule = () => {
               d="M6 18 18 6M6 6l12 12"
             />
           </svg>
-        </p>
+        </header>
         <form onSubmit={(e) => changes(e)}>
           <div className="space-y-6">
             <div className="border-b border-gray-900/10 pb-6">
@@ -50,7 +79,7 @@ const Schedule = () => {
                     htmlFor="title"
                     className="block text-sm/6 font-medium text-gray-900"
                   >
-                    Title
+                    Job Title
                   </label>
                   <div className="mt-2">
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
@@ -58,7 +87,7 @@ const Schedule = () => {
                         id="title"
                         name="title"
                         type="text"
-                        placeholder="janesmith"
+                        placeholder="Full Stack Developer"
                         autoComplete="title"
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm/6"
                       />
@@ -122,7 +151,7 @@ const Schedule = () => {
                       <input
                         id="date"
                         name="date"
-                        type="date"
+                        type="datetime-local"
                         autoComplete="date"
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm/6"
                       />
