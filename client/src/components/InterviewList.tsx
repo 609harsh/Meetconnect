@@ -1,7 +1,6 @@
 import { Interview } from "../types";
 import InterviewCard from "./InterviewCard";
 
-// const interviews: Interview[] = [
 //   {
 //     key: 1,
 //     title: "Backend Developer Intern",

@@ -1,10 +1,14 @@
+import { useAppDispatch } from "../redux/hooks";
+import { deleteInterview } from "../redux/interviewsSlice";
 import { useDeleteInterviewsMutation } from "../redux/meetApi";
 import { Interview } from "../types";
 
 const InterviewCard = ({ data }: { data: Interview }) => {
-  const [deleteInterview, { isLoading }] = useDeleteInterviewsMutation();
+  const [removeInterview, { isLoading }] = useDeleteInterviewsMutation();
+  const dispatch = useAppDispatch();
   const handleDelete = async (id: string) => {
-    const response = await deleteInterview(id).unwrap();
+    const response = await removeInterview(id).unwrap();
+    dispatch(deleteInterview(id));
     console.log(response);
   };
   return (
@@ -35,7 +39,8 @@ const InterviewCard = ({ data }: { data: Interview }) => {
         </h5>
         <p>{data.company}</p>
         <p>
-          {data.date} | {data.duration}
+          {data.date} {data.date === "" || data.duration === "" ? "" : "|"}{" "}
+          {data.duration}
         </p>
         <p className="text-slate-600 leading-normal font-light">{data.guest}</p>
       </div>

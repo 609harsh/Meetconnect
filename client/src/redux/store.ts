@@ -4,10 +4,12 @@ import menuSlice from "./menuSlice";
 import { meetApi } from "./meetApi";
 import { cloudinaryApi } from "./cloudinaryApi";
 import { publicApi } from "./publicApi";
+import interviewSlice from "./interviewsSlice";
 
 const store = configureStore({
   reducer: {
     menu: menuSlice,
+    interview: interviewSlice,
     [meetApi.reducerPath]: meetApi.reducer,
     [cloudinaryApi.reducerPath]: cloudinaryApi.reducer,
     [publicApi.reducerPath]: publicApi.reducer,
