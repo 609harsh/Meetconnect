@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { log } from "console";
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import { CustomError } from "./globalErrorHandler";
 
 export interface JWTError {
   name?: string;
@@ -55,7 +56,8 @@ export const authorization = async (
   } catch (error) {
     const err = error as JWTError;
     console.log(err.message);
-    res.status(401).json({ error: err.message });
+    next(new CustomError(err.message + "", 401));
+    // res.status(401).json({ success: false, error: err.message });
     return;
   }
   //4.)

@@ -11,6 +11,7 @@ class Resources {
     const response = await fetchResources();
     if (!response.success) {
       next(new CustomError(response.error as string, 400));
+      return;
     }
     res.status(200).json({ success: true, data: response.data });
   };
