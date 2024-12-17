@@ -18,7 +18,7 @@ model User{
   name        String
   email       String   @unique
   password    String?   
-  phoneNumber String?   @unique 
+  phoneNumber String?  
   createdAt   DateTime @default(now())
   about       String?
   username    String   @unique
@@ -101,7 +101,7 @@ model Interview{
   type          String
   company       String
   date          String
-  duration      String
+  duration      String?
   guest         String?
   notification  String?
   createdAt     DateTime @default(now())

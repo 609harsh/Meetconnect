@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import {
+  deleteEducation,
+  deleteWorkExperience,
   getAddress,
   getEducation,
   getProfile,
@@ -22,7 +24,7 @@ class Profile {
     next: NextFunction
   ) => {
     if (!req.username) {
-      res.status(401).json({ error: "UserName Does not exist" });
+      next(new CustomError("UserName Does not exist", 400));
       return;
     }
     const response = await updateProfileImage(
@@ -31,6 +33,7 @@ class Profile {
     );
     if (!response.success) {
       next(new CustomError(response.error as string, 400));
+      return;
     }
     res.json({ success: true, data: response.data });
   };
@@ -39,13 +42,14 @@ class Profile {
     res: Response,
     next: NextFunction
   ) => {
-    // if (!req.username) {
-    //   res.status(401).json({ error: "UserName Does not exist" });
-    //   return;
-    // }
+    if (!req.params.username) {
+      next(new CustomError("UserName Does not exist", 400));
+      return;
+    }
     const response = await getProfile(req.params.username);
     if (!response.success) {
       next(new CustomError(response.error as string, 400));
+      return;
     }
     res.json({ success: true, data: response.data });
   };
@@ -55,12 +59,13 @@ class Profile {
     next: NextFunction
   ) => {
     if (!req.username) {
-      res.status(401).json({ error: "UserName Does not exist" });
+      res.status(400).json({ error: "UserName Does not exist" });
       return;
     }
     const response = await patchProfile(req.username, req.body);
     if (!response.success) {
       next(new CustomError(response.error as string, 400));
+      return;
     }
     res.json({ success: true, data: response.data });
   };
@@ -69,13 +74,14 @@ class Profile {
     res: Response,
     next: NextFunction
   ) => {
-    // if (!req.username) {
-    //   res.status(401).json({ error: "UserName Does not exist" });
-    //   return;
-    // }
+    if (!req.params.username) {
+      next(new CustomError("UserName Does not exist", 400));
+      return;
+    }
     const response = await getAddress(req.params.sername);
     if (!response.success) {
       next(new CustomError(response.error as string, 400));
+      return;
     }
     res.json({ success: true, data: response.data });
   };
@@ -85,12 +91,13 @@ class Profile {
     next: NextFunction
   ) => {
     if (!req.username) {
-      res.status(401).json({ error: "UserName Does not exist" });
+      res.status(400).json({ error: "UserName Does not exist" });
       return;
     }
     const response = await patchAddress(req.username, req.body);
     if (!response.success) {
       next(new CustomError(response.error as string, 400));
+      return;
     }
     res.json({ success: true, data: response.data });
   };
@@ -99,14 +106,14 @@ class Profile {
     res: Response,
     next: NextFunction
   ) => {
-    // if (!req.username) {
-    //   console.log(req.username);
-    //   res.status(401).json({ error: "UserName Does not exist" });
-    //   return;
-    // }
+    if (!req.params.username) {
+      next(new CustomError("UserName Does not exist", 400));
+      return;
+    }
     const response = await getEducation(req.params.username);
     if (!response.success) {
       next(new CustomError(response.error as string, 400));
+      return;
     }
     res.json({ success: true, data: response.data });
   };
@@ -116,7 +123,7 @@ class Profile {
     next: NextFunction
   ) => {
     if (!req.username) {
-      res.status(401).json({ error: "UserName Does not exist" });
+      res.status(400).json({ error: "UserName Does not exist" });
       return;
     }
     const response = await patchEducation(
@@ -126,6 +133,7 @@ class Profile {
     );
     if (!response.success) {
       next(new CustomError(response.error as string, 400));
+      return;
     }
     res.json({ success: true, data: response.data });
   };
@@ -134,13 +142,14 @@ class Profile {
     res: Response,
     next: NextFunction
   ) => {
-    // if (!req.username) {
-    //   res.status(401).json({ error: "UserName Does not exist" });
-    //   return;
-    // }
+    if (!req.params.username) {
+      next(new CustomError("UserName Does not exist", 400));
+      return;
+    }
     const response = await getSkills(req.params.username);
     if (!response.success) {
       next(new CustomError(response.error as string, 400));
+      return;
     }
     res.json({ success: true, data: response.data });
   };
@@ -150,12 +159,13 @@ class Profile {
     next: NextFunction
   ) => {
     if (!req.username) {
-      res.status(401).json({ error: "UserName Does not exist" });
+      res.status(400).json({ error: "UserName Does not exist" });
       return;
     }
     const response = await patchSkills(req.username, req.body);
     if (!response.success) {
       next(new CustomError(response.error as string, 400));
+      return;
     }
     res.json({ success: true, data: response.data });
   };
@@ -165,13 +175,14 @@ class Profile {
     res: Response,
     next: NextFunction
   ) => {
-    // if (!req.username) {
-    //   res.status(401).json({ error: "UserName Does not exist" });
-    //   return;
-    // }
+    if (!req.params.username) {
+      next(new CustomError("UserName Does not exist", 400));
+      return;
+    }
     const response = await getWorkExperience(req.params.username);
     if (!response.success) {
       next(new CustomError(response.error as string, 400));
+      return;
     }
     res.json({ success: true, data: response.data });
   };
@@ -182,7 +193,7 @@ class Profile {
     next: NextFunction
   ) => {
     if (!req.username) {
-      res.status(401).json({ error: "UserName Does not exist" });
+      res.status(400).json({ error: "UserName Does not exist" });
       return;
     }
     const response = await patchWorkExperience(
@@ -192,6 +203,41 @@ class Profile {
     );
     if (!response.success) {
       next(new CustomError(response.error as string, 400));
+      return;
+    }
+    res.json({ success: true, data: response.data });
+  };
+
+  public removeEducation = async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    if (!req.username) {
+      next(new CustomError("Username does not exist", 400));
+      return;
+    }
+    const response = await deleteEducation(req.username, req.params.id);
+    if (!response.success) {
+      next(new CustomError(response.error as string, 400));
+      return;
+    }
+    res.json({ success: true, data: response.data });
+  };
+
+  public removeWorkExperience = async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    if (!req.username) {
+      next(new CustomError("Username does not exist", 400));
+      return;
+    }
+    const response = await deleteWorkExperience(req.username, req.params.id);
+    if (!response.success) {
+      next(new CustomError(response.error as string, 400));
+      return;
     }
     res.json({ success: true, data: response.data });
   };

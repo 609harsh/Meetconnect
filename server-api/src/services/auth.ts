@@ -19,7 +19,7 @@ export const createUser = async (data: any) => {
     const user = await prisma.user.create({
       data: {
         name: data.name,
-        email: data.email,
+        email: (data.email + "").toLowerCase(),
         password: data?.password,
         phoneNumber: data?.phoneNumber,
         username:
@@ -42,10 +42,9 @@ export const createUser = async (data: any) => {
     return { success: true, data: token };
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
-      console.log(err.meta);
-      return { success: false, error: `Prisma error: ${err?.meta?.target}` };
+      return { success: false, error: `Db error: ${err?.meta?.target}` };
     } else if (err instanceof Prisma.PrismaClientValidationError) {
-      return { success: false, error: `Prisma error: ${err.message}` };
+      return { success: false, error: `DB Error: ${err.message}` };
     } else if (err instanceof Error) {
       return { success: false, error: err.message };
     }
@@ -57,7 +56,7 @@ export const userLogin = async (data: any) => {
   try {
     const user = await prisma.user.findUnique({
       where: {
-        email: data.email,
+        email: (data.email + "").toLowerCase(),
       },
     });
     if (!user) throw new Error("User email/password does not match");

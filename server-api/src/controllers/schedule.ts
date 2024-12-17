@@ -11,14 +11,12 @@ class ScheduleInterviews {
   ) => {
     const data = req.body;
     const userId = req.userId + "";
-    if (userId.length < 12) {
-      res.json({ success: false, error: "User is not Valid" });
-    }
     const response = await createInterviews(data, userId);
-    if (!response.success) {
-      next(new CustomError(response.error as string, 400));
+    if (response.success) {
+      res.status(200).json(response);
+      return;
     }
-    res.status(200).json(response);
+    next(new CustomError(response.error as string, 400));
   };
 }
 

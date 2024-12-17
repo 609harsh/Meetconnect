@@ -38,9 +38,9 @@ export interface WorkExperience {
 
 const errorFunction = (err: unknown) => {
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
-    return `Prisma error: ${err.message}`;
+    return `Db error: Invalid details`;
   } else if (err instanceof Prisma.PrismaClientValidationError) {
-    return `Prisma error: ${err.message}`;
+    return `DB Error: ${err.message.split("\n").pop()}`;
   } else if (err instanceof Error) {
     return err.message;
   }
@@ -69,6 +69,7 @@ export const getProfile = async (username: string) => {
         username,
       },
     });
+    if (!profile) throw new Error("User does not Exist");
     return { success: true, data: profile };
   } catch (err) {
     return { success: false, error: errorFunction(err) };
@@ -96,6 +97,7 @@ export const getAddress = async (username: string) => {
         username,
       },
     });
+    if (!address) throw new Error("User does not Exist");
     return { success: true, data: address };
   } catch (err) {
     return { success: false, error: errorFunction(err) };
@@ -124,6 +126,12 @@ export const patchAddress = async (username: string, data: UserAddress) => {
 
 export const getEducation = async (username: string) => {
   try {
+    const user = await prisma.user.findFirst({
+      where: {
+        username,
+      },
+    });
+    if (!user) throw new Error("User does not exist");
     const education = await prisma.userEducation.findMany({
       where: {
         username: username,
@@ -176,6 +184,7 @@ export const getSkills = async (username: string) => {
         username: username,
       },
     });
+    if (!skills) throw new Error("User does not exist");
     return { success: true, data: skills };
   } catch (err) {
     return { success: false, error: errorFunction(err) };
@@ -204,6 +213,12 @@ export const patchSkills = async (username: string, skill: Skill[]) => {
 
 export const getWorkExperience = async (username: string) => {
   try {
+    const user = await prisma.user.findFirst({
+      where: {
+        username,
+      },
+    });
+    if (!user) throw new Error("User does not exist");
     const works = await prisma.userWorkExperience.findMany({
       where: {
         username: username,
@@ -237,6 +252,40 @@ export const patchWorkExperience = async (
       },
     });
     return { success: true, data: work };
+  } catch (err) {
+    return { success: false, error: errorFunction(err) };
+  }
+};
+
+export const deleteEducation = async (
+  username: string,
+  educationId: string
+) => {
+  try {
+    const education = await prisma.userEducation.delete({
+      where: {
+        username,
+        id: educationId,
+      },
+    });
+    return { success: true, data: education };
+  } catch (err) {
+    return { success: false, error: errorFunction(err) };
+  }
+};
+
+export const deleteWorkExperience = async (
+  username: string,
+  workExperienceId: string
+) => {
+  try {
+    const workExperience = await prisma.userWorkExperience.delete({
+      where: {
+        username,
+        id: workExperienceId,
+      },
+    });
+    return { success: true, data: workExperience };
   } catch (err) {
     return { success: false, error: errorFunction(err) };
   }

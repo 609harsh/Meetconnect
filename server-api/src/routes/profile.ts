@@ -22,4 +22,15 @@ profile.patch(
   profileController.updateWorkExperience
 );
 
+profile.delete(
+  "/education/:id",
+  authorization,
+  profileController.removeEducation
+);
+profile.delete(
+  "/workexperience/:id",
+  authorization,
+  profileController.removeWorkExperience
+);
+
 export default profile;
