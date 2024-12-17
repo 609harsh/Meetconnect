@@ -1,10 +1,138 @@
+import { Swiper, SwiperSlide } from "swiper/react";
 import Navbar from "./components/Navbar";
+import { EffectCoverflow, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-coverflow";
+import "swiper/css/pagination";
+import { Link } from "react-router-dom";
 
 function App() {
   return (
-    <div>
-      <Navbar />
-      <head></head>
+    <div className="h-full">
+      <div className="fixed z-10 w-full">
+        <Navbar />
+      </div>
+      <section className="relative bg-gradient-to-r from-blue-900/90 via-blue-700/90 to-cyan-800/90 h-screen flex items-center">
+        <div className="container mx-auto px-6 md:px-12 lg:px-20 flex flex-col-reverse md:flex-row items-center gap-4">
+          <div className="w-full md:w-1/2 text-center md:text-left">
+            <h1 className="animate-slidein300 opacity-0 text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+              Simplify Your Job Hunt with{" "}
+              <span className="underline decoration-cyan-300">
+                One Powerful Tool!
+              </span>
+            </h1>
+            <p className="animate-slidein500 opacity-0 mt-4 text-lg text-gray-100">
+              Track interviews, manage job applications, showcase your profile,
+              and access free career resources—all in one place.
+            </p>
+            <div className="animate-slidein700 opacity-0 mt-6 flex justify-center md:justify-start space-x-4">
+              <Link
+                to="/signin"
+                className="bg-white text-blue-500 font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-blue-100"
+              >
+                Get Started for Free
+              </Link>
+              <a
+                href="#features"
+                className="bg-transparent text-white border border-white px-6 py-3 rounded-lg hover:bg-white hover:text-blue-500"
+              >
+                Explore Features
+              </a>
+            </div>
+          </div>
+
+          <div className="w-full md:w-1/2 flex justify-end">
+            <img
+              src="/Screenshot 2024-12-17 150255.png"
+              alt="Job Hunt Illustration"
+              className="rounded-lg shadow-lg"
+            />
+          </div>
+        </div>
+        {/* <div className="absolute bottom-4 w-full flex justify-center">
+          <button className="bg-white bg-opacity-90 text-blue-500 px-4 py-2 rounded-full shadow-md hover:bg-blue-100 flex items-center">
+            <svg
+              className="w-5 h-5 mr-2"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M14.752 11.168l-6.704 3.886a1 1 0 01-1.516-.858V8.804a1 1 0 011.516-.858l6.704 3.886a1 1 0 010 1.716z"
+              />
+            </svg>
+            Watch Demo
+          </button>
+        </div> */}
+      </section>
+      <section
+        className="carousel h-svh flex flex-col my-auto items-center justify-evenly"
+        id="features"
+      >
+        <h2 className="text-5xl lg:text-6xl font-extrabold tracking-widest">
+          Features
+        </h2>
+        <Swiper
+          effect={"coverflow"}
+          grabCursor={true}
+          centeredSlides={true}
+          slidesPerView={"auto"}
+          coverflowEffect={{
+            rotate: 50,
+            stretch: 0,
+            depth: 100,
+            modifier: 1,
+            slideShadows: true,
+          }}
+          pagination={true}
+          modules={[EffectCoverflow, Pagination]}
+          className="w-full py-12 "
+          style={{ scrollbarWidth: "none" }}
+        >
+          <SwiperSlide className="bg-center bg-cover w-80 md:w-96 ">
+            <div className="flex flex-col bg-white items-center text-black">
+              <img
+                src="https://swiperjs.com/demos/images/nature-1.jpg"
+                className="block w-full"
+              />
+              <p className="py-5 text-xl font-semibold">Interview Tracker</p>
+            </div>
+          </SwiperSlide>
+          <SwiperSlide className="bg-center bg-cover w-80 md:w-96">
+            <div className="flex flex-col bg-white items-center text-black">
+              <img
+                src="https://swiperjs.com/demos/images/nature-1.jpg"
+                className="block w-full"
+              />
+              <p className="py-5 text-xl font-semibold">
+                Job Application Tracker
+              </p>
+            </div>
+          </SwiperSlide>
+          <SwiperSlide className="bg-center bg-cover w-80 md:w-96">
+            <div className="flex flex-col bg-white items-center text-black">
+              <img
+                src="https://swiperjs.com/demos/images/nature-1.jpg"
+                className="block w-full"
+              />
+              <p className="py-5 text-xl font-semibold">Public Profile</p>
+            </div>
+          </SwiperSlide>
+          <SwiperSlide className="bg-center bg-cover w-80 md:w-96 ">
+            <div className="flex flex-col bg-white items-center text-black">
+              <img
+                src="https://swiperjs.com/demos/images/nature-1.jpg"
+                className="block w-full"
+              />
+              <p className="py-5 text-xl font-semibold">Free Resources</p>
+            </div>
+          </SwiperSlide>
+        </Swiper>
+      </section>
       <section className="bg-white ">
         <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6 ">
           <div className="mx-auto max-w-screen-sm text-center mb-8 lg:mb-16">
@@ -22,9 +150,9 @@ function App() {
 
               <div className="p-5">
                 <h3 className="text-xl font-bold tracking-tight text-gray-900 ">
-                  <a href="#">Bonnie Green</a>
+                  <a href="#">Harsh Gupta</a>
                 </h3>
-                <span className="text-gray-500 ">CEO & Web Developer</span>
+                <span className="text-gray-500 ">Full Stack Web Developer</span>
                 <p className="mt-3 mb-4 font-light text-gray-500 text-sm ">
                   Hi! I’m Harsh Gupta, a passionate Full Stack Developer based
                   in India. With a background in Computer Science and experience
@@ -41,7 +169,10 @@ function App() {
                 </p>
                 <ul className="flex space-x-4 sm:mt-0">
                   <li>
-                    <a href="#" className="text-gray-500 hover:text-gray-900 ">
+                    <Link
+                      to="https://www.linkedin.com/in/harsh-gupta-a72902244/"
+                      className="text-gray-500 hover:text-gray-900 "
+                    >
                       <svg
                         className="w-5 h-5"
                         fill="currentColor"
@@ -50,14 +181,17 @@ function App() {
                       >
                         <path
                           fill-rule="evenodd"
-                          d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+                          d="M20.447 20.452H17.32v-4.981c0-1.188-.023-2.722-1.658-2.722-1.659 0-1.912 1.297-1.912 2.637v5.066H10.61V9.75h2.923v1.464h.042c.407-.771 1.398-1.586 2.879-1.586 3.074 0 3.642 2.024 3.642 4.654v6.17zM6.337 8.286a1.605 1.605 0 110-3.211 1.605 1.605 0 010 3.211zm1.697 12.166H4.642V9.75h3.392v10.702zM22 2H2C.895 2 0 2.895 0 4v16c0 1.105.895 2 2 2h20c1.105 0 2-.895 2-2V4c0-1.105-.895-2-2-2z"
                           clip-rule="evenodd"
                         />
                       </svg>
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="text-gray-500 hover:text-gray-900 ">
+                    <Link
+                      to="https://x.com/609hgharsh"
+                      className="text-gray-500 hover:text-gray-900 "
+                    >
                       <svg
                         className="w-5 h-5"
                         fill="currentColor"
@@ -66,10 +200,13 @@ function App() {
                       >
                         <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
                       </svg>
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="text-gray-500 hover:text-gray-900 ">
+                    <Link
+                      to="https://github.com/609harsh"
+                      className="text-gray-500 hover:text-gray-900 "
+                    >
                       <svg
                         className="w-5 h-5"
                         fill="currentColor"
@@ -82,10 +219,13 @@ function App() {
                           clip-rule="evenodd"
                         />
                       </svg>
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="text-gray-500 hover:text-gray-900 ">
+                    <Link
+                      to="https://harsh-gupta-portfolio.vercel.app/"
+                      className="text-gray-500 hover:text-gray-900 "
+                    >
                       <svg
                         className="w-5 h-5"
                         fill="currentColor"
@@ -98,7 +238,7 @@ function App() {
                           clip-rule="evenodd"
                         />
                       </svg>
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -106,6 +246,11 @@ function App() {
           </div>
         </div>
       </section>
+      <hr className="h-1 bg-black" />
+      <p className="text-center font-medium p-4">
+        ©️ 2024| Built by Harsh Gupta - Crafted with ❣️ and copious amounts of
+        coffee!!
+      </p>
     </div>
   );
 }
