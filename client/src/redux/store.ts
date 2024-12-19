@@ -5,11 +5,15 @@ import { meetApi } from "./meetApi";
 import { cloudinaryApi } from "./cloudinaryApi";
 import { publicApi } from "./publicApi";
 import interviewSlice from "./interviewsSlice";
+import jobColumnSlice from "./jobColumnSlice";
+import jobSlice from "./jobsSlice";
 
 const store = configureStore({
   reducer: {
     menu: menuSlice,
     interview: interviewSlice,
+    jobcolumn: jobColumnSlice,
+    jobdata: jobSlice,
     [meetApi.reducerPath]: meetApi.reducer,
     [cloudinaryApi.reducerPath]: cloudinaryApi.reducer,
     [publicApi.reducerPath]: publicApi.reducer,

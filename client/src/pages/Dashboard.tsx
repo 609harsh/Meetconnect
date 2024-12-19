@@ -1,7 +1,7 @@
 import Interview from "../components/Interview";
 import Navbar from "../components/Navbar";
 import Schedule from "../components/Schedule";
-import Tracker from "../components/Tracker";
+import Tracker from "../components/Tracker/Tracker";
 import { useAppSelector } from "../redux/hooks";
 import { NavbarMenu } from "../types";
 
