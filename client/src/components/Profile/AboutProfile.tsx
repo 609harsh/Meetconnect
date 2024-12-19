@@ -1,4 +1,6 @@
 import { useState } from "react";
+import CancelIcon from "../../icons/CancelIcon";
+import SaveIcon from "../../icons/SaveIcon";
 
 const AboutProfile = ({
   data,
@@ -31,39 +33,21 @@ const AboutProfile = ({
           )}
           {update ? (
             <li className="font-medium rounded-md hover:cursor-pointer flex flex-row justify-around items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6 text-green-700 font-bold hover:bg-green-100 rounded-full"
+              <span
                 onClick={() => saveChanges()}
+                className="text-green-700 font-bold hover:bg-green-100 rounded-full"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6 text-gray-700 hover:bg-gray-100 rounded-full"
+                <SaveIcon />
+              </span>
+              <span
                 onClick={() => {
                   setUpdate(!update);
                   setValue("");
                 }}
+                className="text-gray-700 hover:bg-gray-100 rounded-full"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
+                <CancelIcon />
+              </span>
             </li>
           ) : (
             <li

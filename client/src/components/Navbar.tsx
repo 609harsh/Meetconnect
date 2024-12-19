@@ -4,6 +4,8 @@ import { changeMenuTo } from "../redux/menuSlice";
 import { Payload } from "../types";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
+import LogoutIcon from "../icons/LogoutIcon";
+import MenuIcon from "../icons/MenuIcon";
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
@@ -30,62 +32,40 @@ const Navbar = () => {
         </Link>
         <div className="hidden md:block">
           {login && (
-            <ul className="flex flex-col gap-2 mt-2 mb-4 md:mb-0 md:mt-0 md:flex-row md:items-center md:gap-6">
-              <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
+            <ul className="flex flex-col gap-2 mt-2 mr-2 font-normal text-slate-700 mb-4 md:mb-0 md:mt-0 md:flex-row md:items-center md:gap-6 ">
+              <li className="hover:ring-blue-700/90 hover:ring-2 p-1 hover:bg-blue-300/40 rounded-md">
                 <Link
                   to="/dashboard"
-                  className="flex items-center"
                   onClick={() => dispatch(changeMenuTo(true))}
                 >
                   Schedule
                 </Link>
               </li>
-              <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
+              <li className="hover:ring-blue-700/90 hover:ring-2 p-1 hover:bg-blue-300/40 rounded-md">
                 <Link
                   to="/dashboard"
-                  className="flex items-center"
                   onClick={() => dispatch(changeMenuTo(false))}
                 >
                   Interviews
                 </Link>
               </li>
-              <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
-                <Link to="/tracker" className="flex items-center">
-                  Tracker
-                </Link>
+              <li className="hover:ring-blue-700/90 hover:ring-2 p-1 hover:bg-blue-300/40 rounded-md">
+                <Link to="/tracker">Tracker</Link>
               </li>
-              <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
-                <Link to="/resources" className="flex items-center">
-                  Resources
-                </Link>
+              <li className="hover:ring-blue-700/90 hover:ring-2 p-1 hover:bg-blue-300/40 rounded-md">
+                <Link to="/resources">Resources</Link>
               </li>
-              <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
-                <Link to={`/profile/${username}`} className="flex items-center">
-                  Profile
-                </Link>
+              <li className="hover:ring-blue-700/90 hover:ring-2 p-1 hover:bg-blue-300/40 rounded-md">
+                <Link to={`/profile/${username}`}>Profile</Link>
               </li>
-              <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
+              <li className="hover:ring-blue-700/90 hover:ring-2 p-1 hover:bg-blue-300/40 rounded-md">
                 <Link
                   to="/login"
-                  className="flex items-center"
                   onClick={() => {
                     localStorage.removeItem("token");
                   }}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
-                    />
-                  </svg>
+                  <LogoutIcon />
                 </Link>
               </li>
             </ul>
@@ -94,7 +74,7 @@ const Navbar = () => {
 
         {!login && (
           <ul className="flex flex-row gap-1 mt-2 mb-4 md:mb-0 md:mt-0 md:flex-row md:items-center md:gap-6">
-            <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
+            <li className="flex items-center p-1 text-md gap-x-2 text-slate-600">
               <Link
                 to="/login"
                 className="px-3 py-1 bg-white text-gray-800 shadow hover:bg-gray-50 rounded-lg"
@@ -105,7 +85,7 @@ const Navbar = () => {
                 Login
               </Link>
             </li>
-            <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
+            <li className="flex items-center p-1 text-md gap-x-2 text-slate-600">
               <Link
                 to="/signin"
                 className="px-3 py-1 bg-gray-800 text-gray-200 shadow hover:bg-gray-900 rounded-lg"
@@ -125,34 +105,21 @@ const Navbar = () => {
             onClick={() => setOpenMenu(!openMenu)}
           >
             <span className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4 6h16M4 12h16M4 18h16"
-                ></path>
-              </svg>
+              <MenuIcon />
             </span>
           </button>
         )}
       </div>
       {openMenu && (
-        <div className="md:hidden">
+        <div className="md:hidden ">
           {login && (
             <ul
               role="list"
-              className="flex flex-col gap-2 mt-1 mb-2 items-end shadow-lg rounded-lg p-2"
+              className="flex flex-col gap-2 mt-1 text-md text-center text-slate-800 font-medium mb-2 shadow-lg rounded-lg  ring-2 ring-blue-700/90 p-2 "
             >
-              <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
+              <li className="p-1 bg-blue-300/40 ">
                 <Link
                   to="/dashboard"
-                  className="flex items-center"
                   onClick={() => {
                     setOpenMenu(!openMenu);
                     dispatch(changeMenuTo(true));
@@ -161,10 +128,9 @@ const Navbar = () => {
                   Schedule
                 </Link>
               </li>
-              <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
+              <li className="p-1">
                 <Link
                   to="/dashboard"
-                  className="flex items-center"
                   onClick={() => {
                     setOpenMenu(!openMenu);
                     dispatch(changeMenuTo(false));
@@ -173,25 +139,18 @@ const Navbar = () => {
                   Interviews
                 </Link>
               </li>
-              <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
-                <Link to="/dashboard" className="flex items-center">
-                  Tracker
-                </Link>
+              <li className=" p-1 bg-blue-300/40">
+                <Link to="/dashboard">Tracker</Link>
               </li>
-              <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
-                <Link to="/resources" className="flex items-center">
-                  Resources
-                </Link>
+              <li className=" p-1">
+                <Link to="/resources">Resources</Link>
               </li>
-              <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
-                <Link to={`/profile/${username}`} className="flex items-center">
-                  Profile
-                </Link>
+              <li className="p-1 bg-blue-300/40">
+                <Link to={`/profile/${username}`}>Profile</Link>
               </li>
-              <li className="flex items-center p-1 text-sm gap-x-2 text-slate-600">
+              <li className="p-1">
                 <Link
                   to="/login"
-                  className="flex items-center"
                   onClick={() => {
                     setOpenMenu(!openMenu);
                     localStorage.removeItem("token");

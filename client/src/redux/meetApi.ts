@@ -7,7 +7,6 @@ import {
   Skill,
   User,
 } from "../types";
-import { ErrorResponse } from "react-router-dom";
 const api_url: string = import.meta.env.VITE_API_HOST;
 
 export interface ApiResponse<T> {
@@ -33,7 +32,7 @@ export const meetApi = createApi({
   reducerPath: "meetApi",
   baseQuery: fetchBaseQuery({
     baseUrl: api_url,
-    prepareHeaders: (headers, api) => {
+    prepareHeaders: (headers) => {
       const token = localStorage.getItem("token") as string;
       if (token) {
         headers.set("authorization", `Bearer ${token}`);

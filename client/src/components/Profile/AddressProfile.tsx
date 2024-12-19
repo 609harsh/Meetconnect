@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { usePatchAddressProfileMutation } from "../../redux/meetApi";
 import { Address } from "../../types";
 import { useFetchAddressProfileMutation } from "../../redux/publicApi";
+import SaveIcon from "../../icons/SaveIcon";
+import CancelIcon from "../../icons/CancelIcon";
 
 const labels = ["line1", "line2", "city", "state", "country", "pincode"];
 const add: Address = {
@@ -83,36 +85,18 @@ const AddressProfile = ({
               </li>
               {activeAddress === field ? (
                 <li className="font-medium rounded-md hover:cursor-pointer flex flex-row self-end mb-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-6 text-green-700 font-bold hover:bg-green-100 rounded-full"
+                  <span
                     onClick={() => saveAddressChanges()}
+                    className="text-green-700 font-bold hover:bg-green-100 rounded-full"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                    />
-                  </svg>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-6 text-gray-700 hover:bg-gray-100 rounded-full"
+                    <SaveIcon />
+                  </span>
+                  <span
                     onClick={() => cancelAddressChanges()}
+                    className="text-gray-700 hover:bg-gray-100 rounded-full"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                    />
-                  </svg>
+                    <CancelIcon />
+                  </span>
                 </li>
               ) : (
                 !disable && (
