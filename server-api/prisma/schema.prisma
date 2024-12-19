@@ -24,6 +24,27 @@ model User{
   username    String   @unique
   profileImg  String?
   interview   Interview[]
+  trackerColumn TrackerColumn[]
+}
+
+model TrackerColumn{
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  columnTitle       String
+  idx               Int
+  jobIdx            String[]
+  username          String
+  jobs              TrackerJob[]
+  user              User @relation(fields: [username], references: [username])
+}
+
+model TrackerJob{
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  jobtitle String
+  company  String
+  note     String
+  listId   String  @db.ObjectId
+  list     TrackerColumn @relation(fields: [listId],references: [id])
+  link     String
 }
 
 model UserAddress{
