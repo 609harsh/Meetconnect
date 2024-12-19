@@ -6,6 +6,7 @@ import schedule from "./routes/schedule";
 import interviews from "./routes/interviews";
 import profile from "./routes/profile";
 import { CustomError, globalErrorHandler } from "./globalErrorHandler";
+import tracker from "./routes/tracker";
 const app: Express = express();
 
 app.use(express.urlencoded({ extended: true }));
@@ -14,6 +15,7 @@ app.use(cors());
 app.use(authRouter);
 app.use(schedule);
 app.use(interviews);
+app.use(tracker);
 app.use(resources);
 app.use(profile);
 
