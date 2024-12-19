@@ -2,7 +2,6 @@ import { toast } from "react-toastify";
 import { useAppDispatch } from "../redux/hooks";
 import { useCreateInterviewsMutation } from "../redux/meetApi";
 import { changeMenuTo } from "../redux/menuSlice";
-import { NavbarMenu } from "../types";
 import { addInterview } from "../redux/interviewsSlice";
 
 const Schedule = () => {
@@ -37,7 +36,7 @@ const Schedule = () => {
       if (interview.success) {
         console.log("New Interview", interview.data);
         dispatch(addInterview(interview.data));
-        dispatch(changeMenuTo({ value: NavbarMenu.INTERVIEW }));
+        dispatch(changeMenuTo(false));
       }
 
       // console.log(interview);
@@ -59,9 +58,7 @@ const Schedule = () => {
             strokeWidth={1.5}
             stroke="currentColor"
             className="size-6 cursor-pointer"
-            onClick={() =>
-              dispatch(changeMenuTo({ value: NavbarMenu.INTERVIEW }))
-            }
+            onClick={() => dispatch(changeMenuTo(false))}
           >
             <path
               strokeLinecap="round"
@@ -224,9 +221,7 @@ const Schedule = () => {
             <button
               type="button"
               className="text-sm/6 font-semibold text-gray-900"
-              onClick={() =>
-                dispatch(changeMenuTo({ value: NavbarMenu.INTERVIEW }))
-              }
+              onClick={() => dispatch(changeMenuTo(false))}
             >
               Cancel
             </button>
