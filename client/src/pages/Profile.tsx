@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import SkillsProfile from "../components/Profile/SkillsProfile";
-import AttachmentsProfile from "../components/Profile/AttachmentsProfile";
 import WorkExperienceProfile from "../components/Profile/WorkExperienceProfile";
 import EducationProfile from "../components/Profile/EducationProfile";
 import AddressProfile from "../components/Profile/AddressProfile";
@@ -71,6 +70,7 @@ export default function Profile() {
         method: "PATCH",
       }
     );
+    await updateUrl({ url: response.data as string }).unwrap();
     await res.json();
     if (response.success) setPreview(response.data as string);
   };
@@ -116,7 +116,7 @@ export default function Profile() {
           <EducationProfile disable={disable} username={username + ""} />
           <SkillsProfile disable={disable} username={username + ""} />
           <WorkExperienceProfile disable={disable} username={username + ""} />
-          {/* <AttachmentsProfile disable={disable} /> */}
+          {/* <AttachmentsProfile /> */}
         </dl>
       </div>
     </div>

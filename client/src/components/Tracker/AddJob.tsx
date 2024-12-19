@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import Select from "react-select";
 import AsyncSelect from "react-select/async";
 import { Column, Job } from "../../types";
@@ -60,15 +60,7 @@ const jobOptions: JobOption[] = [
   },
 ];
 
-const AddJob = ({
-  closeJob,
-  defaultValue,
-}: {
-  closeJob: () => void;
-  defaultValue: string | number;
-}) => {
-  const [isSearchable, setIsSearchable] = useState(true);
-  const [isClearable, setIsClearable] = useState(true);
+const AddJob = ({ closeJob }: { closeJob: () => void }) => {
   const dispatch = useAppDispatch();
   const columns: Column[] = useAppSelector((state) => state.jobcolumn);
   const addNewJob = (e: React.FormEvent<HTMLFormElement>) => {
@@ -133,9 +125,9 @@ const AddJob = ({
                         // defaultValue={colourOptions[0]}
                         // isDisabled={isDisabled}
                         // isLoading={isLoading}
-                        isClearable={isClearable}
+                        isClearable={true}
                         // isRtl={isRtl}
-                        isSearchable={isSearchable}
+                        isSearchable={true}
                         name="jobtitle"
                         options={jobOptions}
                       />
@@ -176,9 +168,9 @@ const AddJob = ({
                         // )}
                         // isDisabled={isDisabled}
                         // isLoading={isLoading}
-                        isClearable={isClearable}
+                        isClearable={true}
                         // isRtl={isRtl}
-                        isSearchable={isSearchable}
+                        isSearchable={true}
                         // value={columns.find((col) => col.id === defaultValue)}
                         name="list"
                         options={columns?.map((col) => {

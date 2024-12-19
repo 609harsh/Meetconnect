@@ -3,6 +3,7 @@ import { useAppDispatch } from "../redux/hooks";
 import { useCreateInterviewsMutation } from "../redux/meetApi";
 import { changeMenuTo } from "../redux/menuSlice";
 import { addInterview } from "../redux/interviewsSlice";
+import CloseIcon from "../icons/CloseIcon";
 
 const Schedule = () => {
   const dispatch = useAppDispatch();
@@ -48,24 +49,18 @@ const Schedule = () => {
 
   return (
     <div className="flex justify-center z-10 fixed h-full w-full bg-black bg-opacity-5 backdrop-blur-sm left-0 top-0">
-      <div className="rounded-lg bg-white shadow-xl my-10 max-h-fit w-full max-w-sm p-4 overflow-scroll">
+      <div
+        className="rounded-lg bg-white shadow-xl my-10 max-h-fit w-full max-w-md p-4 overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-violet-700 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-violet-700"
+        style={{ scrollbarWidth: "thin", WebkitOverflowScrolling: "auto" }}
+      >
         <header className="flex flex-row justify-between border-b border-gray-900/10 pb-4">
           <h2 className="text-lg font-semibold ">Schedule Interview</h2>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6 cursor-pointer"
+          <span
             onClick={() => dispatch(changeMenuTo(false))}
+            className="cursor-pointer"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18 18 6M6 6l12 12"
-            />
-          </svg>
+            <CloseIcon />
+          </span>
         </header>
         <form onSubmit={(e) => changes(e)}>
           <div className="space-y-6">

@@ -1,4 +1,4 @@
-import { act, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Column, Job } from "../../types";
 import TrackerColumn from "./TrackerColumn";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";

@@ -2,19 +2,19 @@ import { Skill } from "./types";
 
 export const skillsData: Skill[] = [
   {
-    id: "react",
-    value: "React",
+    value: "react",
+    label: "React",
   },
   {
-    id: "mongodb",
-    value: "MongoDB",
+    value: "mongodb",
+    label: "MongoDB",
   },
   {
-    id: "express",
-    value: "Express",
+    value: "express",
+    label: "Express",
   },
   {
-    id: "prisma",
-    value: "Prisma",
+    value: "prisma",
+    label: "Prisma",
   },
 ];

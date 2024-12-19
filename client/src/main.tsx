@@ -5,7 +5,6 @@ import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Login from "./pages/Login.tsx";
 import Signin from "./pages/Signin.tsx";
-import Home from "./pages/Home.tsx";
 import Forgot from "./pages/Forgot.tsx";
 import Profile from "./pages/Profile.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
@@ -31,10 +30,6 @@ const router = createBrowserRouter([
     element: <Signin />,
   },
   {
-    path: "/home",
-    element: <Home />,
-  },
-  {
     path: "/forgot",
     element: <Forgot />,
   },
@@ -51,7 +46,7 @@ const router = createBrowserRouter([
     element: <Resources />,
   },
   {
-    path: "/kanban",
+    path: "/tracker",
     element: <Tracker />,
   },
 ]);

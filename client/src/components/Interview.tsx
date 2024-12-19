@@ -1,16 +1,17 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import InterviewList from "./InterviewList";
 import { Interview } from "../types";
 import { useGetInterviewsQuery } from "../redux/meetApi";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { addAllInterviews } from "../redux/interviewsSlice";
 import Schedule from "./Schedule";
+import Loader from "./Loader";
 
 interface Tabs {
   id: number;
   name: string;
 }
-const tabsData: Tabs[] = [
+const tabs: Tabs[] = [
   {
     id: 1,
     name: "Live",
@@ -28,31 +29,26 @@ const tabsData: Tabs[] = [
     name: "All",
   },
 ];
+
 const InterviewSection = () => {
   const [currId, setCurrId] = useState(1);
-  const [tabs, setTabs] = useState<Tabs[]>(tabsData);
   const [interviewsData, setInterviewData] = useState<Interview[]>([]);
+  const { data: interviews = [], isFetching } = useGetInterviewsQuery();
   const allInterviews = useAppSelector((state) => state.interview);
   const dispatch = useAppDispatch();
   const scheduleModal = useAppSelector((state) => state.menu.value);
-  const {
-    data: interviews = [],
-    isSuccess,
-    isFetching,
-    isError,
-    error,
-  } = useGetInterviewsQuery();
 
   useEffect(() => {
-    if (isSuccess) dispatch(addAllInterviews(interviews)); // Add all interviews to Redux state
-  }, [interviews, isSuccess]);
+    if (interviews && interviews.length > 0) {
+      dispatch(addAllInterviews(interviews));
+    }
+  }, [interviews, dispatch]);
+
   useEffect(() => {
-    console.log("Hello, World", allInterviews);
-    const fetchInterviews = async (currId: number) => {
+    const classifyInterviews = async (currId: number) => {
       const dateNow = new Date()
         .toLocaleDateString("en-GB", { timeZone: "IST" })
         .split("/");
-
       const liveDate = dateNow[2] + "-" + dateNow[1] + "-" + dateNow[0];
 
       if (currId === 1) {
@@ -74,40 +70,43 @@ const InterviewSection = () => {
         setInterviewData(allInterviews);
       }
     };
-
-    fetchInterviews(currId);
+    if (allInterviews.length > 0) {
+      classifyInterviews(currId);
+    }
   }, [currId, allInterviews]);
   return (
     <>
       {scheduleModal && <Schedule />}
-      <div>
-        <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700 mx-auto max-w-5xl my-5 md:mt-10">
-          <ul className="flex flex-wrap -mb-px">
-            {tabs?.map((tab) => {
-              return (
-                <li className="me-2" key={tab.id}>
-                  {tab.id === currId ? (
-                    <p
-                      className="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500"
-                      aria-current="page"
-                    >
-                      {tab.name}
-                    </p>
-                  ) : (
-                    <p
-                      onClick={() => setCurrId(tab.id)}
-                      className="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 hover:cursor-pointer"
-                    >
-                      {tab.name}
-                    </p>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+      {
+        <div>
+          <div className="text-lg font-medium text-center text-gray-80000 border-b-2 border-gray-200  mx-auto max-w-5xl my-5 md:mt-10">
+            <ul className="flex flex-wrap -mb-px">
+              {tabs?.map((tab) => {
+                return (
+                  <li className="me-2" key={tab.id}>
+                    {tab.id === currId ? (
+                      <p
+                        className="inline-block p-4 text-blue-700/90 border-b-2 border-blue-700/90 rounded-t-lg active"
+                        aria-current="page"
+                      >
+                        {tab.name}
+                      </p>
+                    ) : (
+                      <p
+                        onClick={() => setCurrId(tab.id)}
+                        className="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-black hover:border-blue-300/90 hover:bg-blue-300/90 hover:cursor-pointer"
+                      >
+                        {tab.name}
+                      </p>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+          {isFetching ? <Loader /> : <InterviewList data={interviewsData} />}
         </div>
-        <InterviewList data={interviewsData} />
-      </div>
+      }
     </>
   );
 };

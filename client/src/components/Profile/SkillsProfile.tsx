@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useUpdateSkillsMutation } from "../../redux/meetApi";
 import { Skill } from "../../types";
 import { useFetchSkillsProfileMutation } from "../../redux/publicApi";
+import CloseIcon from "../../icons/CloseIcon";
+import SearchIcon from "../../icons/SearchIcon";
 
 let list: Skill[] = [
   {
@@ -54,18 +56,18 @@ const SkillsProfile = ({
     const data = list.filter((skill) =>
       skill.value.toLowerCase().includes(val.toLowerCase())
     );
-    setSkillsList((prev) => data);
+    setSkillsList(data);
   };
   const addSkill = async (label: string, value: string) => {
     const newSkills = [...skills, { label, value }];
     await patchSkills({ body: newSkills }).unwrap();
-    setSkills((prev) => newSkills);
+    setSkills(newSkills);
     setSkillsList([]);
   };
   const removeKey = async (label: string) => {
     const newSkills = skills.filter((skill) => skill.label !== label);
     await patchSkills({ body: newSkills }).unwrap();
-    setSkills((prev) => newSkills);
+    setSkills(newSkills);
   };
 
   return (
@@ -79,22 +81,11 @@ const SkillsProfile = ({
               className="inline-flex items-center rounded-sm bg-gray-50 px-2 py-1 mr-2 mb-3 text-sm font-normal text-black ring-1 ring-inset ring-gray-500/10"
             >
               {skill.value}
-              <span className="ml-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-4 hover:cursor-pointer text-gray-600 "
-                  onClick={() => removeKey(skill.label)}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18 18 6M6 6l12 12"
-                  />
-                </svg>
+              <span
+                className="ml-1 hover:cursor-pointer text-gray-600"
+                onClick={() => removeKey(skill.label)}
+              >
+                <CloseIcon />
               </span>
             </span>
           ))}
@@ -104,20 +95,7 @@ const SkillsProfile = ({
             <div className="flex flex-col border-2 border-gray-200 border-solid rounded-md focus-within:border-indigo-800 focus-within:ring-4 focus-within:ring-indigo-300 focus-within:ring-offset-3">
               <div className="w-full flex flex-row gap-2 p-2  ">
                 <span className="bg-blue-100 p-2 rounded-full h-8">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                    />
-                  </svg>
+                  <SearchIcon />
                 </span>
                 <input
                   className="text-md w-full placeholder-dark-a border rounded bg-transparent shadow-none outline-none border-transparent "

@@ -13,12 +13,14 @@ export const interviewSlice = createSlice({
 
     // Delete an interview by id
     deleteInterview(state, action: PayloadAction<String>) {
-      state.filter((interview: Interview) => interview.id !== action.payload);
+      return state.filter(
+        (interview: Interview) => interview.id !== action.payload
+      );
     },
 
     // Add all interviews (bulk add, replacing current data)
     addAllInterviews: (state, action: PayloadAction<Interview[]>) => {
-      state = action.payload;
+      return action.payload;
     },
   },
 });
