@@ -31,7 +31,7 @@ model TrackerColumn{
   id                String   @id @default(auto()) @map("_id") @db.ObjectId
   columnTitle       String
   idx               Int
-  jobIdx            String[]
+  jobIdx            String[] @default([])
   username          String
   jobs              TrackerJob[]
   user              User @relation(fields: [username], references: [username])
@@ -41,10 +41,10 @@ model TrackerJob{
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
   jobtitle String
   company  String
-  note     String
-  listId   String  @db.ObjectId
-  list     TrackerColumn @relation(fields: [listId],references: [id])
-  link     String
+  note     String?
+  columnId   String?  @db.ObjectId
+  column     TrackerColumn? @relation(fields: [columnId],references: [id], onDelete:Cascade)
+  link     String?
 }
 
 model UserAddress{
