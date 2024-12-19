@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import Select from "react-select";
 import AsyncSelect from "react-select/async";
+import { Column, Job } from "../../types";
+import CloseIcon from "../../icons/CloseIcon";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { addJob } from "../../redux/jobsSlice";
 
 export interface JobOption {
   value: string;
@@ -56,31 +60,45 @@ const jobOptions: JobOption[] = [
   },
 ];
 
-const AddJob = () => {
+const AddJob = ({
+  closeJob,
+  defaultValue,
+}: {
+  closeJob: () => void;
+  defaultValue: string | number;
+}) => {
   const [isSearchable, setIsSearchable] = useState(true);
   const [isClearable, setIsClearable] = useState(true);
+  const dispatch = useAppDispatch();
+  const columns: Column[] = useAppSelector((state) => state.jobcolumn);
+  const addNewJob = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData: Partial<Job> = {};
+    const form = e.target as HTMLFormElement;
+
+    for (let element of form.elements) {
+      const input = element as
+        | HTMLInputElement
+        | HTMLSelectElement
+        | HTMLTextAreaElement;
+      if (input.name) formData[input.name as keyof Job] = input.value;
+    }
+    formData.id = Math.ceil(Math.random() * 100000).toString();
+    dispatch(addJob(formData as Job));
+    closeJob();
+    return;
+  };
   return (
     <div className="flex justify-center items-center z-10 fixed bg-black bg-opacity-5 backdrop-blur-sm inset-0">
       <div className="bg-white relative rounded-lg w-[800px] p-10 overflow-auto max-h-screen">
         <header className="flex flex-row justify-between">
           <p className="font-bold text-3xl">Add Job</p>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18 18 6M6 6l12 12"
-            />
-          </svg>
+          <span onClick={closeJob} className="hover:cursor-pointer">
+            <CloseIcon />
+          </span>
         </header>
         <section className="new-job-form">
-          <form>
+          <form onSubmit={(e) => addNewJob(e)}>
             <div className="space-y-12">
               <div className="border-b border-gray-900/10 pb-12">
                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -96,6 +114,7 @@ const AddJob = () => {
                         cacheOptions
                         defaultOptions
                         loadOptions={promiseOptions}
+                        name="company"
                       />
                     </div>
                   </div>
@@ -124,7 +143,7 @@ const AddJob = () => {
                   </div>
                   <div className="sm:col-span-3">
                     <label
-                      htmlFor="company"
+                      htmlFor="link"
                       className="block text-sm/6 font-medium text-gray-900"
                     >
                       Job Link
@@ -133,8 +152,7 @@ const AddJob = () => {
                       <div className="flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
                         <div className="shrink-0 select-none text-base text-gray-500 sm:text-sm/6"></div>
                         <input
-                          id="company"
-                          name="company"
+                          name="link"
                           type="text"
                           placeholder=""
                           className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
@@ -144,7 +162,7 @@ const AddJob = () => {
                   </div>
                   <div className="sm:col-span-3">
                     <label
-                      htmlFor="company"
+                      htmlFor="list"
                       className="block text-sm/6 font-medium text-gray-900"
                     >
                       List
@@ -153,14 +171,24 @@ const AddJob = () => {
                       <Select
                         className="basic-single"
                         // classNamePrefix="select"
-                        // defaultValue={colourOptions[0]}
+                        // defaultValue={columns?.find(
+                        //   (col) => col.id === defaultValue
+                        // )}
                         // isDisabled={isDisabled}
                         // isLoading={isLoading}
                         isClearable={isClearable}
                         // isRtl={isRtl}
                         isSearchable={isSearchable}
-                        name="jobtitle"
-                        options={jobOptions}
+                        // value={columns.find((col) => col.id === defaultValue)}
+                        name="list"
+                        options={columns?.map((col) => {
+                          return {
+                            value: col.id,
+                            label: col.title,
+                            color: "#00B8D9",
+                            isFixed: true,
+                          };
+                        })}
                       />
                     </div>
                   </div>
@@ -173,7 +201,6 @@ const AddJob = () => {
                     </label>
                     <div className="mt-2">
                       <textarea
-                        id="about"
                         name="about"
                         rows={3}
                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -188,6 +215,7 @@ const AddJob = () => {
               <button
                 type="button"
                 className="text-sm/6 font-semibold text-gray-900"
+                onClick={closeJob}
               >
                 Cancel
               </button>

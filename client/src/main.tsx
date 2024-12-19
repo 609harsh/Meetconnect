@@ -14,6 +14,8 @@ import { Provider } from "react-redux";
 import store from "./redux/store.ts";
 import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+// import KanbanBoard from "./pages/Kanban/Kanban.tsx";
+import Tracker from "./components/Tracker/Tracker.tsx";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +49,10 @@ const router = createBrowserRouter([
   {
     path: "/resources",
     element: <Resources />,
+  },
+  {
+    path: "/kanban",
+    element: <Tracker />,
   },
 ]);
 

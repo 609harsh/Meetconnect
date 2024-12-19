@@ -110,3 +110,17 @@ export enum NavbarMenu {
   PROFILE,
   ADDJOB,
 }
+
+export interface Column {
+  id: string | number;
+  title: string;
+}
+
+export interface Job {
+  id: string | number;
+  jobtitle: string;
+  company: string;
+  about?: string;
+  link?: string;
+  list: string | number;
+}
