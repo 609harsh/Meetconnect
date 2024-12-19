@@ -102,14 +102,6 @@ export interface User {
   profileImg?: string;
   name?: string;
 }
-export enum NavbarMenu {
-  SCHEDULE,
-  INTERVIEW,
-  TRACKER,
-  RESOURCES,
-  PROFILE,
-  ADDJOB,
-}
 
 export interface Column {
   id: string | number;

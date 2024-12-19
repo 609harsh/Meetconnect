@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserLoginMutation } from "../redux/meetApi";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
@@ -7,18 +7,14 @@ import { Payload } from "../types";
 import { Bounce, toast } from "react-toastify";
 
 const Login = () => {
-  const [error, setError] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigation = useNavigate();
   const [userLogin] = useUserLoginMutation();
 
-  useEffect(() => {
-    setError("");
-  }, [email, password]);
   const submitForm = async () => {
     if (!email || !password) {
-      setError("All fields required");
+      toast.error("All fields required");
       return;
     }
     if (
@@ -29,27 +25,27 @@ const Login = () => {
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         )
     ) {
-      setError("Please enter valid email");
+      toast.error("Please enter valid email");
       return;
     }
     if (password.length < 8) {
-      setError("Password length should be at least 8 charcters");
+      toast.error("Password length should be at least 8 charcters");
       return;
     }
     if (!password.match(/(?=.*[a-z])/)) {
-      setError("Password should have at least one lowercase letter");
+      toast.error("Password should have at least one lowercase letter");
       return;
     }
     if (!password.match(/(?=.*[A-Z])/)) {
-      setError("Password should have at least one uppercase letter");
+      toast.error("Password should have at least one uppercase letter");
       return;
     }
     if (!password.match(/(?=.*\d)/)) {
-      setError("Password should have at least one digit");
+      toast.error("Password should have at least one digit");
       return;
     }
     if (!password.match(/(?=.*[@$!%*?&])/)) {
-      setError("Password should have at least one special character");
+      toast.error("Password should have at least one special character");
       return;
     }
     //Write api call
@@ -92,28 +88,12 @@ const Login = () => {
         {
           pending: "Logging in.. ",
           success: "Welcome",
-        },
-        {
-          autoClose: 3000,
-          closeOnClick: true,
-          draggable: true,
         }
       );
       localStorage.setItem("token", token);
       navigation("/dashboard");
     } catch (err: any) {
-      console.log(err);
-      toast.error(err.error, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      toast.error(err.error);
     }
   };
   return (
@@ -202,7 +182,6 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          {error !== "" && <p className="text-sm text-red-600 mt-1">{error}</p>}
           <div className="mt-6">
             <button
               type="submit"

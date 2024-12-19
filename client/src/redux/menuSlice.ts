@@ -1,17 +1,14 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
-import { NavbarMenu } from "../types";
 
 export const menuSlice = createSlice({
   name: "menu",
   initialState: {
-    value: {
-      value: NavbarMenu.INTERVIEW,
-    },
+    value: false,
   },
   reducers: {
-    changeMenuTo: (state, action: PayloadAction<any>) => {
-      state.value = { ...action.payload };
+    changeMenuTo: (state, action: PayloadAction<boolean>) => {
+      state.value = action.payload;
     },
   },
 });
