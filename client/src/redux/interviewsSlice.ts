@@ -20,7 +20,7 @@ export const interviewSlice = createSlice({
 
     // Add all interviews (bulk add, replacing current data)
     addAllInterviews: (state, action: PayloadAction<Interview[]>) => {
-      return action.payload;
+      state.splice(0, state.length, ...action.payload);
     },
   },
 });
