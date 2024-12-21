@@ -201,10 +201,13 @@ const Tracker = () => {
   };
 
   return (
-    <>
+    <div
+      style={{ backgroundImage: "url(kanban4.jpg)" }}
+      className="bg-cover bg-center md:bg-contain md:bg-repeat-round min-h-screen"
+    >
       <Navbar />
       <div className="max-w-7xl mx-auto px-5">
-        <div className="my-5 md:my-10 flex flex-row justify-between items-center border-b-2 py-5 ">
+        <div className="my-5 md:my-10 flex flex-row justify-between items-center border-b-2 py-5 font-bold ">
           <h1 className="text-xl md:text-4xl ">Job Board</h1>
         </div>
         {isFetching ? (
@@ -254,7 +257,7 @@ const Tracker = () => {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

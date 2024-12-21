@@ -68,7 +68,9 @@ const AddressProfile = ({
               key={idx}
             >
               <li className="w-full mr-2">
-                <p className="font-semibold text-sm">{field}</p>
+                <p className="font-semibold text-sm">
+                  {field[0].toUpperCase() + field.substring(1)}
+                </p>
                 {activeAddress === field ? (
                   <input
                     key={field}

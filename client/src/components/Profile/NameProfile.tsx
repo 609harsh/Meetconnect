@@ -5,9 +5,11 @@ import CancelIcon from "../../icons/CancelIcon";
 const NameProfile = ({
   data,
   updateProfile,
+  disable,
 }: {
   data: string | undefined;
   updateProfile: Function;
+  disable: boolean;
 }) => {
   const [update, setUpdate] = useState<boolean>(false);
   const [value, setValue] = useState<string | undefined>("");
@@ -49,14 +51,16 @@ const NameProfile = ({
               </span>
             </li>
           ) : (
-            <li
-              onClick={() => {
-                setUpdate(!update);
-              }}
-              className="font-medium text-indigo-600 hover:text-indigo-500 pr-5 hover:cursor-pointer"
-            >
-              Update
-            </li>
+            !disable && (
+              <li
+                onClick={() => {
+                  setUpdate(!update);
+                }}
+                className="font-medium text-indigo-600 hover:text-indigo-500 pr-5 hover:cursor-pointer"
+              >
+                Update
+              </li>
+            )
           )}
         </ul>
       </dd>

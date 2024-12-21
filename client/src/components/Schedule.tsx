@@ -53,11 +53,11 @@ const Schedule = () => {
         className="rounded-lg bg-white shadow-xl my-10 max-h-fit w-full max-w-md p-4 overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-violet-700 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-violet-700"
         style={{ scrollbarWidth: "thin", WebkitOverflowScrolling: "auto" }}
       >
-        <header className="flex flex-row justify-between border-b border-gray-900/10 pb-4">
+        <header className="flex flex-row justify-between items-center border-b border-gray-900/10 pb-4">
           <h2 className="text-lg font-semibold ">Schedule Interview</h2>
           <span
             onClick={() => dispatch(changeMenuTo(false))}
-            className="cursor-pointer"
+            className="cursor-pointer hover:bg-gray-200 rounded-full p-1 "
           >
             <CloseIcon />
           </span>

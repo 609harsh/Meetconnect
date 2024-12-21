@@ -17,7 +17,8 @@ import PhoneNumberProfile from "../components/Profile/PhoneNumberProfile";
 import AboutProfile from "../components/Profile/AboutProfile";
 import { useFetchProfileMutation } from "../redux/ApiSlice/publicApi";
 import Navbar from "../components/Navbar";
-
+import { toast } from "react-toastify";
+const base_url = import.meta.env.VITE_API_HOST + "";
 export default function Profile() {
   const [uploadProfile] = useUploadProfileMutation();
   const [updateUrl] = useUpdateProfileImageMutation();
@@ -64,16 +65,31 @@ export default function Profile() {
       import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
     );
     formdata.append("api_key", import.meta.env.VITE_CLOUDINARY_API_KEY);
-    const response = await uploadProfile({ formData: formdata }).unwrap();
-    const res = await fetch(
-      `http://localhost:3000/image/${username}?url=${response.data + ""}`,
-      {
-        method: "PATCH",
-      }
-    );
-    await updateUrl({ url: response.data as string }).unwrap();
-    await res.json();
-    if (response.success) setPreview(response.data as string);
+
+    try {
+      const response = await toast.promise(
+        uploadProfile({ formData: formdata }).unwrap(),
+        { pending: "Uploading" }
+      );
+      const res = await toast.promise(
+        fetch(`${base_url}image?url=${response.data + ""}`, {
+          method: "PATCH",
+          headers: {
+            "content-type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }),
+        {
+          pending: "Uploading",
+          success: "Uploaded",
+        }
+      );
+      await res.json();
+      if (response.success) setPreview(response.data as string);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+    // await updateUrl({ url: response.data as string }).unwrap();
   };
   const updateProfile = async (body: User) => {
     await patchProfile({
@@ -81,9 +97,12 @@ export default function Profile() {
     }).unwrap();
   };
   return (
-    <>
+    <div
+      style={{ backgroundImage: "url(/profileB2.jpg)" }}
+      className="bg-no-repeat bg-center pb-2"
+    >
       <Navbar />
-      <div className="mx-auto border-b shadow-md rounded-md max-w-4xl p-4 my-6">
+      <div className="mx-auto border-b shadow-md rounded-md max-w-4xl p-4 my-6 bg-gray-100">
         <div className="px-4 sm:px-0 flex justify-between items-center">
           <h3 className="text-3xl font-semibold leading-7 text-gray-900 ">
             Your Profile
@@ -108,15 +127,18 @@ export default function Profile() {
             <NameProfile
               data={profileData?.name}
               updateProfile={updateProfile}
+              disable={disable}
             />
             <EmailProfile data={profileData?.email} />
             <PhoneNumberProfile
               data={profileData?.phoneNumber}
               updateProfile={updateProfile}
+              disable={disable}
             />
             <AboutProfile
               data={profileData?.about}
               updateProfile={updateProfile}
+              disable={disable}
             />
             <AddressProfile disable={disable} username={username + ""} />
             <EducationProfile disable={disable} username={username + ""} />
@@ -126,6 +148,6 @@ export default function Profile() {
           </dl>
         </div>
       </div>
-    </>
+    </div>
   );
 }

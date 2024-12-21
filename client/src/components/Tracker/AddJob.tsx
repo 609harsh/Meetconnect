@@ -6,6 +6,7 @@ import CloseIcon from "../../icons/CloseIcon";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addJob } from "../../redux/jobsSlice";
 import { useCreateNewJobMutation } from "../../redux/ApiSlice/trackerApi";
+import { JobRoles } from "../../data";
 
 export interface JobOption {
   value: string;
@@ -15,51 +16,18 @@ export interface JobOption {
   isDisabled?: boolean;
 }
 
-const filterColors = (inputValue: string) => {
-  return jobOptions.filter((i) =>
-    i.label.toLowerCase().includes(inputValue.toLowerCase())
-  );
-};
+// const filterColors = (inputValue: string) => {
+//   return jobOptions.filter((i) =>
+//     i.label.toLowerCase().includes(inputValue.toLowerCase())
+//   );
+// };
 
-const promiseOptions = (inputValue: string) =>
-  new Promise<JobOption[]>((resolve) => {
-    setTimeout(() => {
-      resolve(filterColors(inputValue));
-    }, 1000);
-  });
-
-const jobOptions: JobOption[] = [
-  {
-    value: "ocean",
-    label: "Software Developer",
-    color: "#00B8D9",
-    isFixed: true,
-  },
-  {
-    value: "ocean",
-    label: "Full Developer",
-    color: "#00B8D9",
-    isFixed: true,
-  },
-  {
-    value: "ocean",
-    label: "Software Developer",
-    color: "#00B8D9",
-    isFixed: true,
-  },
-  {
-    value: "ocean",
-    label: "Software Developer",
-    color: "#00B8D9",
-    isFixed: true,
-  },
-  {
-    value: "ocean",
-    label: "Software Developer",
-    color: "#00B8D9",
-    isFixed: true,
-  },
-];
+// const promiseOptions = (inputValue: string) =>
+//   new Promise<JobOption[]>((resolve) => {
+//     setTimeout(() => {
+//       resolve(filterColors(inputValue));
+//     }, 1000);
+//   });
 
 const AddJob = ({ closeJob }: { closeJob: () => void }) => {
   const dispatch = useAppDispatch();
@@ -111,12 +79,15 @@ const AddJob = ({ closeJob }: { closeJob: () => void }) => {
                       Company
                     </label>
                     <div className="mt-2">
-                      <AsyncSelect
-                        cacheOptions
-                        defaultOptions
-                        loadOptions={promiseOptions}
-                        name="company"
-                      />
+                      <div className="flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                        <div className="shrink-0 select-none text-base text-gray-500 sm:text-sm/6"></div>
+                        <input
+                          name="company"
+                          type="text"
+                          placeholder="Amazon"
+                          className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
+                        />
+                      </div>
                     </div>
                   </div>
 
@@ -138,7 +109,7 @@ const AddJob = ({ closeJob }: { closeJob: () => void }) => {
                         // isRtl={isRtl}
                         isSearchable={true}
                         name="jobtitle"
-                        options={jobOptions}
+                        options={JobRoles}
                       />
                     </div>
                   </div>
@@ -198,7 +169,7 @@ const AddJob = ({ closeJob }: { closeJob: () => void }) => {
                       htmlFor="note"
                       className="block text-sm/6 font-medium text-gray-900"
                     >
-                      Note
+                      Applied On:
                     </label>
                     <div className="mt-2">
                       <textarea

@@ -6,6 +6,8 @@ import { deleteJob } from "../../redux/jobsSlice";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useDeleteJobMutation } from "../../redux/ApiSlice/trackerApi";
+import LinkIcon from "../../icons/LinkIcon";
+import { Link } from "react-router-dom";
 
 const TrackerCard = ({ data }: { data: Job }) => {
   const [mouseIsOver, setIsMouseOver] = useState(false);
@@ -61,17 +63,32 @@ const TrackerCard = ({ data }: { data: Job }) => {
       onMouseEnter={() => setIsMouseOver(true)}
       onMouseLeave={() => setIsMouseOver(false)}
     >
-      <figure>
+      {/* <figure>
         <img
           src={
             "https://upload.wikimedia.org/wikipedia/sco/2/21/Nvidia_logo.svg"
           }
           width={"60px"}
         />
-      </figure>
+      </figure> */}
       <div className="flex-grow">
-        <h2 className="text-lg font-bold mb-4">{data.company}</h2>
+        <h2 className="text-lg font-bold mb-2">{data.company}</h2>
         <h3 className="text-base font-light">{data.jobtitle}</h3>
+        <p className="text-sm flex flex-row items-center gap-2">
+          {data.note && data.note.length > 0 ? "Applied On: " : ""}
+          {data.note}
+          {data.link && data.link.length > 0 ? (
+            <Link
+              to={data.link}
+              target="_blank"
+              className="text-blue-600 hover:cursor-pointer"
+            >
+              <LinkIcon />{" "}
+            </Link>
+          ) : (
+            ""
+          )}
+        </p>
       </div>
       {mouseIsOver && (
         <div

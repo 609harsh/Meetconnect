@@ -9,7 +9,7 @@ import GithubIcon from "./icons/GithubIcon";
 import LinkedinIcon from "./icons/LinkedinIcon";
 import TwitterIcon from "./icons/TwitterIcon";
 import InternetIcon from "./icons/InternetIcon";
-
+import "./index.css";
 function App() {
   return (
     <div className="h-full">
@@ -55,10 +55,10 @@ function App() {
         </div>
       </section>
       <section
-        className="carousel h-svh flex flex-col my-auto items-center justify-evenly"
+        className="carousel md:h-svh flex flex-col items-center my-20 md:my-auto md:items-center justify-start md:justify-evenly"
         id="features"
       >
-        <h2 className="text-5xl lg:text-6xl font-extrabold tracking-widest">
+        <h2 className="text-5xl lg:text-6xl font-bold md:font-extrabold tracking-widest">
           Features
         </h2>
         <Swiper
@@ -75,45 +75,27 @@ function App() {
           }}
           pagination={true}
           modules={[EffectCoverflow, Pagination]}
-          className="w-full py-12 "
+          className="w-full py-4 md:py-12 "
           style={{ scrollbarWidth: "none" }}
         >
-          <SwiperSlide className="bg-center bg-cover w-80 md:w-96 ">
-            <div className="flex flex-col bg-white items-center text-black">
-              <img
-                src="https://swiperjs.com/demos/images/nature-1.jpg"
-                className="block w-full"
-              />
+          <SwiperSlide className="bg-center bg-cover sliders w-full md:w-4/6 lg:w-3/6">
+            <div className="flex flex-col flex-grow bg-white items-center text-black">
+              <img src={"/interview.png"} loading="lazy" />
               <p className="py-5 text-xl font-semibold">Interview Tracker</p>
             </div>
           </SwiperSlide>
-          <SwiperSlide className="bg-center bg-cover w-80 md:w-96">
-            <div className="flex flex-col bg-white items-center text-black">
-              <img
-                src="https://swiperjs.com/demos/images/nature-1.jpg"
-                className="block w-full"
-              />
+          <SwiperSlide className="bg-center bg-cover   w-full md:w-4/6 lg:w-3/6 ">
+            <div className="flex flex-col flex-grow bg-white items-center text-black">
+              <img src={"/tracker.png"} loading="lazy" />
               <p className="py-5 text-xl font-semibold">
                 Job Application Tracker
               </p>
             </div>
           </SwiperSlide>
-          <SwiperSlide className="bg-center bg-cover w-80 md:w-96">
-            <div className="flex flex-col bg-white items-center text-black">
-              <img
-                src="https://swiperjs.com/demos/images/nature-1.jpg"
-                className="block w-full"
-              />
+          <SwiperSlide className="bg-center bg-cover w-full md:w-4/6 lg:w-3/6">
+            <div className="flex flex-col flex-grow bg-white items-center text-black">
+              <img src={"/publicprofile.png"} loading="lazy" />
               <p className="py-5 text-xl font-semibold">Public Profile</p>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide className="bg-center bg-cover w-80 md:w-96 ">
-            <div className="flex flex-col bg-white items-center text-black">
-              <img
-                src="https://swiperjs.com/demos/images/nature-1.jpg"
-                className="block w-full"
-              />
-              <p className="py-5 text-xl font-semibold">Free Resources</p>
             </div>
           </SwiperSlide>
         </Swiper>
@@ -126,11 +108,11 @@ function App() {
             </h2>
           </div>
           <div className="flex justify-center max-w-3xl  mx-auto">
-            <div className="bg-gray-50 rounded-lg shadow sm:flex ">
+            <div className="bg-gray-50 rounded-lg shadow sm:flex h-fit md:h-80">
               <img
-                className="w-full rounded-lg sm:rounded-none sm:rounded-l-lg"
-                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png"
-                alt="Bonnie Avatar"
+                className="rounded-lg sm:rounded-none sm:rounded-l-lg"
+                src={"/creator.jpg"}
+                alt="Harsh Gupta"
               />
 
               <div className="p-5">
