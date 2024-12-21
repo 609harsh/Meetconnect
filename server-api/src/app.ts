@@ -12,6 +12,9 @@ const app: Express = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
+app.get("/", (req, res) => {
+  res.send("Welcome to MeetConnect API");
+});
 app.use(authRouter);
 app.use(schedule);
 app.use(interviews);
