@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { usePatchAddressProfileMutation } from "../../redux/meetApi";
+import { usePatchAddressProfileMutation } from "../../redux/ApiSlice/meetApi";
 import { Address } from "../../types";
-import { useFetchAddressProfileMutation } from "../../redux/publicApi";
+import { useFetchAddressProfileMutation } from "../../redux/ApiSlice/publicApi";
 import SaveIcon from "../../icons/SaveIcon";
 import CancelIcon from "../../icons/CancelIcon";
 

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import AddEducation from "./AddEducation";
 import { Education } from "../../types";
-import { usePatchEducationProfileMutation } from "../../redux/meetApi";
-import { useFetchEducationMutation } from "../../redux/publicApi";
+import { usePatchEducationProfileMutation } from "../../redux/ApiSlice/meetApi";
+import { useFetchEducationMutation } from "../../redux/ApiSlice/publicApi";
 import TrashIcon from "../../icons/TrashIcon";
 
 const EducationProfile = ({

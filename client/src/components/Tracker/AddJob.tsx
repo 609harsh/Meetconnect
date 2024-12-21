@@ -5,6 +5,7 @@ import { Column, Job } from "../../types";
 import CloseIcon from "../../icons/CloseIcon";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addJob } from "../../redux/jobsSlice";
+import { useCreateNewJobMutation } from "../../redux/ApiSlice/trackerApi";
 
 export interface JobOption {
   value: string;
@@ -63,7 +64,8 @@ const jobOptions: JobOption[] = [
 const AddJob = ({ closeJob }: { closeJob: () => void }) => {
   const dispatch = useAppDispatch();
   const columns: Column[] = useAppSelector((state) => state.jobcolumn);
-  const addNewJob = (e: React.FormEvent<HTMLFormElement>) => {
+  const [newJob] = useCreateNewJobMutation();
+  const addNewJob = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData: Partial<Job> = {};
     const form = e.target as HTMLFormElement;
@@ -75,9 +77,16 @@ const AddJob = ({ closeJob }: { closeJob: () => void }) => {
         | HTMLTextAreaElement;
       if (input.name) formData[input.name as keyof Job] = input.value;
     }
-    formData.id = Math.ceil(Math.random() * 100000).toString();
+    console.log(formData);
+
+    const response = await newJob({ body: formData as Job }).unwrap();
+    console.log(response);
+
+    formData.id = response.data.id;
+
     dispatch(addJob(formData as Job));
     closeJob();
+
     return;
   };
   return (
@@ -172,11 +181,11 @@ const AddJob = ({ closeJob }: { closeJob: () => void }) => {
                         // isRtl={isRtl}
                         isSearchable={true}
                         // value={columns.find((col) => col.id === defaultValue)}
-                        name="list"
+                        name="columnId"
                         options={columns?.map((col) => {
                           return {
                             value: col.id,
-                            label: col.title,
+                            label: col.columnTitle,
                             color: "#00B8D9",
                             isFixed: true,
                           };
@@ -186,14 +195,14 @@ const AddJob = ({ closeJob }: { closeJob: () => void }) => {
                   </div>
                   <div className="col-span-full">
                     <label
-                      htmlFor="about"
+                      htmlFor="note"
                       className="block text-sm/6 font-medium text-gray-900"
                     >
                       Note
                     </label>
                     <div className="mt-2">
                       <textarea
-                        name="about"
+                        name="note"
                         rows={3}
                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                         defaultValue={""}

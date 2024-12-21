@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import InterviewList from "./InterviewList";
 import { Interview } from "../types";
-import { useGetInterviewsQuery } from "../redux/meetApi";
+import { useGetInterviewsQuery } from "../redux/ApiSlice/meetApi";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { addAllInterviews } from "../redux/interviewsSlice";
 import Schedule from "./Schedule";

@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client";
+import { log } from "console";
 
 export interface Column {
   id?: string;
@@ -108,6 +109,9 @@ export const deleteColumn = async (columnId: string) => {
 
 export const createJob = async (columnId: string, body: Job) => {
   try {
+    console.log(columnId);
+    console.log(body);
+
     if (!columnId || columnId.trim() === "" || columnId === "undefined") {
       throw new Error("Invalid ColumnId");
     }
@@ -147,6 +151,7 @@ export const deleteJob = async (columnId: string, jobId: string) => {
     if (!jobId || jobId.trim() === "" || jobId === "undefined") {
       throw new Error("Invalid JobId");
     }
+
     const jobIds = await prisma.trackerColumn.findFirst({
       where: {
         id: columnId,
@@ -155,7 +160,7 @@ export const deleteJob = async (columnId: string, jobId: string) => {
         jobIdx: true,
       },
     });
-    const newJobIds = jobIds?.jobIdx.filter((id) => id === jobId);
+    const newJobIds = jobIds?.jobIdx.filter((id) => id !== jobId);
     const update = await prisma.trackerColumn.update({
       where: {
         id: columnId,
@@ -164,7 +169,8 @@ export const deleteJob = async (columnId: string, jobId: string) => {
         jobIdx: newJobIds,
       },
     });
-    const job = await prisma.trackerColumn.delete({
+
+    const job = await prisma.trackerJob.delete({
       where: {
         id: jobId,
       },
@@ -210,9 +216,7 @@ export const swapColumn = async (
 export const swapSameColumn = async (
   columnId: string,
   jobId1: string,
-  jobId2: string,
-  jobIdx1: string,
-  jobIdx2: string
+  jobId2: string
 ) => {
   //0-based indexs
   //keep original indexes only
@@ -226,6 +230,8 @@ export const swapSameColumn = async (
       },
     });
     const newJobs = update?.jobIdx as string[];
+    let jobIdx1 = newJobs.findIndex((job) => job === jobId1);
+    let jobIdx2 = newJobs.findIndex((job) => job === jobId2);
     newJobs[Number(jobIdx1)] = jobId2;
     newJobs[Number(jobIdx2)] = jobId1;
     console.log(newJobs);

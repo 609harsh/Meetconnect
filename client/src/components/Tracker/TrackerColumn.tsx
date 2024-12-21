@@ -1,19 +1,19 @@
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
-import { Job } from "../../types";
+import { Column, Job } from "../../types";
 import TrackerCard from "./TrackerCard";
 import { CSS } from "@dnd-kit/utilities";
-import { useMemo, useState } from "react";
+import { ReactEventHandler, useMemo, useState } from "react";
 import PlusIcon from "../../icons/PlusIcon";
 import AddJob from "./AddJob";
 import { useAppDispatch } from "../../redux/hooks";
 import { deleteJobColumn, renameJobColumn } from "../../redux/jobColumnSlice";
 import { deleteJob } from "../../redux/jobsSlice";
 import TrashIcon from "../../icons/TrashIcon";
-
-interface Column {
-  id: string | number;
-  title: string;
-}
+import {
+  useDeleteTrackerColumnMutation,
+  usePatchTrackerColumnMutation,
+} from "../../redux/ApiSlice/trackerApi";
+import { DndContext } from "@dnd-kit/core";
 
 const TrackerColumn = ({
   column,
@@ -22,9 +22,22 @@ const TrackerColumn = ({
   column: Column;
   jobsData: Job[];
 }) => {
+  const [removeColumn] = useDeleteTrackerColumnMutation();
+  const [renameColumn] = usePatchTrackerColumnMutation();
   const [editMode, setEditmode] = useState<boolean>(false);
   const [addJob, setAddJob] = useState<boolean>(false);
-  const jobsId = useMemo(() => jobsData.map((job) => job.id), [jobsData]);
+  const jobsId = useMemo(
+    () =>
+      jobsData
+        .sort(
+          (a, b) =>
+            (column.jobIdx || []).indexOf(a.id) -
+            (column.jobIdx || []).indexOf(b.id)
+        )
+        .map((job) => job.id),
+    [jobsData]
+  );
+  const [title, setTitle] = useState<string>("");
   const dispatch = useAppDispatch();
 
   const {
@@ -35,7 +48,7 @@ const TrackerColumn = ({
     transition,
     isDragging,
   } = useSortable({
-    id: column.id,
+    id: column.idx as number,
     data: {
       type: "column",
       column,
@@ -47,11 +60,25 @@ const TrackerColumn = ({
     transition,
     transform: CSS.Transform.toString(transform),
   };
-  const deleteColumn = (id: string | number) => {
+  const deleteColumn = async (id: string) => {
     jobsData.map((job) => {
       dispatch(deleteJob(job.id));
     });
     dispatch(deleteJobColumn(id));
+    await removeColumn({ columnId: id });
+  };
+  const renameColumnTitle = async (id: string | undefined) => {
+    dispatch(
+      renameJobColumn({
+        id: column.id as string,
+        title: title,
+      })
+    );
+    await renameColumn({
+      columnId: id as string,
+      title,
+    }).unwrap();
+    setEditmode(false);
   };
   if (isDragging) {
     return (
@@ -72,53 +99,48 @@ const TrackerColumn = ({
         <div
           ref={setNodeRef}
           style={style}
+          {...attributes}
+          {...listeners}
           className="w-80 min-w-80 h-[500px] max-h-[500px] px-4 bg-[#f3f7f7] flex flex-col rounded-md"
         >
           <div
-            {...attributes}
-            {...listeners}
             onClick={() => setEditmode(true)}
-            className="h-16 cursor-grab rounded-md rounded-b-none text-md p-3 font-bold  flex items-center justify-between"
+            className="h-16 cursor-grab rounded-md rounded-b-none text-lg p-3 font-bold  flex items-center justify-between"
           >
             <div className="flex gap-2 items-start">
-              <div className="flex justify-center items-center px-2 py-1 text-sm rounded-full bg-gray-400">
-                0
-              </div>
-              {!editMode && column.title}
+              {!editMode && column.columnTitle}
               {editMode && (
                 <input
                   autoFocus
-                  onChange={(e) =>
-                    dispatch(
-                      renameJobColumn({ id: column.id, title: e.target.value })
-                    )
-                  }
+                  onChange={(e) => setTitle(e.target.value)}
                   className="bg-inherit px-2 py-1 outline-none focus:ring-2 focus:ring-gray-400 rounded-md text-sm"
-                  onBlur={() => setEditmode(false)}
+                  onBlur={() => renameColumnTitle(column.id)}
                   onKeyDown={(e) => {
                     if (e.key !== "Enter") return;
-                    setEditmode(false);
+                    renameColumnTitle(column.id);
                   }}
                 />
               )}
             </div>
             <button
-              className="stroke-red-500 hover:bg-gray-400 rounded px-1 py-2 cursor-pointer"
-              onClick={() => deleteColumn(column.id)}
+              className=" text-red-500 hover:bg-gray-400 rounded px-1 py-2 cursor-pointer"
+              onClick={() => deleteColumn(column.id as string)}
             >
               <TrashIcon />
             </button>
           </div>
+
           <div
             className="flex flex-grow flex-col overflow-x-hidden overflow-y-auto gap-3 mb-2"
             style={{ scrollbarWidth: "none" }}
           >
-            {jobsData.map((job: Job) => (
-              <SortableContext key={job.id} items={jobsId}>
-                <TrackerCard data={job} />
-              </SortableContext>
-            ))}
+            <SortableContext items={jobsId}>
+              {jobsData.map((job: Job) => (
+                <TrackerCard data={job} key={job.id} />
+              ))}
+            </SortableContext>
           </div>
+
           <button
             className="flex gap-2 items-center p-4 border-t-2"
             onClick={() => setAddJob(true)}

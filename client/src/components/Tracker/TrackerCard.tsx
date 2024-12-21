@@ -5,11 +5,12 @@ import { useAppDispatch } from "../../redux/hooks";
 import { deleteJob } from "../../redux/jobsSlice";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useDeleteJobMutation } from "../../redux/ApiSlice/trackerApi";
 
 const TrackerCard = ({ data }: { data: Job }) => {
   const [mouseIsOver, setIsMouseOver] = useState(false);
   const dispatch = useAppDispatch();
-
+  const [deleteJobCard] = useDeleteJobMutation();
   const {
     setNodeRef,
     attributes,
@@ -39,6 +40,17 @@ const TrackerCard = ({ data }: { data: Job }) => {
       ></div>
     );
   }
+
+  const removejob = async (
+    id: string | undefined,
+    colId: string | undefined
+  ) => {
+    dispatch(deleteJob(id as string));
+    await deleteJobCard({
+      columnId: colId as string,
+      jobId: id as string,
+    }).unwrap();
+  };
   return (
     <div
       ref={setNodeRef}
@@ -64,7 +76,7 @@ const TrackerCard = ({ data }: { data: Job }) => {
       {mouseIsOver && (
         <div
           className="self-start cursor-pointer"
-          onClick={() => dispatch(deleteJob(data.id))}
+          onClick={() => removejob(data.id, data.columnId)}
         >
           <CloseIcon />
         </div>

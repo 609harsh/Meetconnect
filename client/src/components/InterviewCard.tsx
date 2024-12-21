@@ -2,7 +2,7 @@ import LinkIcon from "../icons/LinkIcon";
 import TrashIcon from "../icons/TrashIcon";
 import { useAppDispatch } from "../redux/hooks";
 import { deleteInterview } from "../redux/interviewsSlice";
-import { useDeleteInterviewsMutation } from "../redux/meetApi";
+import { useDeleteInterviewsMutation } from "../redux/ApiSlice/meetApi";
 import { Interview } from "../types";
 
 const InterviewCard = ({ data }: { data: Interview }) => {

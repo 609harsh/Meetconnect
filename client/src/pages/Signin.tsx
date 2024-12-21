@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useUserSignupMutation } from "../redux/meetApi";
+import { useUserSignupMutation } from "../redux/ApiSlice/meetApi";
 import { jwtDecode } from "jwt-decode";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { Payload } from "../types";

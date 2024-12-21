@@ -6,7 +6,7 @@ import {
   Resources,
   Skill,
   User,
-} from "../types";
+} from "../../types";
 const api_url: string = import.meta.env.VITE_API_HOST;
 
 export interface ApiResponse<T> {

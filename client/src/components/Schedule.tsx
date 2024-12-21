@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import { useAppDispatch } from "../redux/hooks";
-import { useCreateInterviewsMutation } from "../redux/meetApi";
+import { useCreateInterviewsMutation } from "../redux/ApiSlice/meetApi";
 import { changeMenuTo } from "../redux/menuSlice";
 import { addInterview } from "../redux/interviewsSlice";
 import CloseIcon from "../icons/CloseIcon";
