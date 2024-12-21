@@ -104,15 +104,21 @@ export interface User {
 }
 
 export interface Column {
-  id: string | number;
-  title: string;
+  id?: string;
+  columnTitle: string;
+  idx?: number;
+  jobIdx?: string[];
+  username?: string;
+  jobs?: Job[];
 }
 
 export interface Job {
-  id: string | number;
+  id: string;
   jobtitle: string;
   company: string;
   about?: string;
   link?: string;
   list: string | number;
+  columnId?: string;
+  note?: string;
 }

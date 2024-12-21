@@ -7,42 +7,54 @@ export const jobColumnSlice = createSlice({
   name: "jobcolumn",
   initialState: [] as Column[],
   reducers: {
+    //addColumnsAfterFetching
+    addPreJobCoLumn: (state, action: PayloadAction<Column[]>) => {
+      state.splice(0, state.length, ...action.payload);
+    },
     // Add a single interview
     addJobColumn: (state, action: PayloadAction<Column>) => {
       state.push(action.payload);
     },
 
     // Delete an interview by id
-    deleteJobColumn: (state, action: PayloadAction<String | Number>) => {
+    deleteJobColumn: (state, action: PayloadAction<string>) => {
       return state.filter((col: Column) => col.id !== action.payload);
     },
 
-    renameJobColumn: (state, action: PayloadAction<Column>) => {
+    renameJobColumn: (
+      state,
+      action: PayloadAction<{ id: string; title: string }>
+    ) => {
       const column = state.find((col) => col.id === action.payload.id);
       if (column) {
-        column.title = action.payload.title; // Mutate the column directly
+        column.columnTitle = action.payload.title; // Mutate the column directly
       }
     },
 
     swipeColumn: (
       state,
       action: PayloadAction<{
-        activeColumnId: string | number;
-        overColumnId: string | number;
+        activeColumnId: number;
+        overColumnId: number;
       }>
     ) => {
       const activeColumnIdx = state.findIndex(
-        (col) => col.id === action.payload.activeColumnId
+        (col) => col.idx === action.payload.activeColumnId
       );
       const overColumnIdx = state.findIndex(
-        (col) => col.id === action.payload.overColumnId
+        (col) => col.idx === action.payload.overColumnId
       );
       return arrayMove(state, activeColumnIdx, overColumnIdx);
     },
   },
 });
 
-export const { addJobColumn, deleteJobColumn, renameJobColumn, swipeColumn } =
-  jobColumnSlice.actions;
+export const {
+  addPreJobCoLumn,
+  addJobColumn,
+  deleteJobColumn,
+  renameJobColumn,
+  swipeColumn,
+} = jobColumnSlice.actions;
 export const jobcolumnList = (state: RootState) => state.jobcolumn;
 export default jobColumnSlice.reducer;

@@ -15,6 +15,7 @@ import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import KanbanBoard from "./pages/Kanban/Kanban.tsx";
 import Tracker from "./components/Tracker/Tracker.tsx";
+import PrivateRoute from "./PrivateRoute.tsx";
 
 const router = createBrowserRouter([
   {
@@ -39,7 +40,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <Dashboard />,
+    element: (
+      <PrivateRoute>
+        <Dashboard />
+      </PrivateRoute>
+    ),
   },
   {
     path: "/resources",
@@ -47,7 +52,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/tracker",
-    element: <Tracker />,
+    element: (
+      <PrivateRoute>
+        <Tracker />
+      </PrivateRoute>
+    ),
   },
 ]);
 

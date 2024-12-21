@@ -3,19 +3,20 @@ import SkillsProfile from "../components/Profile/SkillsProfile";
 import WorkExperienceProfile from "../components/Profile/WorkExperienceProfile";
 import EducationProfile from "../components/Profile/EducationProfile";
 import AddressProfile from "../components/Profile/AddressProfile";
-import { useUploadProfileMutation } from "../redux/cloudinaryApi";
+import { useUploadProfileMutation } from "../redux/ApiSlice/cloudinaryApi";
 import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { Payload, User } from "../types";
 import {
   useUpdateProfileImageMutation,
   useUpdateProfileMutation,
-} from "../redux/meetApi";
+} from "../redux/ApiSlice/meetApi";
 import NameProfile from "../components/Profile/NameProfile";
 import EmailProfile from "../components/Profile/EmailProfile";
 import PhoneNumberProfile from "../components/Profile/PhoneNumberProfile";
 import AboutProfile from "../components/Profile/AboutProfile";
-import { useFetchProfileMutation } from "../redux/publicApi";
+import { useFetchProfileMutation } from "../redux/ApiSlice/publicApi";
+import Navbar from "../components/Navbar";
 
 export default function Profile() {
   const [uploadProfile] = useUploadProfileMutation();
@@ -80,45 +81,51 @@ export default function Profile() {
     }).unwrap();
   };
   return (
-    <div className="mx-auto border-b shadow-md rounded-md max-w-4xl p-4 my-6">
-      <div className="px-4 sm:px-0 flex justify-between items-center">
-        <h3 className="text-3xl font-semibold leading-7 text-gray-900 ">
-          Your Profile
-        </h3>
-        <div className="relative border-2 border-solid border-black w-fit mr-4">
-          <input
-            type="file"
-            className="hidden"
-            id="fileInput"
-            accept="image/png, image/jpeg, image/jpg"
-            onChange={getFile}
-          />
-          <img
-            src={`${preview}`}
-            className="z-10 h-28 w-28 bg-cover"
-            onClick={() => setImage()}
-          ></img>
+    <>
+      <Navbar />
+      <div className="mx-auto border-b shadow-md rounded-md max-w-4xl p-4 my-6">
+        <div className="px-4 sm:px-0 flex justify-between items-center">
+          <h3 className="text-3xl font-semibold leading-7 text-gray-900 ">
+            Your Profile
+          </h3>
+          <div className="relative border-2 border-solid border-black w-fit mr-4">
+            <input
+              type="file"
+              className="hidden"
+              id="fileInput"
+              accept="image/png, image/jpeg, image/jpg"
+              onChange={getFile}
+            />
+            <img
+              src={`${preview}`}
+              className="z-10 h-28 w-28 bg-cover"
+              onClick={() => setImage()}
+            ></img>
+          </div>
+        </div>
+        <div className="mt-6 border-t border-gray-100">
+          <dl className="divide-y divide-gray-100">
+            <NameProfile
+              data={profileData?.name}
+              updateProfile={updateProfile}
+            />
+            <EmailProfile data={profileData?.email} />
+            <PhoneNumberProfile
+              data={profileData?.phoneNumber}
+              updateProfile={updateProfile}
+            />
+            <AboutProfile
+              data={profileData?.about}
+              updateProfile={updateProfile}
+            />
+            <AddressProfile disable={disable} username={username + ""} />
+            <EducationProfile disable={disable} username={username + ""} />
+            <SkillsProfile disable={disable} username={username + ""} />
+            <WorkExperienceProfile disable={disable} username={username + ""} />
+            {/* <AttachmentsProfile /> */}
+          </dl>
         </div>
       </div>
-      <div className="mt-6 border-t border-gray-100">
-        <dl className="divide-y divide-gray-100">
-          <NameProfile data={profileData?.name} updateProfile={updateProfile} />
-          <EmailProfile data={profileData?.email} />
-          <PhoneNumberProfile
-            data={profileData?.phoneNumber}
-            updateProfile={updateProfile}
-          />
-          <AboutProfile
-            data={profileData?.about}
-            updateProfile={updateProfile}
-          />
-          <AddressProfile disable={disable} username={username + ""} />
-          <EducationProfile disable={disable} username={username + ""} />
-          <SkillsProfile disable={disable} username={username + ""} />
-          <WorkExperienceProfile disable={disable} username={username + ""} />
-          {/* <AttachmentsProfile /> */}
-        </dl>
-      </div>
-    </div>
+    </>
   );
 }

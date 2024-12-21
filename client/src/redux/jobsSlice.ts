@@ -6,30 +6,34 @@ export const jobSlice = createSlice({
   name: "jobdata",
   initialState: [] as Job[],
   reducers: {
+    //Add pre existing jobs
+    addPreJob: (state, action: PayloadAction<Job[]>) => {
+      state.splice(0, state.length, ...action.payload);
+    },
     // Add a single interview
     addJob: (state, action: PayloadAction<Job>) => {
       state.push(action.payload);
     },
 
     // Delete an interview by id
-    deleteJob: (state, action: PayloadAction<string | number>) => {
+    deleteJob: (state, action: PayloadAction<string>) => {
       return state.filter((job: Job) => job.id !== action.payload);
     },
 
     swipeSamecolumnJob: (
       state,
       action: PayloadAction<{
-        activeId: string | number;
-        overId: string | number;
+        activeId: string;
+        overId: string;
       }>
     ) => {
       const activeIdx = state.findIndex(
-        (job) => job.id.toString() === action.payload.activeId.toString()
+        (job) => job.id === action.payload.activeId
       );
       const overIdx = state.findIndex(
-        (job) => job.id.toString() === action.payload.overId.toString()
+        (job) => job.id === action.payload.overId
       );
-      state[activeIdx].list = state[overIdx].list.toString();
+      state[activeIdx].columnId = state[overIdx].columnId;
       state.splice(
         overIdx < 0 ? state.length + overIdx : overIdx,
         0,
@@ -64,6 +68,7 @@ export const jobSlice = createSlice({
 });
 
 export const {
+  addPreJob,
   addJob,
   deleteJob,
   swipeSamecolumnJob,

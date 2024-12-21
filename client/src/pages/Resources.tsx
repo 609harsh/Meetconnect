@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-cards";
 import Navbar from "../components/Navbar";
-import { useFetchResourcesQuery } from "../redux/publicApi";
+import { useFetchResourcesQuery } from "../redux/ApiSlice/publicApi";
 import Loader from "../components/Loader";
 import { toast } from "react-toastify";
 
@@ -38,7 +38,7 @@ const resources = () => {
                       {ele.easy.map((list) => (
                         <div key={idx + "" + list.id}>
                           <SwiperSlide
-                            className="p-5 space-y-4 leading-6 "
+                            className="p-5 space-y-4 leading-6"
                             style={{
                               height: "320px",
                               overflow: "scroll",

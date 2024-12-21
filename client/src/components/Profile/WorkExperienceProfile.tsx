@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import AddExperience from "./AddExperience";
-import { useUpdateWorkExperienceMutation } from "../../redux/meetApi";
+import { useUpdateWorkExperienceMutation } from "../../redux/ApiSlice/meetApi";
 import { Experience } from "../../types";
-import { useFetchWorkExperienceMutation } from "../../redux/publicApi";
+import { useFetchWorkExperienceMutation } from "../../redux/ApiSlice/publicApi";
 import TrashIcon from "../../icons/TrashIcon";
 
 const WorkExperienceProfile = ({

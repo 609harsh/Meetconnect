@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useUpdateSkillsMutation } from "../../redux/meetApi";
+import { useUpdateSkillsMutation } from "../../redux/ApiSlice/meetApi";
 import { Skill } from "../../types";
-import { useFetchSkillsProfileMutation } from "../../redux/publicApi";
+import { useFetchSkillsProfileMutation } from "../../redux/ApiSlice/publicApi";
 import CloseIcon from "../../icons/CloseIcon";
 import SearchIcon from "../../icons/SearchIcon";
 
