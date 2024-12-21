@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Column, Job } from "../../types";
-import { toast } from "react-toastify";
 const api_url: string = import.meta.env.VITE_API_HOST + "tracker/";
 
 export interface ApiResponse<T> {

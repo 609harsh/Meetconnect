@@ -2,7 +2,7 @@ import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { Column, Job } from "../../types";
 import TrackerCard from "./TrackerCard";
 import { CSS } from "@dnd-kit/utilities";
-import { ReactEventHandler, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import PlusIcon from "../../icons/PlusIcon";
 import AddJob from "./AddJob";
 import { useAppDispatch } from "../../redux/hooks";
@@ -13,7 +13,6 @@ import {
   useDeleteTrackerColumnMutation,
   usePatchTrackerColumnMutation,
 } from "../../redux/ApiSlice/trackerApi";
-import { DndContext } from "@dnd-kit/core";
 
 const TrackerColumn = ({
   column,

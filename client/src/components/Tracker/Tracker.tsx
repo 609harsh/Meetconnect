@@ -37,11 +37,7 @@ import Loader from "../Loader";
 import Navbar from "../Navbar";
 
 const Tracker = () => {
-  const {
-    data: trackerDetails,
-    isFetching,
-    isError,
-  } = useGetTrackerDetailsQuery();
+  const { data: trackerDetails, isFetching } = useGetTrackerDetailsQuery();
   const [newColumn] = useCreateTrackerColumnMutation();
   const [exchangeColumn] = useSwapColumnMutation();
   const [swapSameJobColumn] = useSwapSameColumnMutation();
@@ -115,7 +111,7 @@ const Tracker = () => {
     //Dropped over same column
     console.log("drag end");
     console.log(active, over);
-    const isActiveJob = active.data.current?.type === "job";
+    // const isActiveJob = active.data.current?.type === "job";
     // if (isActiveJob) {
     //   return;
     // }
