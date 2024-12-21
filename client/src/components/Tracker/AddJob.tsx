@@ -1,6 +1,6 @@
-import { useState } from "react";
+// import { useState } from "react";
 import Select from "react-select";
-import AsyncSelect from "react-select/async";
+// import AsyncSelect from "react-select/async";
 import { Column, Job } from "../../types";
 import CloseIcon from "../../icons/CloseIcon";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";

@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { Payload, User } from "../types";
 import {
-  useUpdateProfileImageMutation,
+  // useUpdateProfileImageMutation,
   useUpdateProfileMutation,
 } from "../redux/ApiSlice/meetApi";
 import NameProfile from "../components/Profile/NameProfile";
@@ -21,7 +21,7 @@ import { toast } from "react-toastify";
 const base_url = import.meta.env.VITE_API_HOST + "";
 export default function Profile() {
   const [uploadProfile] = useUploadProfileMutation();
-  const [updateUrl] = useUpdateProfileImageMutation();
+  // const [updateUrl] = useUpdateProfileImageMutation();
   const [preview, setPreview] = useState<string>("/profile.jpg");
   const [disable, setDisable] = useState<boolean>(true);
   const { username } = useParams<{ username: string }>();
