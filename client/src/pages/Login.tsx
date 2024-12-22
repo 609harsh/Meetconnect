@@ -4,7 +4,7 @@ import { useUserLoginMutation } from "../redux/ApiSlice/meetApi";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { Payload } from "../types";
-import { Bounce, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import Navbar from "../components/Navbar";
 
 const Login = () => {
