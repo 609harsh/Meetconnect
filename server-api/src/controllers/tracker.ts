@@ -137,8 +137,7 @@ class TrackerController {
     const response = await swapDifferentColumn(
       req.body.columnId1,
       req.body.columnId2,
-      req.params.jobId,
-      req.body.newIdx
+      req.params.jobId
     );
     if (!response.success) {
       next(new CustomError(response.error as string, 400));

@@ -30,6 +30,7 @@ import {
   useCreateTrackerColumnMutation,
   useGetTrackerDetailsQuery,
   useSwapColumnMutation,
+  useSwapDifferentColumnMutation,
   useSwapSameColumnMutation,
 } from "../../redux/ApiSlice/trackerApi";
 import { toast } from "react-toastify";
@@ -41,6 +42,7 @@ const Tracker = () => {
   const [newColumn] = useCreateTrackerColumnMutation();
   const [exchangeColumn] = useSwapColumnMutation();
   const [swapSameJobColumn] = useSwapSameColumnMutation();
+  const [swapDifferentJobColumn] = useSwapDifferentColumnMutation();
   const columns = useAppSelector((state) => state.jobcolumn);
   const jobs = useAppSelector((state) => state.jobdata);
   const columnsIdx = useMemo(() => columns.map((col) => col.idx), [columns]);
@@ -50,8 +52,6 @@ const Tracker = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (trackerDetails) {
-      console.log(trackerDetails);
-
       let jobColumn = trackerDetails.data
         .map((column) => {
           return {
@@ -146,17 +146,25 @@ const Tracker = () => {
           overId: overId as string,
         })
       );
-      await swapSameJobColumn({
-        columnId: active.data.current?.job.columnId as string,
-        jobId1: activeId as string,
-        jobId2: overId as string,
-      }).unwrap();
-      return;
+      if (
+        active.data.current?.job.columnId === over.data.current?.job.columnId
+      ) {
+        await swapSameJobColumn({
+          columnId: active.data.current?.job.columnId as string,
+          jobId1: activeId as string,
+          jobId2: overId as string,
+        }).unwrap();
+      }
     }
     // Dropping over different column
     const isOverAColumn = over.data.current?.type === "column";
     if (isActiveJob && isOverAColumn) {
       dispatch(swipeDifferentColumnJob({ activeId, overId }));
+      await swapDifferentJobColumn({
+        jobId: activeId as string,
+        columnId1: active.data.current?.job.columnId,
+        columnId2: overId as string,
+      }).unwrap();
     }
   };
 

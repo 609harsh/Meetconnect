@@ -123,11 +123,11 @@ const TrackerColumn = ({
             className="flex flex-grow flex-col overflow-x-hidden overflow-y-auto gap-3 mb-2"
             style={{ scrollbarWidth: "none" }}
           >
-            <SortableContext items={jobsId}>
-              {jobsData.map((job: Job) => (
+            {jobsData.map((job: Job) => (
+              <SortableContext items={jobsId}>
                 <TrackerCard data={job} key={job.id} />
-              ))}
-            </SortableContext>
+              </SortableContext>
+            ))}
           </div>
 
           <button

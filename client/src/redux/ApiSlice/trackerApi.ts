@@ -121,12 +121,12 @@ export const trackerApi = createApi({
     }),
     swapDifferentColumn: builder.mutation<
       ApiResponse<any>,
-      { jobId: string; columnId1: string; columnId2: string; newIdx: string }
+      { jobId: string; columnId1: string; columnId2: string }
     >({
-      query: ({ jobId, columnId1, columnId2, newIdx }) => ({
+      query: ({ jobId, columnId1, columnId2 }) => ({
         url: `swapDifferentcolumn/${jobId}`,
         method: "PATCH",
-        body: JSON.stringify({ columnId1, columnId2, newIdx }),
+        body: JSON.stringify({ columnId1, columnId2 }),
         headers: {
           "content-type": "application/json",
         },
