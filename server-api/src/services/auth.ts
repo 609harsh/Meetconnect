@@ -56,9 +56,10 @@ export const userLogin = async (data: any) => {
   try {
     const user = await prisma.user.findUnique({
       where: {
-        email: (data.email + "").toLowerCase(),
+        email: data.email.toLowerCase(),
       },
     });
+
     if (!user) throw new Error("User email/password does not match");
     if (!data.google) {
       const hash = await bcrypt.compare(data?.password, user?.password + "");
