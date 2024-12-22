@@ -9,9 +9,7 @@ export interface ApiResponse<T> {
 
 export interface NewApiResponse<T> {
   success: boolean;
-  data: {
-    trackerColumn: T;
-  };
+  data: T;
 }
 
 export const trackerApi = createApi({

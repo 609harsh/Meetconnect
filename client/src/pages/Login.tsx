@@ -4,7 +4,7 @@ import { useUserLoginMutation } from "../redux/ApiSlice/meetApi";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { Payload } from "../types";
-import { Bounce, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import Navbar from "../components/Navbar";
 
 const Login = () => {
@@ -67,17 +67,7 @@ const Login = () => {
       navigation("/dashboard");
     } catch (err: any) {
       console.log(err);
-      toast.error(err.error, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      toast.error(err.error);
     }
   };
 
@@ -85,7 +75,7 @@ const Login = () => {
     try {
       const { email } = jwtDecode(credentialResponse) as Payload;
       const token = await toast.promise(
-        userLogin({ email, password }).unwrap(),
+        userLogin({ email, password, google: true }).unwrap(),
         {
           pending: "Logging in.. ",
           success: "Welcome",

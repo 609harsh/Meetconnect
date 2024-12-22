@@ -49,7 +49,16 @@ export const getTracker = async (username: string, id: string) => {
         },
       },
     });
-    return { success: true, data: tracker };
+    let sortedData = tracker?.trackerColumn.map((col) => {
+      col.jobs.sort(
+        (a, b) =>
+          (col.jobIdx || []).indexOf(a.id) - (col.jobIdx || []).indexOf(b.id)
+      );
+      return col;
+    });
+    console.log(sortedData);
+
+    return { success: true, data: sortedData };
   } catch (err) {
     return { success: false, error: errorFunction(err) };
   }
@@ -109,9 +118,6 @@ export const deleteColumn = async (columnId: string) => {
 
 export const createJob = async (columnId: string, body: Job) => {
   try {
-    console.log(columnId);
-    console.log(body);
-
     if (!columnId || columnId.trim() === "" || columnId === "undefined") {
       throw new Error("Invalid ColumnId");
     }

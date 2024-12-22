@@ -21,7 +21,6 @@ const Navbar = () => {
     const token = localStorage.getItem("token") as string;
     if (token) {
       const user = jwtDecode(token) as Payload;
-      console.log(user);
       setUsername(user.username);
       setLogin(true);
     }

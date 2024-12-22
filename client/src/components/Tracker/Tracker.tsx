@@ -50,7 +50,9 @@ const Tracker = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (trackerDetails) {
-      let jobColumn = trackerDetails.data.trackerColumn
+      console.log(trackerDetails);
+
+      let jobColumn = trackerDetails.data
         .map((column) => {
           return {
             id: column.id,
@@ -60,9 +62,10 @@ const Tracker = () => {
           };
         })
         .sort((a, b) => a.idx - b.idx);
-      let jobs = trackerDetails.data.trackerColumn.map((column) => {
+      let jobs = trackerDetails.data.map((column) => {
         return column.jobs?.flat();
       });
+
       if (jobColumn && jobColumn.length > 0) {
         dispatch(addPreJobCoLumn(jobColumn));
       }
@@ -109,13 +112,6 @@ const Tracker = () => {
     const activeColumnId = active.id;
     const overColumnId = over.id;
     //Dropped over same column
-    console.log("drag end");
-    console.log(active, over);
-    // const isActiveJob = active.data.current?.type === "job";
-    // if (isActiveJob) {
-    //   return;
-    // }
-
     if (activeColumnId === overColumnId) return;
 
     dispatch(
@@ -142,8 +138,6 @@ const Tracker = () => {
     const isOverJob = over.data.current?.type === "job";
 
     if (!isActiveJob) return;
-    console.log("drag over");
-    console.log(active, over);
     //Dropping over same column
     if (isActiveJob && isOverJob) {
       dispatch(
@@ -174,28 +168,6 @@ const Tracker = () => {
     })
   );
 
-  const extractJobs = (column: Column) => {
-    // let data =  // Filter jobs based on jobIdx
-
-    // Ensure stable sorting
-
-    // data = [...data].sort(
-    //   (a, b) =>
-    //     (column.jobIdx || []).indexOf(a.id) -
-    //     (column.jobIdx || []).indexOf(b.id)
-    // );
-
-    return jobs.filter((job) => job.columnId === column.id);
-
-    // const data = column.jobIdx?.map((jobIds) => {
-    //   return jobs.find((job) => job.id === jobIds);
-    // });
-    // // const job = jobs.filter((job) => job.columnId === column.id);
-    // // console.log(data);
-    // // console.log(job);
-    // return data as Job[];
-  };
-
   return (
     <div
       style={{ backgroundImage: "url(kanban4.jpg)" }}
@@ -223,7 +195,9 @@ const Tracker = () => {
                       <TrackerColumn
                         key={column.id}
                         column={column}
-                        jobsData={extractJobs(column)}
+                        jobsData={jobs.filter(
+                          (job) => job.columnId === column.id
+                        )}
                       />
                     ))}
                   </SortableContext>
@@ -242,7 +216,9 @@ const Tracker = () => {
                     <TrackerColumn
                       key={activeColumn.id}
                       column={activeColumn}
-                      jobsData={extractJobs(activeColumn)}
+                      jobsData={jobs.filter(
+                        (job) => job.columnId === activeColumn.id
+                      )}
                     />
                   )}
                   {activeJob && <TrackerCard data={activeJob} />}

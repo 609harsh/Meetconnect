@@ -25,17 +25,7 @@ const TrackerColumn = ({
   const [renameColumn] = usePatchTrackerColumnMutation();
   const [editMode, setEditmode] = useState<boolean>(false);
   const [addJob, setAddJob] = useState<boolean>(false);
-  const jobsId = useMemo(
-    () =>
-      jobsData
-        .sort(
-          (a, b) =>
-            (column.jobIdx || []).indexOf(a.id) -
-            (column.jobIdx || []).indexOf(b.id)
-        )
-        .map((job) => job.id),
-    [jobsData]
-  );
+  const jobsId = useMemo(() => jobsData.map((job) => job.id), [jobsData]);
   const [title, setTitle] = useState<string>("");
   const dispatch = useAppDispatch();
 
