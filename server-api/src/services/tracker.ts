@@ -1,5 +1,4 @@
 import { Prisma, PrismaClient } from "@prisma/client";
-import { log } from "console";
 
 export interface Column {
   id?: string;
@@ -56,7 +55,6 @@ export const getTracker = async (username: string, id: string) => {
       );
       return col;
     });
-    console.log(sortedData);
 
     return { success: true, data: sortedData };
   } catch (err) {
@@ -240,6 +238,8 @@ export const swapSameColumn = async (
     let jobIdx2 = newJobs.findIndex((job) => job === jobId2);
     newJobs[Number(jobIdx1)] = jobId2;
     newJobs[Number(jobIdx2)] = jobId1;
+    console.log("Same column");
+
     console.log(newJobs);
     const column = await prisma.trackerColumn.update({
       where: {
@@ -258,14 +258,14 @@ export const swapSameColumn = async (
 export const swapDifferentColumn = async (
   columnId1: string,
   columnId2: string,
-  jobId: string,
-  newIdx: string
+  jobId: string
 ) => {
   //0-based indexes
   //kep original indexes
   try {
     // change refrence in job
     //disconnect
+
     const job = await prisma.trackerJob.update({
       where: {
         id: jobId,
@@ -307,7 +307,7 @@ export const swapDifferentColumn = async (
       },
     });
     const updatedArray2 = col2?.jobIdx;
-    updatedArray2?.splice(Number(newIdx), 0, jobId);
+    updatedArray2?.push(jobId);
     const update2 = await prisma.trackerColumn.update({
       where: {
         id: columnId2,

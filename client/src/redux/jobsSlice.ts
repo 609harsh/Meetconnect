@@ -12,7 +12,7 @@ export const jobSlice = createSlice({
     },
     // Add a single interview
     addJob: (state, action: PayloadAction<Job>) => {
-      state.push(action.payload);
+      state.unshift(action.payload);
     },
 
     // Delete an interview by id
