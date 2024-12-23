@@ -11,8 +11,7 @@ export const createUser = async (data: any) => {
   try {
     const findUser = await prisma.user.findFirst({
       where: {
-        email: data.email,
-        phoneNumber: data?.phoneNumber,
+        email: data.email.toLowerCase(),
       },
     });
     if (findUser) throw new Error("User Already Exist");

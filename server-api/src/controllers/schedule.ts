@@ -1,7 +1,7 @@
 import { NextFunction, Response } from "express";
 import { createInterviews } from "../services/schedule";
-import { CustomRequest } from "../authorizationMiddleware";
 import { CustomError } from "../globalErrorHandler";
+import { CustomRequest } from "../types";
 
 class ScheduleInterviews {
   public postInterviews = async (

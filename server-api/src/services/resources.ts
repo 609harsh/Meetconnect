@@ -20,9 +20,15 @@ export const fetchResources = async () => {
     return { success: true, data };
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
-      return { success: false, error: `Prisma error: ${err.message}` };
+      return {
+        success: false,
+        error: `Db error: ${err.message.split("\n").pop()}`,
+      };
     } else if (err instanceof Prisma.PrismaClientValidationError) {
-      return { success: false, error: `Prisma error: ${err.message}` };
+      return {
+        success: false,
+        error: `DB Error: ${err.message.split("\n").pop()}`,
+      };
     } else if (err instanceof Error) {
       return { success: false, error: err.message };
     }

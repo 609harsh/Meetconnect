@@ -1,25 +1,11 @@
 import { PrismaClient } from "@prisma/client";
-import { log } from "console";
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { CustomError } from "./globalErrorHandler";
+import dotenv from "dotenv";
+import { CustomRequest, JWTError, Payload } from "./types";
 
-export interface JWTError {
-  name?: string;
-  message?: string;
-}
-export interface Payload {
-  name: string;
-  email: string;
-  id: string;
-  username: string;
-  iat: number;
-  exp: number;
-}
-export interface CustomRequest extends Request {
-  userId?: string; // Extend Request to include userId
-  username?: string;
-}
+dotenv.config();
 
 const prisma = new PrismaClient();
 export const authorization = async (
@@ -29,7 +15,13 @@ export const authorization = async (
 ) => {
   //1.) if token is not present
   const tokenDetails = req.headers.authorization;
-  if (!tokenDetails || !tokenDetails.startsWith("Bearer")) {
+  if (!tokenDetails) {
+    res.status(401).json({ success: false, message: "Token does not exist" });
+    return;
+  }
+  console.log(tokenDetails);
+
+  if (!tokenDetails.startsWith("Bearer")) {
     res.status(401).json({ success: false, message: "Token does not exist" });
     return;
   }
@@ -39,7 +31,7 @@ export const authorization = async (
 
   let result: Payload;
   try {
-    result = jwt.verify(token, "23456789") as Payload;
+    result = jwt.verify(token, process.env.TOKEN_SECRET + "") as Payload;
 
     //3.) validate user
     const user = await prisma.user.findFirst({
@@ -57,10 +49,7 @@ export const authorization = async (
     const err = error as JWTError;
     console.log(err.message);
     next(new CustomError(err.message + "", 401));
-    // res.status(401).json({ success: false, error: err.message });
     return;
   }
   //4.)
-
-  //
 };

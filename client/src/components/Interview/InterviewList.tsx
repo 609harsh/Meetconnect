@@ -1,4 +1,4 @@
-import { Interview } from "../types";
+import { Interview } from "../../types";
 import InterviewCard from "./InterviewCard";
 
 //   {

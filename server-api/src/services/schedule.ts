@@ -1,15 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client";
-
-interface Interview {
-  title: string;
-  type: string;
-  company: string;
-  date: string;
-  duration?: string;
-  guest?: string;
-  notification?: string;
-  link?: string;
-}
+import { Interview } from "../types";
 
 const prisma = new PrismaClient();
 
@@ -28,9 +18,15 @@ export const createInterviews = async (
     return { success: true, data: interview };
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
-      return { success: false, error: `Prisma error1: ${err.meta}` };
+      return {
+        success: false,
+        error: `Db error: ${err.message.split("\n").pop()}`,
+      };
     } else if (err instanceof Prisma.PrismaClientValidationError) {
-      return { success: false, error: `Prisma error: Some Fields are missing` };
+      return {
+        success: false,
+        error: `DB Error: ${err.message.split("\n").pop()}`,
+      };
     } else if (err instanceof Error) {
       return { success: false, error: err.message };
     }

@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { deleteInterview, getInterviews } from "../services/interviews";
-import { CustomRequest } from "../authorizationMiddleware";
+
 import { CustomError } from "../globalErrorHandler";
+import { CustomRequest } from "../types";
 
 class Interviews {
   public fetchInterviews = async (

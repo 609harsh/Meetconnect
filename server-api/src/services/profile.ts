@@ -1,44 +1,17 @@
 import { Prisma, PrismaClient } from "@prisma/client";
+import {
+  Skill,
+  UserAddress,
+  UserEducation,
+  UserUpdate,
+  WorkExperience,
+} from "../types";
 
 const prisma = new PrismaClient();
-export interface UserUpdate {
-  about?: string;
-  phoneNumber?: string;
-  name?: string;
-}
-
-export interface UserAddress {
-  line1?: string;
-  line2?: string;
-  state?: string;
-  country?: string;
-  pincode?: string;
-  city?: string;
-}
-
-export interface UserEducation {
-  school?: string;
-  degree?: string;
-  grade?: string;
-  fieldOfStudy?: string;
-  duration?: string;
-}
-
-export interface Skill {
-  value: string;
-  label: string;
-}
-
-export interface WorkExperience {
-  title?: string;
-  company?: string;
-  duration?: string;
-  about?: string;
-}
 
 const errorFunction = (err: unknown) => {
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
-    return `Db error: Invalid details`;
+    return `Db error: ${err.message.split("\n").pop()}`;
   } else if (err instanceof Prisma.PrismaClientValidationError) {
     return `DB Error: ${err.message.split("\n").pop()}`;
   } else if (err instanceof Error) {
