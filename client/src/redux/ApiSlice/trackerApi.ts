@@ -1,16 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Column, Job } from "../../types";
+import { ApiResponse, Column, Job } from "../../types";
 const api_url: string = import.meta.env.VITE_API_HOST + "tracker/";
-
-export interface ApiResponse<T> {
-  success: boolean;
-  data: T;
-}
-
-export interface NewApiResponse<T> {
-  success: boolean;
-  data: T;
-}
 
 export const trackerApi = createApi({
   reducerPath: "trackerApi",
@@ -25,7 +15,7 @@ export const trackerApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getTrackerDetails: builder.query<NewApiResponse<Column[]>, void>({
+    getTrackerDetails: builder.query<ApiResponse<Column[]>, void>({
       query: () => ({
         url: "",
         method: "GET",

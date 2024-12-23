@@ -8,14 +8,6 @@ import { addJob } from "../../redux/jobsSlice";
 import { useCreateNewJobMutation } from "../../redux/ApiSlice/trackerApi";
 import { JobRoles } from "../../data";
 
-export interface JobOption {
-  value: string;
-  label: string;
-  color: string;
-  isFixed?: boolean;
-  isDisabled?: boolean;
-}
-
 // const filterColors = (inputValue: string) => {
 //   return jobOptions.filter((i) =>
 //     i.label.toLowerCase().includes(inputValue.toLowerCase())

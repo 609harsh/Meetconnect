@@ -1,9 +1,5 @@
-import { Experience } from "../../types";
+import { FormExperience } from "../../types";
 
-interface FormExperience extends Experience {
-  startYear?: string;
-  endYear?: string;
-}
 const AddExperience = ({
   formExperienceAction,
 }: {
@@ -14,7 +10,7 @@ const AddExperience = ({
     let formData: FormExperience = {};
     for (let elements of e.target) {
       if (elements.name) {
-        formData[elements.name as keyof Experience] = elements.value;
+        formData[elements.name as keyof FormExperience] = elements.value;
       }
     }
     // console.log(formData);
