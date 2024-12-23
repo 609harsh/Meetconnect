@@ -1,5 +1,4 @@
 import { NextFunction, Response } from "express";
-import { CustomRequest } from "../authorizationMiddleware";
 import {
   createColumn,
   createJob,
@@ -12,7 +11,7 @@ import {
   swapSameColumn,
 } from "../services/tracker";
 import { CustomError } from "../globalErrorHandler";
-import { patchEducation } from "../services/profile";
+import { CustomRequest } from "../types";
 
 class TrackerController {
   public fetchTracker = async (

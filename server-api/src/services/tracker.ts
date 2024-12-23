@@ -1,26 +1,11 @@
 import { Prisma, PrismaClient } from "@prisma/client";
-
-export interface Column {
-  id?: string;
-  columnTitle: string;
-  idx: string;
-  jobIdx?: string[];
-  username?: string;
-}
-export interface Job {
-  id?: string;
-  company: string;
-  columnId?: string;
-  note?: string;
-  link?: string;
-  jobtitle: string;
-}
+import { Column, Job } from "../types";
 
 const prisma = new PrismaClient();
 
 const errorFunction = (err: unknown) => {
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
-    return `Db error: ${err.message}`;
+    return `Db error: ${err.message.split("\n").pop()}`;
   } else if (err instanceof Prisma.PrismaClientValidationError) {
     return `DB Error: ${err.message.split("\n").pop()}`;
   } else if (err instanceof Error) {

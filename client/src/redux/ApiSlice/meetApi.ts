@@ -1,6 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   Address,
+  ApiResponse,
+  ApiSkillResponse,
+  ApiUserResponse,
   Education,
   Experience,
   Interview,
@@ -8,25 +11,6 @@ import {
   User,
 } from "../../types";
 const api_url: string = import.meta.env.VITE_API_HOST;
-
-export interface ApiResponse<T> {
-  success: boolean;
-  data: T;
-}
-
-export interface ApiUserResponse {
-  success: boolean;
-  data: string;
-}
-
-export interface ApiSkillResponse {
-  success: boolean;
-  data: {
-    skills: Skill[];
-    id: string;
-    username: string;
-  };
-}
 
 export const meetApi = createApi({
   reducerPath: "meetApi",

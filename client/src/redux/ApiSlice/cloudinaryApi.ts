@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { ApiResponse } from "./meetApi";
+import { ApiResponse } from "../../types";
 
 const cloud_name = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 

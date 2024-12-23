@@ -122,3 +122,40 @@ export interface Job {
   columnId?: string;
   note?: string;
 }
+
+export interface Tabs {
+  id: number;
+  name: string;
+}
+
+export interface FormExperience extends Experience {
+  startYear?: string;
+  endYear?: string;
+}
+
+export interface JobOption {
+  value: string;
+  label: string;
+  color: string;
+  isFixed?: boolean;
+  isDisabled?: boolean;
+}
+
+export interface ApiResponse<T> {
+  success: boolean;
+  data: T;
+}
+
+export interface ApiUserResponse {
+  success: boolean;
+  data: string;
+}
+
+export interface ApiSkillResponse {
+  success: boolean;
+  data: {
+    skills: Skill[];
+    id: string;
+    username: string;
+  };
+}

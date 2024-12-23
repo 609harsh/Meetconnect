@@ -7,13 +7,21 @@ import interviews from "./routes/interviews";
 import profile from "./routes/profile";
 import { CustomError, globalErrorHandler } from "./globalErrorHandler";
 import tracker from "./routes/tracker";
+import dotnev from "dotenv";
+
+dotnev.config();
 const app: Express = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 app.get("/", (req, res) => {
-  res.send("Welcome to MeetConnect API");
+  res.send(`
+  <div style="display:flex; flex-direction:column; align-items:center;">
+  <h1>Welcome to Jobsy API</h1>
+  <h3>Check Out the <a href=${process.env.DOCUMENTATION_URL}>API Docs</a></h3>
+</div>
+`);
 });
 app.use(authRouter);
 app.use(schedule);

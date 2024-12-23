@@ -1,4 +1,4 @@
-import Interview from "../components/Interview";
+import Interview from "../components/Interview/Interview";
 import Navbar from "../components/Navbar";
 
 function Dashboard() {

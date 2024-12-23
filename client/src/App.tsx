@@ -80,13 +80,13 @@ function App() {
         >
           <SwiperSlide className="bg-center bg-cover sliders w-full md:w-4/6 lg:w-3/6">
             <div className="flex flex-col flex-grow bg-white items-center text-black">
-              <img src={"/interview.png"} loading="lazy" />
+              <img src={"/interview.png"} />
               <p className="py-5 text-xl font-semibold">Interview Tracker</p>
             </div>
           </SwiperSlide>
           <SwiperSlide className="bg-center bg-cover   w-full md:w-4/6 lg:w-3/6 ">
             <div className="flex flex-col flex-grow bg-white items-center text-black">
-              <img src={"/tracker.png"} loading="lazy" />
+              <img src={"/tracker.png"} />
               <p className="py-5 text-xl font-semibold">
                 Job Application Tracker
               </p>

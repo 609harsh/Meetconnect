@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import {
   deleteEducation,
   deleteWorkExperience,
@@ -14,8 +14,8 @@ import {
   patchWorkExperience,
   updateProfileImage,
 } from "../services/profile";
-import { CustomRequest } from "../authorizationMiddleware";
 import { CustomError } from "../globalErrorHandler";
+import { CustomRequest } from "../types";
 
 class Profile {
   public updateProfileImage = async (
