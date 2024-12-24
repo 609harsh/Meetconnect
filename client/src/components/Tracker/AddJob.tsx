@@ -7,6 +7,8 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addJob } from "../../redux/jobsSlice";
 import { useCreateNewJobMutation } from "../../redux/ApiSlice/trackerApi";
 import { JobRoles } from "../../data";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 // const filterColors = (inputValue: string) => {
 //   return jobOptions.filter((i) =>
@@ -25,6 +27,7 @@ const AddJob = ({ closeJob }: { closeJob: () => void }) => {
   const dispatch = useAppDispatch();
   const columns: Column[] = useAppSelector((state) => state.jobcolumn);
   const [newJob] = useCreateNewJobMutation();
+  const navigation = useNavigate();
   const addNewJob = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData: Partial<Job> = {};
@@ -37,15 +40,24 @@ const AddJob = ({ closeJob }: { closeJob: () => void }) => {
         | HTMLTextAreaElement;
       if (input.name) formData[input.name as keyof Job] = input.value;
     }
-    console.log(formData);
-
-    const response = await newJob({ body: formData as Job }).unwrap();
-    console.log(response);
-
-    formData.id = response.data.id;
-
-    dispatch(addJob(formData as Job));
-    closeJob();
+    try {
+      const response = await toast.promise(
+        newJob({ body: formData as Job }).unwrap(),
+        {
+          success: "Job Created",
+          pending: "Creating ...",
+        }
+      );
+      formData.id = response.data.id;
+      dispatch(addJob(formData as Job));
+      closeJob();
+    } catch (err: any) {
+      if (err.status === 401) {
+        navigation("/login");
+        return;
+      }
+      toast.error(err.error);
+    }
 
     return;
   };

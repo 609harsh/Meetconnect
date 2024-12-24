@@ -4,10 +4,14 @@ import { useCreateInterviewsMutation } from "../redux/ApiSlice/meetApi";
 import { changeMenuTo } from "../redux/menuSlice";
 import { addInterview } from "../redux/interviewsSlice";
 import CloseIcon from "../icons/CloseIcon";
+import { useNavigate } from "react-router-dom";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { SerializedError } from "@reduxjs/toolkit";
 
 const Schedule = () => {
   const dispatch = useAppDispatch();
   const [saveInterview] = useCreateInterviewsMutation();
+  const navigation = useNavigate();
   const changes = async (e: any) => {
     e.preventDefault();
     const formData: any = {};
@@ -39,10 +43,12 @@ const Schedule = () => {
         dispatch(addInterview(interview.data));
         dispatch(changeMenuTo(false));
       }
-
       // console.log(interview);
-    } catch (err: any) {
-      console.log(err);
+    } catch (err: FetchBaseQueryError | SerializedError | any) {
+      if (err.status === 401) {
+        navigation("/login");
+        return;
+      }
       toast.error(err.error);
     }
   };

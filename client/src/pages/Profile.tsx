@@ -4,7 +4,7 @@ import WorkExperienceProfile from "../components/Profile/WorkExperienceProfile";
 import EducationProfile from "../components/Profile/EducationProfile";
 import AddressProfile from "../components/Profile/AddressProfile";
 import { useUploadProfileMutation } from "../redux/ApiSlice/cloudinaryApi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { Payload, User } from "../types";
 import {
@@ -28,6 +28,8 @@ export default function Profile() {
   const [fetchProfileData] = useFetchProfileMutation();
   const [patchProfile] = useUpdateProfileMutation();
   const [profileData, setProfileData] = useState<User>();
+  const navigation = useNavigate();
+
   const checkUpdateFeature = () => {
     const token = localStorage.getItem("token") as string;
     if (!token || token.trim() === "") {
@@ -92,9 +94,17 @@ export default function Profile() {
     // await updateUrl({ url: response.data as string }).unwrap();
   };
   const updateProfile = async (body: User) => {
-    await patchProfile({
-      body,
-    }).unwrap();
+    try {
+      await patchProfile({
+        body,
+      }).unwrap();
+    } catch (err: any) {
+      if (err.status === 401) {
+        navigation("/login");
+        return;
+      }
+      toast.error(err.error);
+    }
   };
   return (
     <div

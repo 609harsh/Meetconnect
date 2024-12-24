@@ -79,7 +79,7 @@ const InterviewList = ({ data }: { data: Interview[] }) => {
         <p>No interviews data available!! </p>
       ) : (
         data.map((interview) => {
-          return <InterviewCard data={interview} />;
+          return <InterviewCard key={interview.id} data={interview} />;
         })
       )}
     </div>

@@ -19,7 +19,6 @@ export const authorization = async (
     res.status(401).json({ success: false, message: "Token does not exist" });
     return;
   }
-  console.log(tokenDetails);
 
   if (!tokenDetails.startsWith("Bearer")) {
     res.status(401).json({ success: false, message: "Token does not exist" });

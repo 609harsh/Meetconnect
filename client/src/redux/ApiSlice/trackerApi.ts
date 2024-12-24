@@ -33,11 +33,7 @@ export const trackerApi = createApi({
           "content-type": "application/json",
         },
       }),
-      transformResponse: (response: any) => {
-        return response;
-      },
     }),
-
     patchTrackerColumn: builder.mutation<
       ApiResponse<Column>,
       { columnId: string; title: string }

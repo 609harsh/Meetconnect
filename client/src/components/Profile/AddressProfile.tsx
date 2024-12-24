@@ -4,6 +4,8 @@ import { Address } from "../../types";
 import { useFetchAddressProfileMutation } from "../../redux/ApiSlice/publicApi";
 import SaveIcon from "../../icons/SaveIcon";
 import CancelIcon from "../../icons/CancelIcon";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const labels = ["line1", "line2", "city", "state", "country", "pincode"];
 const add: Address = {
@@ -29,6 +31,7 @@ const AddressProfile = ({
   const [fetchAddressDetails, { isLoading }] = useFetchAddressProfileMutation();
   const [updateAddressDetails] = usePatchAddressProfileMutation();
   const [address, setAddress] = useState<Address>(add);
+  const navigation = useNavigate();
   useEffect(() => {
     const getDetails = async () => {
       const { data } = await fetchAddressDetails({ username });
@@ -41,11 +44,19 @@ const AddressProfile = ({
   const saveAddressChanges = async () => {
     //make api call
     add[activeAddress as keyof Address] = activeAddressData;
-    await updateAddressDetails({
-      body: { ...add },
-    }).unwrap();
+    try {
+      await updateAddressDetails({
+        body: { ...add },
+      }).unwrap();
 
-    setActiveAddress("");
+      setActiveAddress("");
+    } catch (err: any) {
+      if (err.status === 401) {
+        navigation("/login");
+        return;
+      }
+      toast.error(err.error);
+    }
   };
 
   const cancelAddressChanges = () => {

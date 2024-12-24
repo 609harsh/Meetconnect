@@ -25,50 +25,6 @@ export const meetApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getInterviews: builder.query<Interview[], void>({
-      query: () => ({
-        url: `interviews`,
-        method: "GET",
-      }),
-      transformResponse: (response: ApiResponse<Interview[]>) => response?.data,
-    }),
-    deleteInterviews: builder.mutation<boolean, string>({
-      query: (id) => ({
-        url: `interviews/${id}`,
-        method: "DELETE",
-      }),
-      transformResponse: (response: ApiResponse<Interview>) =>
-        response?.success,
-    }),
-    createInterviews: builder.mutation<ApiResponse<Interview>, Interview>({
-      query: (body) => ({
-        url: `schedule`,
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(body),
-      }),
-    }),
-    userLogin: builder.mutation<
-      string,
-      { email: string; password?: string; google?: boolean }
-    >({
-      query: ({ email, password, google = false }) => ({
-        url: `login`,
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({ email, password, google }),
-      }),
-      transformResponse: (response: ApiUserResponse) => {
-        return response?.data;
-      },
-      transformErrorResponse: (response) => {
-        return response?.data;
-      },
-    }),
     userSignup: builder.mutation<
       string,
       {
@@ -100,6 +56,51 @@ export const meetApi = createApi({
         return response?.data;
       },
     }),
+    userLogin: builder.mutation<
+      string,
+      { email: string; password?: string; google?: boolean }
+    >({
+      query: ({ email, password, google = false }) => ({
+        url: `login`,
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ email, password, google }),
+      }),
+      transformResponse: (response: ApiUserResponse) => {
+        return response?.data;
+      },
+      transformErrorResponse: (response) => {
+        return response?.data;
+      },
+    }),
+    getInterviews: builder.query<Interview[], void>({
+      query: () => ({
+        url: `interviews`,
+        method: "GET",
+      }),
+      transformResponse: (response: ApiResponse<Interview[]>) => response?.data,
+    }),
+    deleteInterviews: builder.mutation<boolean, string>({
+      query: (id) => ({
+        url: `interviews/${id}`,
+        method: "DELETE",
+      }),
+      transformResponse: (response: ApiResponse<Interview>) =>
+        response?.success,
+    }),
+    createInterviews: builder.mutation<ApiResponse<Interview>, Interview>({
+      query: (body) => ({
+        url: `schedule`,
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(body),
+      }),
+    }),
+
     patchEducationProfile: builder.mutation<
       ApiResponse<Education>,
       { body: object }

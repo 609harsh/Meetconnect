@@ -13,6 +13,8 @@ import {
   useDeleteTrackerColumnMutation,
   usePatchTrackerColumnMutation,
 } from "../../redux/ApiSlice/trackerApi";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const TrackerColumn = ({
   column,
@@ -28,7 +30,7 @@ const TrackerColumn = ({
   const jobsId = useMemo(() => jobsData.map((job) => job.id), [jobsData]);
   const [title, setTitle] = useState<string>("");
   const dispatch = useAppDispatch();
-
+  const navigation = useNavigate();
   const {
     setNodeRef,
     attributes,
@@ -54,7 +56,14 @@ const TrackerColumn = ({
       dispatch(deleteJob(job.id));
     });
     dispatch(deleteJobColumn(id));
-    await removeColumn({ columnId: id });
+    try {
+      await removeColumn({ columnId: id }).unwrap();
+    } catch (err: any) {
+      if (err.status === 401) {
+        navigation("/login");
+      }
+      toast.error(err.error);
+    }
   };
   const renameColumnTitle = async (id: string | undefined) => {
     dispatch(
@@ -63,11 +72,18 @@ const TrackerColumn = ({
         title: title,
       })
     );
-    await renameColumn({
-      columnId: id as string,
-      title,
-    }).unwrap();
-    setEditmode(false);
+    try {
+      await renameColumn({
+        columnId: id as string,
+        title,
+      }).unwrap();
+      setEditmode(false);
+    } catch (err: any) {
+      if (err.status === 401) {
+        navigation("/login");
+      }
+      toast.error(err.error);
+    }
   };
   if (isDragging) {
     return (

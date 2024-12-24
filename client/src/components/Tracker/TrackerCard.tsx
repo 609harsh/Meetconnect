@@ -7,12 +7,14 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useDeleteJobMutation } from "../../redux/ApiSlice/trackerApi";
 import LinkIcon from "../../icons/LinkIcon";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const TrackerCard = ({ data }: { data: Job }) => {
   const [mouseIsOver, setIsMouseOver] = useState(false);
   const dispatch = useAppDispatch();
   const [deleteJobCard] = useDeleteJobMutation();
+  const navigation = useNavigate();
   const {
     setNodeRef,
     attributes,
@@ -48,10 +50,18 @@ const TrackerCard = ({ data }: { data: Job }) => {
     colId: string | undefined
   ) => {
     dispatch(deleteJob(id as string));
-    await deleteJobCard({
-      columnId: colId as string,
-      jobId: id as string,
-    }).unwrap();
+    try {
+      await deleteJobCard({
+        columnId: colId as string,
+        jobId: id as string,
+      }).unwrap();
+    } catch (err: any) {
+      if (err.status === 401) {
+        navigation("/login");
+        return;
+      }
+      toast.error(err.error);
+    }
   };
   return (
     <div

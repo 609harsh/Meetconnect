@@ -36,9 +36,14 @@ import {
 import { toast } from "react-toastify";
 import Loader from "../Loader";
 import Navbar from "../Navbar";
+import { useNavigate } from "react-router-dom";
 
 const Tracker = () => {
-  const { data: trackerDetails, isFetching } = useGetTrackerDetailsQuery();
+  const {
+    data: trackerDetails,
+    isFetching,
+    error,
+  } = useGetTrackerDetailsQuery();
   const [newColumn] = useCreateTrackerColumnMutation();
   const [exchangeColumn] = useSwapColumnMutation();
   const [swapSameJobColumn] = useSwapSameColumnMutation();
@@ -48,9 +53,13 @@ const Tracker = () => {
   const columnsIdx = useMemo(() => columns.map((col) => col.idx), [columns]);
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
   const [activeJob, setActiveJob] = useState<Job | null>(null);
-
+  const navigation = useNavigate();
   const dispatch = useAppDispatch();
   useEffect(() => {
+    if (error && "status" in error && error.status === 401) {
+      navigation("/login");
+      return;
+    }
     if (trackerDetails) {
       let jobColumn = trackerDetails.data
         .map((column) => {
@@ -73,7 +82,7 @@ const Tracker = () => {
       if (fetchedJobs && fetchedJobs.length > 0)
         dispatch(addPreJob(fetchedJobs as Job[]));
     }
-  }, [dispatch, trackerDetails]);
+  }, [dispatch, trackerDetails, error]);
 
   const createNewColumn = async () => {
     const body = {
@@ -89,6 +98,10 @@ const Tracker = () => {
       const data = response.data;
       dispatch(addJobColumn(data));
     } catch (err: any) {
+      if (err.status === 401) {
+        navigation("/login");
+        return;
+      }
       toast.error(err.error);
     }
   };
