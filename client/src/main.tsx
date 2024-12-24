@@ -5,7 +5,7 @@ import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Login from "./pages/Login.tsx";
 import Signin from "./pages/Signin.tsx";
-import Forgot from "./pages/Forgot.tsx";
+// import Forgot from "./pages/Forgot.tsx";
 import Profile from "./pages/Profile.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import Resources from "./pages/Resources.tsx";
@@ -16,6 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 // import KanbanBoard from "./pages/Kanban/Kanban.tsx";
 import Tracker from "./components/Tracker/Tracker.tsx";
 import PrivateRoute from "./PrivateRoute.tsx";
+import NotFound from "./pages/NotFound.tsx";
 
 const router = createBrowserRouter([
   {
@@ -30,10 +31,10 @@ const router = createBrowserRouter([
     path: "/signin",
     element: <Signin />,
   },
-  {
-    path: "/forgot",
-    element: <Forgot />,
-  },
+  // {
+  //   path: "/forgot",
+  //   element: <Forgot />,
+  // },
   {
     path: "/profile/:username",
     element: <Profile />,
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
         <Tracker />
       </PrivateRoute>
     ),
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 
