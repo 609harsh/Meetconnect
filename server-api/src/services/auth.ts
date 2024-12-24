@@ -75,7 +75,7 @@ export const userLogin = async (data: any) => {
       },
       process.env.TOKEN_SECRET + "",
       {
-        expiresIn: Number(process.env.TOKEN_VALIDITY),
+        expiresIn: process.env.TOKEN_VALIDITY + "",
       }
     );
     return { success: true, data: token };
