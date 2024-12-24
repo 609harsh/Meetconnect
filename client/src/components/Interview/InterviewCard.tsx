@@ -4,13 +4,18 @@ import { useAppDispatch } from "../../redux/hooks";
 import { deleteInterview } from "../../redux/interviewsSlice";
 import { useDeleteInterviewsMutation } from "../../redux/ApiSlice/meetApi";
 import { Interview } from "../../types";
+import { useNavigate } from "react-router-dom";
 
 const InterviewCard = ({ data }: { data: Interview }) => {
-  const [removeInterview] = useDeleteInterviewsMutation();
+  const [removeInterview, { error }] = useDeleteInterviewsMutation();
+  const navigation = useNavigate();
   const dispatch = useAppDispatch();
   const handleDelete = async (id: string) => {
     await removeInterview(id).unwrap();
     dispatch(deleteInterview(id));
+    if (error) {
+      navigation("/login");
+    }
   };
   return (
     <div

@@ -4,6 +4,8 @@ import { Education } from "../../types";
 import { usePatchEducationProfileMutation } from "../../redux/ApiSlice/meetApi";
 import { useFetchEducationMutation } from "../../redux/ApiSlice/publicApi";
 import TrashIcon from "../../icons/TrashIcon";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const EducationProfile = ({
   disable,
@@ -16,17 +18,25 @@ const EducationProfile = ({
   const [educations, setEducations] = useState<Education[]>([]);
   const [getEducation] = useFetchEducationMutation();
   const [updateEducation] = usePatchEducationProfileMutation();
-
+  const navigation = useNavigate();
   const addEducation = async (education: Education, add: boolean) => {
     if (!add) {
       setOpenEducation(!openEducation);
       return;
     }
-    const save = await updateEducation({
-      body: education,
-    }).unwrap();
-    if (save.success) setOpenEducation(!openEducation);
-    setEducations([...educations, education]);
+    try {
+      const save = await updateEducation({
+        body: education,
+      }).unwrap();
+      if (save.success) setOpenEducation(!openEducation);
+      setEducations([...educations, education]);
+    } catch (err: any) {
+      if (err.status === 401) {
+        navigation("/login");
+        return;
+      }
+      toast.error(err.error);
+    }
   };
   useEffect(() => {
     const getEducationDetails = async () => {

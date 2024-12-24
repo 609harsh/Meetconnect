@@ -4,6 +4,8 @@ import { useUpdateWorkExperienceMutation } from "../../redux/ApiSlice/meetApi";
 import { Experience } from "../../types";
 import { useFetchWorkExperienceMutation } from "../../redux/ApiSlice/publicApi";
 import TrashIcon from "../../icons/TrashIcon";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const WorkExperienceProfile = ({
   disable,
@@ -16,7 +18,7 @@ const WorkExperienceProfile = ({
   const [getDetails] = useFetchWorkExperienceMutation();
   const [addExperience] = useUpdateWorkExperienceMutation();
   const [experience, setExperience] = useState<Experience[]>([]);
-
+  const navigation = useNavigate();
   useEffect(() => {
     const fetchDetails = async () => {
       const res = await getDetails({ username }).unwrap();
@@ -25,13 +27,20 @@ const WorkExperienceProfile = ({
     fetchDetails();
   }, []);
   const formExperienceAction = async (formData?: Experience) => {
-    console.log("formData", formData);
-    if (!formData) return;
-    const res = await addExperience({
-      newExperience: formData,
-    }).unwrap();
-    setExperience((prev) => [...prev, { ...res.data }]);
-    setOpenExperience(!openExperience);
+    try {
+      if (!formData) return;
+      const res = await addExperience({
+        newExperience: formData,
+      }).unwrap();
+      setExperience((prev) => [...prev, { ...res.data }]);
+      setOpenExperience(!openExperience);
+    } catch (err: any) {
+      if (err.status === 401) {
+        navigation("/login");
+        return;
+      }
+      toast.error(err.error);
+    }
   };
 
   const removeWorkExp = (id: string | undefined) => {

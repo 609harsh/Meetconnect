@@ -4,6 +4,8 @@ import { Skill } from "../../types";
 import { useFetchSkillsProfileMutation } from "../../redux/ApiSlice/publicApi";
 import CloseIcon from "../../icons/CloseIcon";
 import SearchIcon from "../../icons/SearchIcon";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 let list: Skill[] = [
   {
@@ -35,7 +37,7 @@ const SkillsProfile = ({
   const [skillList, setSkillsList] = useState<Skill[]>([]);
   const [fetchSkills] = useFetchSkillsProfileMutation();
   const [patchSkills] = useUpdateSkillsMutation();
-
+  const navigation = useNavigate();
   useEffect(() => {
     const getSkills = async () => {
       const response = await fetchSkills({
@@ -59,15 +61,31 @@ const SkillsProfile = ({
     setSkillsList(data);
   };
   const addSkill = async (label: string, value: string) => {
-    const newSkills = [...skills, { label, value }];
-    await patchSkills({ body: newSkills }).unwrap();
-    setSkills(newSkills);
-    setSkillsList([]);
+    try {
+      const newSkills = [...skills, { label, value }];
+      await patchSkills({ body: newSkills }).unwrap();
+      setSkills(newSkills);
+      setSkillsList([]);
+    } catch (err: any) {
+      if (err.status === 401) {
+        navigation("/login");
+        return;
+      }
+      toast.error(err.error);
+    }
   };
   const removeKey = async (label: string) => {
-    const newSkills = skills.filter((skill) => skill.label !== label);
-    await patchSkills({ body: newSkills }).unwrap();
-    setSkills(newSkills);
+    try {
+      const newSkills = skills.filter((skill) => skill.label !== label);
+      await patchSkills({ body: newSkills }).unwrap();
+      setSkills(newSkills);
+    } catch (err: any) {
+      if (err.status === 401) {
+        navigation("/login");
+        return;
+      }
+      toast.error(err.error);
+    }
   };
 
   return (

@@ -6,6 +6,8 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addAllInterviews } from "../../redux/interviewsSlice";
 import Schedule from "../Schedule";
 import Loader from "../Loader";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const tabs: Tabs[] = [
   {
@@ -29,16 +31,25 @@ const tabs: Tabs[] = [
 const InterviewSection = () => {
   const [currId, setCurrId] = useState(1);
   const [interviewsData, setInterviewData] = useState<Interview[]>([]);
-  const { data: interviews = [], isFetching } = useGetInterviewsQuery();
+  const {
+    data: interviews = [],
+    isFetching,
+    isError,
+    error,
+  } = useGetInterviewsQuery();
   const allInterviews = useAppSelector((state) => state.interview);
   const dispatch = useAppDispatch();
   const scheduleModal = useAppSelector((state) => state.menu.value);
+  const navigation = useNavigate();
 
   useEffect(() => {
-    if (interviews && interviews.length > 0) {
+    if (error && "status" in error && error.status === 401) {
+      toast.error("Unauthorized");
+      navigation("/login");
+    } else if (interviews && interviews.length > 0) {
       dispatch(addAllInterviews(interviews));
     }
-  }, [interviews, dispatch]);
+  }, [interviews, dispatch, isError]);
 
   useEffect(() => {
     const classifyInterviews = async (currId: number) => {
