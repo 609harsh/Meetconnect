@@ -16,6 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 // import KanbanBoard from "./pages/Kanban/Kanban.tsx";
 import Tracker from "./components/Tracker/Tracker.tsx";
 import PrivateRoute from "./PrivateRoute.tsx";
+import NotFound from "./pages/NotFound.tsx";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
         <Tracker />
       </PrivateRoute>
     ),
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 
