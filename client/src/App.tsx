@@ -19,26 +19,24 @@ function App() {
       <section className="relative bg-gradient-to-r from-blue-900/90 via-blue-700/90 to-cyan-800/90 h-screen flex items-center">
         <div className="container mx-auto px-6 md:px-12 lg:px-20 flex flex-col-reverse md:flex-row items-center gap-4">
           <div className="w-full md:w-1/2 text-center md:text-left">
-            <h1 className="animate-slidein300 opacity-0 text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+            <h1 className="animate-slidein300 opacity-0 text-3xl md:text-4xl lg:text-6xl font-bold text-white leading-tight">
               Simplify Your Job Hunt with{" "}
-              <span className="underline decoration-cyan-300">
-                One Powerful Tool!
-              </span>
+              <span className="text-emerald-300 ">One Powerful Tool!</span>
             </h1>
-            <p className="animate-slidein500 opacity-0 mt-4 text-lg text-gray-100">
+            <p className="animate-slidein500 opacity-0 mt-4 md:text-base lg:text-lg text-gray-100">
               Track interviews, manage job applications, showcase your profile,
               and access free career resources—all in one place.
             </p>
             <div className="animate-slidein700 opacity-0 mt-6 flex justify-center md:justify-start space-x-4">
               <Link
                 to="/signin"
-                className="bg-white text-blue-500 font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-blue-100"
+                className="bg-white text-blue-500 font-semibold text-sm md:text-base px-1  py-3 md:px-2 lg:px-6 md:py-3 rounded-lg shadow-md hover:bg-blue-100 self-center"
               >
                 Get Started for Free
               </Link>
               <a
                 href="#features"
-                className="bg-transparent text-white border border-white px-6 py-3 rounded-lg hover:bg-white hover:text-blue-500"
+                className="bg-transparent text-white border border-white text-sm md:text-base px-1  py-3 md:px-2 lg:px-6 md:py-3 rounded-lg hover:bg-white hover:text-blue-500 self-center"
               >
                 Explore Features
               </a>
@@ -81,7 +79,13 @@ function App() {
           <SwiperSlide className="bg-center bg-cover sliders w-full md:w-4/6 lg:w-3/6">
             <div className="flex flex-col flex-grow bg-white items-center text-black">
               <img src={"/interview.png"} />
-              <p className="py-5 text-xl font-semibold">Interview Tracker</p>
+              <p className="py-5 text-xl text-center font-semibold">
+                Interviews Dashboard
+              </p>
+              <p className="py-1 px-2 text-base font-mono text-center font-light">
+                "Seamlessly track, manage, and conquer your interview journey
+                with our all-in-one Interview Dashboard!"
+              </p>
             </div>
           </SwiperSlide>
           <SwiperSlide className="bg-center bg-cover   w-full md:w-4/6 lg:w-3/6 ">
@@ -90,12 +94,20 @@ function App() {
               <p className="py-5 text-xl font-semibold">
                 Job Application Tracker
               </p>
+              <p className="py-1 px-2 text-base font-mono text-center font-light">
+                "Stay organized and land your dream job with our Job Application
+                Tracker—your personalized Kanban board to monitor progress, set
+                priorities, and never miss an opportunity!"
+              </p>
             </div>
           </SwiperSlide>
           <SwiperSlide className="bg-center bg-cover w-full md:w-4/6 lg:w-3/6">
             <div className="flex flex-col flex-grow bg-white items-center text-black">
               <img src={"/publicprofile.png"} loading="lazy" />
               <p className="py-5 text-xl font-semibold">Public Profile</p>
+              <p className="py-1 px-2 text-base font-mono text-center font-light">
+                "Turn your resume into a sharable digital profile in seconds!"
+              </p>
             </div>
           </SwiperSlide>
         </Swiper>
@@ -138,6 +150,7 @@ function App() {
                   <li>
                     <Link
                       to="https://www.linkedin.com/in/harsh-gupta-a72902244/"
+                      target="_blank"
                       className="text-gray-500 hover:text-gray-900 "
                     >
                       <LinkedinIcon />
@@ -146,6 +159,7 @@ function App() {
                   <li>
                     <Link
                       to="https://x.com/609hgharsh"
+                      target="_blank"
                       className="text-gray-500 hover:text-gray-900 "
                     >
                       <TwitterIcon />
@@ -154,6 +168,7 @@ function App() {
                   <li>
                     <Link
                       to="https://github.com/609harsh"
+                      target="_blank"
                       className="text-gray-500 hover:text-gray-900 "
                     >
                       <GithubIcon />
@@ -162,6 +177,7 @@ function App() {
                   <li>
                     <Link
                       to="https://harsh-gupta-portfolio.vercel.app/"
+                      target="_blank"
                       className="text-gray-500 hover:text-gray-900 "
                     >
                       <InternetIcon />

@@ -16,12 +16,18 @@ export const publicApi = createApi({
     baseUrl: api_url,
   }),
   endpoints: (builder) => ({
-    fetchProfile: builder.mutation<ApiResponse<User>, { username: string }>({
+    fetchProfile: builder.query<ApiResponse<User>, { username: string }>({
       query: ({ username }) => {
         return {
           url: `profile/${username}`,
           method: "GET",
         };
+      },
+      transformErrorResponse: (response: {
+        status: number;
+        data: { success: false; error: string };
+      }) => {
+        return response.data;
       },
     }),
     fetchResources: builder.query<Resources[], void>({
@@ -91,7 +97,7 @@ export const publicApi = createApi({
 });
 
 export const {
-  useFetchProfileMutation,
+  useFetchProfileQuery,
   useFetchResourcesQuery,
   useFetchEducationMutation,
   useFetchAddressProfileMutation,

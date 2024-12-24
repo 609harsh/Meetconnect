@@ -85,15 +85,15 @@ const InterviewSection = () => {
     <>
       {scheduleModal && <Schedule />}
       {
-        <div>
+        <div className="relative">
           <div className="text-lg font-medium text-center text-gray-80000 border-b-2 border-gray-200  mx-auto max-w-5xl my-5 md:mt-10">
-            <ul className="flex flex-wrap -mb-px">
+            <ul className="flex flex-wrap justify-center md:justify-start -mb-px">
               {tabs?.map((tab) => {
                 return (
                   <li className="me-2" key={tab.id}>
                     {tab.id === currId ? (
                       <p
-                        className="inline-block p-4 text-blue-700/90 border-b-2 border-blue-700/90 rounded-t-lg active"
+                        className="inline-block p-2 md:p-4 text-blue-700/90 border-b-2 border-blue-700/90 rounded-t-lg active"
                         aria-current="page"
                       >
                         {tab.name}
@@ -101,7 +101,7 @@ const InterviewSection = () => {
                     ) : (
                       <p
                         onClick={() => setCurrId(tab.id)}
-                        className="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-black hover:border-blue-300/90 hover:bg-blue-300/90 hover:cursor-pointer"
+                        className="inline-block p-2 md:p-4 border-b-2 border-transparent rounded-t-lg hover:text-black hover:border-blue-300/90 hover:bg-blue-300/90 hover:cursor-pointer"
                       >
                         {tab.name}
                       </p>
@@ -111,7 +111,13 @@ const InterviewSection = () => {
               })}
             </ul>
           </div>
-          {isFetching ? <Loader /> : <InterviewList data={interviewsData} />}
+          {isFetching ? (
+            <div className="absolute top-64 left-1/2">
+              <Loader />
+            </div>
+          ) : (
+            <InterviewList data={interviewsData} />
+          )}
         </div>
       }
     </>

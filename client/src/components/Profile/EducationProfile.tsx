@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import AddEducation from "./AddEducation";
 import { Education } from "../../types";
-import { usePatchEducationProfileMutation } from "../../redux/ApiSlice/meetApi";
+import {
+  useDeleteEducationMutation,
+  usePatchEducationProfileMutation,
+} from "../../redux/ApiSlice/meetApi";
 import { useFetchEducationMutation } from "../../redux/ApiSlice/publicApi";
 import TrashIcon from "../../icons/TrashIcon";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +21,7 @@ const EducationProfile = ({
   const [educations, setEducations] = useState<Education[]>([]);
   const [getEducation] = useFetchEducationMutation();
   const [updateEducation] = usePatchEducationProfileMutation();
+  const [deleteEducation] = useDeleteEducationMutation();
   const navigation = useNavigate();
   const addEducation = async (education: Education, add: boolean) => {
     if (!add) {
@@ -40,16 +44,22 @@ const EducationProfile = ({
   };
   useEffect(() => {
     const getEducationDetails = async () => {
-      console.log("username", username);
       const res = await getEducation({ username }).unwrap();
-      console.log(res);
       setEducations([...res.data]);
     };
     getEducationDetails();
   }, []);
-  const removeEducation = (id: string | undefined) => {
+  const removeEducation = async (id: string | undefined) => {
     const newEducations = educations.filter((education) => education.id !== id);
     setEducations(newEducations);
+    try {
+      await deleteEducation({ id: id + "" }).unwrap();
+    } catch (err: any) {
+      if (err.status === 401) {
+        navigation("/login");
+      }
+      toast.error(err.error);
+    }
   };
 
   return (

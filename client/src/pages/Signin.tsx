@@ -64,6 +64,14 @@ const Signin = () => {
       toast.error("Password should have at least one special character");
       return;
     }
+    if (phoneNumber.length != 10) {
+      toast.error("Provide valid PhoneNumber");
+      return;
+    }
+    if (!Number(phoneNumber)) {
+      toast.error("Provide valid PhoneNumber");
+      return;
+    }
     try {
       const token = await toast.promise(
         userSignup({

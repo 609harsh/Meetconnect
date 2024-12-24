@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import AddExperience from "./AddExperience";
-import { useUpdateWorkExperienceMutation } from "../../redux/ApiSlice/meetApi";
+import {
+  useDeleteWorkExperienceMutation,
+  useUpdateWorkExperienceMutation,
+} from "../../redux/ApiSlice/meetApi";
 import { Experience } from "../../types";
 import { useFetchWorkExperienceMutation } from "../../redux/ApiSlice/publicApi";
 import TrashIcon from "../../icons/TrashIcon";
@@ -17,6 +20,7 @@ const WorkExperienceProfile = ({
   const [openExperience, setOpenExperience] = useState<boolean>(false);
   const [getDetails] = useFetchWorkExperienceMutation();
   const [addExperience] = useUpdateWorkExperienceMutation();
+  const [deleteExperience] = useDeleteWorkExperienceMutation();
   const [experience, setExperience] = useState<Experience[]>([]);
   const navigation = useNavigate();
   useEffect(() => {
@@ -43,9 +47,18 @@ const WorkExperienceProfile = ({
     }
   };
 
-  const removeWorkExp = (id: string | undefined) => {
+  const removeWorkExp = async (id: string | undefined) => {
     const newEducations = experience.filter((exp) => exp.id !== id);
+
     setExperience(newEducations);
+    try {
+      await deleteExperience({ id: id + "" }).unwrap();
+    } catch (err: any) {
+      if (err.status === 401) {
+        navigation("/login");
+      }
+      toast.error(err.error);
+    }
   };
   return (
     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">

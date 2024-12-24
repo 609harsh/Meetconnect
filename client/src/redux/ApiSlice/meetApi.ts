@@ -114,6 +114,12 @@ export const meetApi = createApi({
         body: JSON.stringify(body),
       }),
     }),
+    deleteEducation: builder.mutation<ApiResponse<Education>, { id: string }>({
+      query: ({ id }) => ({
+        url: `education/${id}`,
+        method: "DELETE",
+      }),
+    }),
     patchAddressProfile: builder.mutation<
       ApiResponse<Address>,
       { body: Address }
@@ -154,6 +160,15 @@ export const meetApi = createApi({
         body: JSON.stringify(newExperience),
       }),
     }),
+    deleteWorkExperience: builder.mutation<
+      ApiResponse<Experience>,
+      { id: string }
+    >({
+      query: ({ id }) => ({
+        url: `workexperience/${id}`,
+        method: "DELETE",
+      }),
+    }),
     updateProfile: builder.mutation<ApiResponse<User>, { body: User }>({
       query: ({ body }) => ({
         url: `profile`,
@@ -189,4 +204,6 @@ export const {
   useUpdateWorkExperienceMutation,
   useUpdateProfileImageMutation,
   useUpdateProfileMutation,
+  useDeleteEducationMutation,
+  useDeleteWorkExperienceMutation,
 } = meetApi;
