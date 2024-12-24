@@ -1,3 +1,5 @@
+import { toast } from "react-toastify";
+
 const AddEducation = ({ addEducation }: { addEducation: Function }) => {
   const saveChanges = async (e: any) => {
     e.preventDefault();
@@ -7,6 +9,36 @@ const AddEducation = ({ addEducation }: { addEducation: Function }) => {
         formData[elements.name] = elements.value;
       }
     }
+
+    if (!formData.school) {
+      toast.error("School Title required");
+      return;
+    }
+    if (!formData.degree) {
+      toast.error("Degree Field required");
+      return;
+    }
+    if (!formData.fieldOfStudy) {
+      toast.error("Field Of Study required");
+      return;
+    }
+    if (!formData.grade) {
+      toast.error("Grade required");
+      return;
+    }
+    if (!formData.startYear || !Number(formData.startYear)) {
+      toast.error("Invalid Start Year");
+      return;
+    }
+    if (!formData.endYear || !Number(formData.endYear)) {
+      toast.error("Invalid End Year");
+      return;
+    }
+    if (Number(formData.startYear) > Number(formData.endYear)) {
+      toast.error("Invalid duration");
+      return;
+    }
+
     const data = {
       school: formData.school,
       grade: formData.grade,
@@ -37,15 +69,13 @@ const AddEducation = ({ addEducation }: { addEducation: Function }) => {
                 Add School
               </label>
               <div className="mt-2">
-                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                  <input
-                    id="school"
-                    name="school"
-                    type="text"
-                    placeholder="LPS"
-                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm/6"
-                  />
-                </div>
+                <input
+                  id="school"
+                  name="school"
+                  type="text"
+                  placeholder="IIT Delhi"
+                  className="block w-full rounded-md border-0 py-1.5 pl-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                />
               </div>
             </div>
             <div className="sm:col-span-4">
@@ -56,16 +86,13 @@ const AddEducation = ({ addEducation }: { addEducation: Function }) => {
                 Degree
               </label>
               <div className="mt-2">
-                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                  <input
-                    id="degree"
-                    name="degree"
-                    type="text"
-                    placeholder="Microsoft"
-                    autoComplete="company"
-                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm/6"
-                  />
-                </div>
+                <input
+                  id="degree"
+                  name="degree"
+                  type="text"
+                  placeholder="B.tech"
+                  className="block w-full rounded-md border-0 py-1.5 pl-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                />
               </div>
             </div>
 
@@ -77,15 +104,13 @@ const AddEducation = ({ addEducation }: { addEducation: Function }) => {
                 Field of Study
               </label>
               <div className="mt-2">
-                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                  <input
-                    id="fieldOfStudy"
-                    name="fieldOfStudy"
-                    type="text"
-                    placeholder="CSE"
-                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm/6"
-                  />
-                </div>
+                <input
+                  id="fieldOfStudy"
+                  name="fieldOfStudy"
+                  type="text"
+                  placeholder="CSE"
+                  className="block w-full rounded-md border-0 py-1.5 pl-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                />
               </div>
             </div>
             <div className="sm:col-span-3">
@@ -96,17 +121,15 @@ const AddEducation = ({ addEducation }: { addEducation: Function }) => {
                 Start Year
               </label>
               <div className="mt-2">
-                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                  <input
-                    id="start-year"
-                    name="startYear"
-                    type="number"
-                    min={2000}
-                    max={new Date().getFullYear()}
-                    placeholder="2024"
-                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm/6"
-                  />
-                </div>
+                <input
+                  id="start-year"
+                  name="startYear"
+                  type="number"
+                  min={2000}
+                  max={new Date().getFullYear()}
+                  placeholder="2020"
+                  className="block w-full rounded-md border-0 py-1.5 pl-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                />
               </div>
             </div>
             <div className="sm:col-span-3">
@@ -117,17 +140,15 @@ const AddEducation = ({ addEducation }: { addEducation: Function }) => {
                 End Year
               </label>
               <div className="mt-2">
-                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                  <input
-                    id="end-year"
-                    name="endYear"
-                    type="number"
-                    min={2000}
-                    max={new Date().getFullYear()}
-                    placeholder="2024"
-                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm/6"
-                  />
-                </div>
+                <input
+                  id="end-year"
+                  name="endYear"
+                  type="number"
+                  min={2000}
+                  max={new Date().getFullYear()}
+                  placeholder="2024"
+                  className="block w-full rounded-md border-0 py-1.5 pl-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                />
               </div>
             </div>
 
@@ -139,12 +160,11 @@ const AddEducation = ({ addEducation }: { addEducation: Function }) => {
                 Grade
               </label>
               <div className="mt-2">
-                <textarea
+                <input
                   id="grade"
                   name="grade"
-                  rows={2}
+                  type="text"
                   className="block w-full rounded-md border-0 py-1.5 pl-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
-                  defaultValue={""}
                 />
               </div>
             </div>

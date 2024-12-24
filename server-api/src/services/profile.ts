@@ -70,7 +70,7 @@ export const getAddress = async (username: string) => {
         username,
       },
     });
-    if (!address) throw new Error("User does not Exist");
+    if (!address) return { success: true, data: null };
     return { success: true, data: address };
   } catch (err) {
     return { success: false, error: errorFunction(err) };
@@ -104,7 +104,7 @@ export const getEducation = async (username: string) => {
         username,
       },
     });
-    if (!user) throw new Error("User does not exist");
+    if (!user) return { success: true, data: [] };
     const education = await prisma.userEducation.findMany({
       where: {
         username: username,
@@ -157,7 +157,7 @@ export const getSkills = async (username: string) => {
         username: username,
       },
     });
-    if (!skills) throw new Error("User does not exist");
+    if (!skills) return { success: true, data: [] };
     return { success: true, data: skills };
   } catch (err) {
     return { success: false, error: errorFunction(err) };
@@ -191,7 +191,7 @@ export const getWorkExperience = async (username: string) => {
         username,
       },
     });
-    if (!user) throw new Error("User does not exist");
+    if (!user) return { success: true, data: [] };
     const works = await prisma.userWorkExperience.findMany({
       where: {
         username: username,

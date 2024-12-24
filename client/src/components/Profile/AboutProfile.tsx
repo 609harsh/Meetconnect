@@ -15,6 +15,10 @@ const AboutProfile = ({
   const [value, setValue] = useState<string>("");
 
   const saveChanges = () => {
+    if (!value || value.trim().length === 0) {
+      setUpdate(!update);
+      return;
+    }
     updateProfile({ about: value });
     setUpdate(!update);
   };
@@ -31,7 +35,7 @@ const AboutProfile = ({
               }}
             />
           ) : (
-            <li>{value === "" ? data : value}</li>
+            <li>{data}</li>
           )}
           {update ? (
             <li className="font-medium rounded-md hover:cursor-pointer flex flex-row justify-around items-center">

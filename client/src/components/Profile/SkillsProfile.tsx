@@ -44,7 +44,7 @@ const SkillsProfile = ({
         username,
       }).unwrap();
       if (response.data) {
-        setSkills(() => [...response.data.skills]);
+        if (response.data?.skills) setSkills(() => [...response.data.skills]);
       }
     };
     getSkills();

@@ -35,7 +35,8 @@ const AddressProfile = ({
   useEffect(() => {
     const getDetails = async () => {
       const { data } = await fetchAddressDetails({ username });
-      if (data?.success) {
+
+      if (data?.success && data.data !== null) {
         setAddress({ ...add, ...data.data });
       }
     };

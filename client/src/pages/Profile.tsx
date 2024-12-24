@@ -15,19 +15,21 @@ import NameProfile from "../components/Profile/NameProfile";
 import EmailProfile from "../components/Profile/EmailProfile";
 import PhoneNumberProfile from "../components/Profile/PhoneNumberProfile";
 import AboutProfile from "../components/Profile/AboutProfile";
-import { useFetchProfileMutation } from "../redux/ApiSlice/publicApi";
+import { useFetchProfileQuery } from "../redux/ApiSlice/publicApi";
 import Navbar from "../components/Navbar";
 import { toast } from "react-toastify";
 const base_url = import.meta.env.VITE_API_HOST + "";
 export default function Profile() {
   const [uploadProfile] = useUploadProfileMutation();
   // const [updateUrl] = useUpdateProfileImageMutation();
-  const [preview, setPreview] = useState<string>("/profile.jpg");
+  const [preview, setPreview] = useState<string>("");
   const [disable, setDisable] = useState<boolean>(true);
   const { username } = useParams<{ username: string }>();
-  const [fetchProfileData] = useFetchProfileMutation();
+  const { data: profileData, error } = useFetchProfileQuery({
+    username: username as string,
+  });
   const [patchProfile] = useUpdateProfileMutation();
-  const [profileData, setProfileData] = useState<User>();
+  // const [profileData, setProfileData] = useState<User>();
   const navigation = useNavigate();
 
   const checkUpdateFeature = () => {
@@ -41,16 +43,15 @@ export default function Profile() {
       return;
     }
   };
+
+  useEffect(() => {
+    if (error) {
+      toast.error("No User Exists");
+      navigation("/dashboard");
+    }
+  }, [error]);
   useEffect(() => {
     checkUpdateFeature();
-    const getProfile = async () => {
-      const response = await fetchProfileData({
-        username: username as string,
-      }).unwrap();
-      setPreview(response.data.profileImg || "/profile.jpg");
-      setProfileData(response.data);
-    };
-    getProfile();
   }, []);
 
   const setImage = () => {
@@ -126,7 +127,11 @@ export default function Profile() {
               onChange={getFile}
             />
             <img
-              src={`${preview}`}
+              src={
+                preview
+                  ? preview
+                  : profileData?.data.profileImg ?? "/profile.jpg"
+              }
               className="z-10 h-28 w-28 bg-cover"
               onClick={() => setImage()}
             ></img>
@@ -135,18 +140,18 @@ export default function Profile() {
         <div className="mt-6 border-t border-gray-100">
           <dl className="divide-y divide-gray-100">
             <NameProfile
-              data={profileData?.name}
+              data={profileData?.data?.name}
               updateProfile={updateProfile}
               disable={disable}
             />
-            <EmailProfile data={profileData?.email} />
+            <EmailProfile data={profileData?.data?.email} />
             <PhoneNumberProfile
-              data={profileData?.phoneNumber}
+              data={profileData?.data?.phoneNumber}
               updateProfile={updateProfile}
               disable={disable}
             />
             <AboutProfile
-              data={profileData?.about}
+              data={profileData?.data?.about}
               updateProfile={updateProfile}
               disable={disable}
             />

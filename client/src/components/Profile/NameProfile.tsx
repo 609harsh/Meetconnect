@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SaveIcon from "../../icons/SaveIcon";
 import CancelIcon from "../../icons/CancelIcon";
+import { toast } from "react-toastify";
 
 const NameProfile = ({
   data,
@@ -14,6 +15,15 @@ const NameProfile = ({
   const [update, setUpdate] = useState<boolean>(false);
   const [value, setValue] = useState<string | undefined>("");
   const saveChanges = () => {
+    if (!value || value.trim().length === 0) {
+      setUpdate(!update);
+      return;
+    }
+    if (value.length <= 2) {
+      toast.error("Name too short");
+      setUpdate(!update);
+      return;
+    }
     updateProfile({ name: value });
     setUpdate(!update);
   };
@@ -30,7 +40,7 @@ const NameProfile = ({
               }}
             />
           ) : (
-            <li>{value === "" ? data : value}</li>
+            <li>{data}</li>
           )}
           {update ? (
             <li className="font-medium rounded-md hover:cursor-pointer flex flex-row justify-around items-center">
