@@ -5,7 +5,7 @@ import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Login from "./pages/Login.tsx";
 import Signin from "./pages/Signin.tsx";
-import Forgot from "./pages/Forgot.tsx";
+// import Forgot from "./pages/Forgot.tsx";
 import Profile from "./pages/Profile.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import Resources from "./pages/Resources.tsx";
@@ -31,10 +31,10 @@ const router = createBrowserRouter([
     path: "/signin",
     element: <Signin />,
   },
-  {
-    path: "/forgot",
-    element: <Forgot />,
-  },
+  // {
+  //   path: "/forgot",
+  //   element: <Forgot />,
+  // },
   {
     path: "/profile/:username",
     element: <Profile />,

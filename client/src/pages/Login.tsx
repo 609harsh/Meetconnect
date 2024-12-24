@@ -160,12 +160,12 @@ const Login = () => {
                 >
                   Password
                 </label>
-                <Link
+                {/* <Link
                   to="/forgot"
                   className="text-xs text-gray-500  hover:underline"
                 >
                   Forget Password?
-                </Link>
+                </Link> */}
               </div>
 
               <input
