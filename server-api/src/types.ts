@@ -20,7 +20,7 @@ export interface CustomRequest extends Request {
 export interface Column {
   id?: string;
   columnTitle: string;
-  idx: string;
+  idx: number;
   jobIdx?: string[];
   username?: string;
 }
@@ -31,6 +31,7 @@ export interface Job {
   note?: string;
   link?: string;
   jobtitle: string;
+  idx?: number;
 }
 export interface Interview {
   title: string;

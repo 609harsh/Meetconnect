@@ -1,13 +1,10 @@
 // import { useState } from "react";
 import Select from "react-select";
 // import AsyncSelect from "react-select/async";
-import { Column, Job } from "../../types";
 import CloseIcon from "../../icons/CloseIcon";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { addJob } from "../../redux/jobsSlice";
-import { useCreateNewJobMutation } from "../../redux/ApiSlice/trackerApi";
 import { JobRoles } from "../../data";
-import { useNavigate } from "react-router-dom";
+import { useCreateNewJobMutation } from "../../redux/ApiSlice/trackerApi";
+import { Column, Job } from "../../types";
 import { toast } from "react-toastify";
 
 // const filterColors = (inputValue: string) => {
@@ -23,11 +20,16 @@ import { toast } from "react-toastify";
 //     }, 1000);
 //   });
 
-const AddJob = ({ closeJob }: { closeJob: () => void }) => {
-  const dispatch = useAppDispatch();
-  const columns: Column[] = useAppSelector((state) => state.jobcolumn);
-  const [newJob] = useCreateNewJobMutation();
-  const navigation = useNavigate();
+const AddJob = ({
+  closeJob,
+  newJob,
+  column,
+}: {
+  closeJob: () => void;
+  newJob: (data: Job) => void;
+  column: Column;
+}) => {
+  const [addJob] = useCreateNewJobMutation();
   const addNewJob = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData: Partial<Job> = {};
@@ -40,24 +42,23 @@ const AddJob = ({ closeJob }: { closeJob: () => void }) => {
         | HTMLTextAreaElement;
       if (input.name) formData[input.name as keyof Job] = input.value;
     }
-    try {
-      const response = await toast.promise(
-        newJob({ body: formData as Job }).unwrap(),
-        {
-          success: "Job Created",
-          pending: "Creating ...",
-        }
-      );
-      formData.id = response.data.id;
-      dispatch(addJob(formData as Job));
-      closeJob();
-    } catch (err: any) {
-      if (err.status === 401) {
-        navigation("/login");
-        return;
-      }
-      toast.error(err.error);
+
+    if (!formData.company) {
+      toast.error("Company is required");
+      return;
     }
+    if (!formData.jobtitle) {
+      toast.error("Job Title is required");
+      return;
+    }
+    if (!formData.columnId) {
+      toast.error("Select List");
+      return;
+    }
+    const response = await addJob({ body: formData }).unwrap();
+    if (response.success) newJob(response.data as Job);
+    closeJob();
+    // newJob(formData as Job);
 
     return;
   };
@@ -66,7 +67,7 @@ const AddJob = ({ closeJob }: { closeJob: () => void }) => {
       <div className="bg-white relative rounded-lg w-[800px] p-10 overflow-auto max-h-screen">
         <header className="flex flex-row justify-between">
           <p className="font-bold text-3xl">Add Job</p>
-          <span onClick={closeJob} className="hover:cursor-pointer">
+          <span onClick={() => closeJob()} className="hover:cursor-pointer">
             <CloseIcon />
           </span>
         </header>
@@ -156,15 +157,16 @@ const AddJob = ({ closeJob }: { closeJob: () => void }) => {
                         // isRtl={isRtl}
                         isSearchable={true}
                         // value={columns.find((col) => col.id === defaultValue)}
+
                         name="columnId"
-                        options={columns?.map((col) => {
-                          return {
-                            value: col.id,
-                            label: col.columnTitle,
+                        options={[
+                          {
+                            value: column.id,
+                            label: column.columnTitle,
                             color: "#00B8D9",
                             isFixed: true,
-                          };
-                        })}
+                          },
+                        ]}
                       />
                     </div>
                   </div>
@@ -191,7 +193,7 @@ const AddJob = ({ closeJob }: { closeJob: () => void }) => {
               <button
                 type="button"
                 className="text-sm/6 font-semibold text-gray-900"
-                onClick={closeJob}
+                onClick={() => closeJob()}
               >
                 Cancel
               </button>

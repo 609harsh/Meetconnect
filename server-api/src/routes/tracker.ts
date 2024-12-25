@@ -22,23 +22,23 @@ tracker.post(
   trackerController.createJob
 );
 tracker.delete(
-  "/tracker/job/:columnId/:jobId",
+  "/tracker/job/:jobId",
   authorization,
   trackerController.removeJob
 );
 
 tracker.patch(
-  "/tracker/swapcolumn",
+  "/tracker/swapcolumn/:columnId1/:columnId2",
   authorization,
   trackerController.swapTrackerColumn
 );
 tracker.patch(
-  "/tracker/swapSamecolumn/:columnId",
+  "/tracker/swapSamecolumn/:jobId1/:jobId2",
   authorization,
   trackerController.swapSameColumn
 );
 tracker.patch(
-  "/tracker/swapDifferentcolumn/:jobId",
+  "/tracker/swapDifferentcolumn/:columnId/:jobId",
   authorization,
   trackerController.swapDifferentColumn
 );

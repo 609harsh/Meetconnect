@@ -1,3 +1,5 @@
+import { UniqueIdentifier } from "@dnd-kit/core";
+
 export interface Interview {
   title: string;
   id: string;
@@ -104,23 +106,21 @@ export interface User {
 }
 
 export interface Column {
-  id?: string;
+  id: UniqueIdentifier;
+  idx: UniqueIdentifier;
   columnTitle: string;
-  idx?: number;
-  jobIdx?: string[];
   username?: string;
-  jobs?: Job[];
+  jobs?: Job;
 }
 
 export interface Job {
-  id: string;
+  id: UniqueIdentifier;
+  idx: UniqueIdentifier;
+  columnId: UniqueIdentifier;
   jobtitle: string;
   company: string;
-  about?: string;
-  link?: string;
-  list: string | number;
-  columnId?: string;
   note?: string;
+  link?: string;
 }
 
 export interface Tabs {

@@ -31,10 +31,9 @@ model TrackerColumn{
   id                String   @id @default(auto()) @map("_id") @db.ObjectId
   columnTitle       String
   idx               Int
-  jobIdx            String[] @default([])
   username          String
   jobs              TrackerJob[]
-  user              User @relation(fields: [username], references: [username])
+  user              User @relation(fields: [username], references: [username], onDelete:Cascade)
 }
 
 model TrackerJob{
@@ -42,6 +41,7 @@ model TrackerJob{
   jobtitle String
   company  String
   note     String?
+  idx      Int
   columnId   String?  @db.ObjectId
   column     TrackerColumn? @relation(fields: [columnId],references: [id], onDelete:Cascade)
   link     String?
@@ -95,7 +95,7 @@ model EasyQuestion{
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
   question        String
   solution        String
-  resource        Resources? @relation(fields: [resoucesId], references: [id])
+  resource        Resources? @relation(fields: [resoucesId], references: [id],onDelete:Cascade)
   resoucesId      String?  @db.ObjectId
 }
 
@@ -103,21 +103,21 @@ model MediumQuestion{
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   question      String
   solution      String
-  resource      Resources? @relation(fields: [resoucesId], references: [id])
+  resource      Resources? @relation(fields: [resoucesId], references: [id],onDelete:Cascade)
   resoucesId    String?  @db.ObjectId
 }
 model HardQuestion{
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   question      String
   solution      String
-  resource      Resources? @relation(fields: [resoucesId], references: [id])
+  resource      Resources? @relation(fields: [resoucesId], references: [id],onDelete:Cascade)
   resoucesId    String?  @db.ObjectId
 }
 
 model Interview{
   id            String @id @default(auto()) @map("_id") @db.ObjectId
   userId        String @db.ObjectId
-  user          User   @relation(fields: [userId], references: [id])
+  user          User   @relation(fields: [userId], references: [id],onDelete:Cascade)
   title         String
   type          String
   company       String

@@ -44,6 +44,8 @@ export const jobColumnSlice = createSlice({
       const overColumnIdx = state.findIndex(
         (col) => col.idx === action.payload.overColumnId
       );
+      state[activeColumnIdx].idx = action.payload.overColumnId;
+      state[overColumnIdx].idx = action.payload.activeColumnId;
       return arrayMove(state, activeColumnIdx, overColumnIdx);
     },
   },
