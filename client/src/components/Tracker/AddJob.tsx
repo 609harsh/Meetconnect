@@ -3,7 +3,6 @@ import Select from "react-select";
 // import AsyncSelect from "react-select/async";
 import CloseIcon from "../../icons/CloseIcon";
 import { JobRoles } from "../../data";
-import { UniqueIdentifier } from "@dnd-kit/core";
 import { useCreateNewJobMutation } from "../../redux/ApiSlice/trackerApi";
 import { Column, Job } from "../../types";
 import { toast } from "react-toastify";
