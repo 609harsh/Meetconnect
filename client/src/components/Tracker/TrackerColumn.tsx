@@ -1,36 +1,34 @@
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
-import { Column, Job } from "../../types";
-import TrackerCard from "./TrackerCard";
 import { CSS } from "@dnd-kit/utilities";
 import { useMemo, useState } from "react";
+
+import { UniqueIdentifier } from "@dnd-kit/core";
+
+import TrashIcon from "../../icons/TrashIcon";
 import PlusIcon from "../../icons/PlusIcon";
 import AddJob from "./AddJob";
-import { useAppDispatch } from "../../redux/hooks";
-import { deleteJobColumn, renameJobColumn } from "../../redux/jobColumnSlice";
-import { deleteJob } from "../../redux/jobsSlice";
-import TrashIcon from "../../icons/TrashIcon";
-import {
-  useDeleteTrackerColumnMutation,
-  usePatchTrackerColumnMutation,
-} from "../../redux/ApiSlice/trackerApi";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import KanbanTask from "./TrackerCard";
+import { Column, Job } from "../../types";
 
-const TrackerColumn = ({
+const KanbanColumn = ({
   column,
   jobsData,
+  renameColumn,
+  deleteColumn,
+  removeJob,
+  newJob,
 }: {
   column: Column;
   jobsData: Job[];
+  renameColumn: (id: UniqueIdentifier, value: string) => void;
+  deleteColumn: (id: UniqueIdentifier) => void;
+  removeJob: (id: UniqueIdentifier) => void;
+  newJob: (data: Job) => void;
 }) => {
-  const [removeColumn] = useDeleteTrackerColumnMutation();
-  const [renameColumn] = usePatchTrackerColumnMutation();
   const [editMode, setEditmode] = useState<boolean>(false);
   const [addJob, setAddJob] = useState<boolean>(false);
   const jobsId = useMemo(() => jobsData.map((job) => job.id), [jobsData]);
   const [title, setTitle] = useState<string>("");
-  const dispatch = useAppDispatch();
-  const navigation = useNavigate();
   const {
     setNodeRef,
     attributes,
@@ -39,7 +37,7 @@ const TrackerColumn = ({
     transition,
     isDragging,
   } = useSortable({
-    id: column.idx as number,
+    id: column.id,
     data: {
       type: "column",
       column,
@@ -51,46 +49,16 @@ const TrackerColumn = ({
     transition,
     transform: CSS.Transform.toString(transform),
   };
-  const deleteColumn = async (id: string) => {
-    jobsData.map((job) => {
-      dispatch(deleteJob(job.id));
-    });
-    dispatch(deleteJobColumn(id));
-    try {
-      await removeColumn({ columnId: id }).unwrap();
-    } catch (err: any) {
-      if (err.status === 401) {
-        navigation("/login");
-      }
-      toast.error(err.error);
-    }
-  };
-  const renameColumnTitle = async (id: string | undefined) => {
-    dispatch(
-      renameJobColumn({
-        id: column.id as string,
-        title: title,
-      })
-    );
-    try {
-      await renameColumn({
-        columnId: id as string,
-        title,
-      }).unwrap();
-      setEditmode(false);
-    } catch (err: any) {
-      if (err.status === 401) {
-        navigation("/login");
-      }
-      toast.error(err.error);
-    }
+  const renameColumnTitle = async (id: UniqueIdentifier) => {
+    renameColumn(id, title);
+    setEditmode(false);
   };
   if (isDragging) {
     return (
       <div
         ref={setNodeRef}
         style={style}
-        className="w-80 min-w-80 h-[500px] max-h-[500px] px-4 bg-[#f3f7f7] flex flex-col rounded-md ring-red-500 border-2 ring-2 opacity-40"
+        className="w-80 min-w-80 h-fit px-4 bg-[#f3f7f7] flex flex-col rounded-md ring-red-500 border-2 ring-2 opacity-40"
       ></div>
     );
   }
@@ -99,14 +67,14 @@ const TrackerColumn = ({
   };
   return (
     <>
-      {addJob && <AddJob closeJob={closeJob} />}
+      {addJob && <AddJob closeJob={closeJob} newJob={newJob} column={column} />}
       {
         <div
           ref={setNodeRef}
           style={style}
           {...attributes}
           {...listeners}
-          className="w-80 min-w-80 h-[500px] max-h-[500px] px-4 bg-[#f3f7f7] flex flex-col rounded-md"
+          className="w-80 min-w-80 h-fit px-4 bg-[#f3f7f7] flex flex-col rounded-md"
         >
           <div
             onClick={() => setEditmode(true)}
@@ -129,7 +97,7 @@ const TrackerColumn = ({
             </div>
             <button
               className=" text-red-500 hover:bg-gray-400 rounded px-1 py-2 cursor-pointer"
-              onClick={() => deleteColumn(column.id as string)}
+              onClick={() => deleteColumn(column.id)}
             >
               <TrashIcon />
             </button>
@@ -139,11 +107,13 @@ const TrackerColumn = ({
             className="flex flex-grow flex-col overflow-x-hidden overflow-y-auto gap-3 mb-2"
             style={{ scrollbarWidth: "none" }}
           >
-            {jobsData.map((job: Job) => (
-              <SortableContext items={jobsId}>
-                <TrackerCard data={job} key={job.id} />
-              </SortableContext>
-            ))}
+            {jobsData.map((job: Job) => {
+              return (
+                <SortableContext key={job.id} items={jobsId}>
+                  <KanbanTask data={job} removeJob={removeJob} />
+                </SortableContext>
+              );
+            })}
           </div>
 
           <button
@@ -159,4 +129,4 @@ const TrackerColumn = ({
   );
 };
 
-export default TrackerColumn;
+export default KanbanColumn;

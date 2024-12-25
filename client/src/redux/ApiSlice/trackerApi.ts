@@ -23,12 +23,12 @@ export const trackerApi = createApi({
     }),
     createTrackerColumn: builder.mutation<
       ApiResponse<Column>,
-      { idx: number; columnTitle: string }
+      { columnTitle: string }
     >({
-      query: ({ idx, columnTitle }) => ({
+      query: ({ columnTitle }) => ({
         url: `column`,
         method: "POST",
-        body: JSON.stringify({ idx, columnTitle }),
+        body: JSON.stringify({ columnTitle }),
         headers: {
           "content-type": "application/json",
         },
@@ -56,7 +56,7 @@ export const trackerApi = createApi({
         method: "DELETE",
       }),
     }),
-    createNewJob: builder.mutation<ApiResponse<Job>, { body: Job }>({
+    createNewJob: builder.mutation<ApiResponse<Job>, { body: Partial<Job> }>({
       query: ({ body }) => ({
         url: `job/${body.columnId}`,
         method: "POST",
@@ -66,23 +66,20 @@ export const trackerApi = createApi({
         },
       }),
     }),
-    deleteJob: builder.mutation<
-      ApiResponse<Job>,
-      { columnId: string; jobId: string }
-    >({
-      query: ({ columnId, jobId }) => ({
-        url: `job/${columnId}/${jobId}`,
+    deleteJob: builder.mutation<ApiResponse<Job>, { jobId: string }>({
+      query: ({ jobId }) => ({
+        url: `job/${jobId}`,
         method: "DELETE",
       }),
     }),
     swapColumn: builder.mutation<
       ApiResponse<any>,
-      { columnId1: string; columnId2: string; newIdx1: number; newIdx2: number }
+      { columnId1: string; columnId2: string }
     >({
-      query: ({ columnId1, columnId2, newIdx1, newIdx2 }) => ({
-        url: "swapcolumn",
+      query: ({ columnId1, columnId2 }) => ({
+        url: `swapcolumn/${columnId1}/${columnId2}`,
         method: "PATCH",
-        body: JSON.stringify({ columnId1, columnId2, newIdx1, newIdx2 }),
+        body: JSON.stringify({ columnId1, columnId2 }),
         headers: {
           "content-type": "application/json",
         },
@@ -91,15 +88,13 @@ export const trackerApi = createApi({
     swapSameColumn: builder.mutation<
       ApiResponse<any>,
       {
-        columnId: string;
         jobId1: string;
         jobId2: string;
       }
     >({
-      query: ({ columnId, jobId1, jobId2 }) => ({
-        url: `swapSamecolumn/${columnId}`,
+      query: ({ jobId1, jobId2 }) => ({
+        url: `swapSamecolumn/${jobId1}/${jobId2}`,
         method: "PATCH",
-        body: JSON.stringify({ columnId, jobId1, jobId2 }),
         headers: {
           "content-type": "application/json",
         },
@@ -107,12 +102,11 @@ export const trackerApi = createApi({
     }),
     swapDifferentColumn: builder.mutation<
       ApiResponse<any>,
-      { jobId: string; columnId1: string; columnId2: string }
+      { columnId: string; jobId: string }
     >({
-      query: ({ jobId, columnId1, columnId2 }) => ({
-        url: `swapDifferentcolumn/${jobId}`,
+      query: ({ columnId, jobId }) => ({
+        url: `swapDifferentcolumn/${columnId}/${jobId}`,
         method: "PATCH",
-        body: JSON.stringify({ columnId1, columnId2 }),
         headers: {
           "content-type": "application/json",
         },

@@ -85,7 +85,7 @@ class TrackerController {
     res: Response,
     next: NextFunction
   ) => {
-    const response = await deleteJob(req.params.columnId, req.params.jobId);
+    const response = await deleteJob(req.params.jobId);
     if (!response.success) {
       next(new CustomError(response.error as string, 400));
       return;
@@ -99,10 +99,8 @@ class TrackerController {
     next: NextFunction
   ) => {
     const response = await swapColumn(
-      req.body.columnId1,
-      req.body.columnId2,
-      req.body.newIdx1,
-      req.body.newIdx2
+      req.params.columnId1,
+      req.params.columnId2
     );
     if (!response.success) {
       next(new CustomError(response.error as string, 400));
@@ -116,11 +114,7 @@ class TrackerController {
     res: Response,
     next: NextFunction
   ) => {
-    const response = await swapSameColumn(
-      req.params.columnId,
-      req.body.jobId1,
-      req.body.jobId2
-    );
+    const response = await swapSameColumn(req.params.jobId1, req.params.jobId2);
     if (!response.success) {
       next(new CustomError(response.error as string, 400));
       return;
@@ -134,8 +128,7 @@ class TrackerController {
     next: NextFunction
   ) => {
     const response = await swapDifferentColumn(
-      req.body.columnId1,
-      req.body.columnId2,
+      req.params.columnId,
       req.params.jobId
     );
     if (!response.success) {

@@ -23,17 +23,18 @@ export const jobSlice = createSlice({
     swipeSamecolumnJob: (
       state,
       action: PayloadAction<{
-        activeId: string;
-        overId: string;
+        activeId: number;
+        overId: number;
       }>
     ) => {
       const activeIdx = state.findIndex(
-        (job) => job.id === action.payload.activeId
+        (job) => job.idx === action.payload.activeId
       );
       const overIdx = state.findIndex(
-        (job) => job.id === action.payload.overId
+        (job) => job.idx === action.payload.overId
       );
-      state[activeIdx].columnId = state[overIdx].columnId;
+      state[activeIdx].idx = action.payload.overId;
+      state[overIdx].idx = action.payload.activeId;
       state.splice(
         overIdx < 0 ? state.length + overIdx : overIdx,
         0,
@@ -44,15 +45,16 @@ export const jobSlice = createSlice({
     swipeDifferentColumnJob: (
       state,
       action: PayloadAction<{
-        activeId: string | number;
-        overId: string | number;
+        activeId: number;
+        overId: string;
       }>
     ) => {
       const activeIdx = state.findIndex(
-        (job) => job.id.toString() === action.payload.activeId.toString()
+        (job) => job.idx === action.payload.activeId
       );
+      //overId--column
+      state[activeIdx].columnId = action.payload.overId;
 
-      state[activeIdx].list = action.payload.overId.toString();
       // state[activeIdx].list = state[overIdx].list;
       // const newArray = state.slice();
       state.splice(

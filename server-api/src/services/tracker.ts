@@ -27,19 +27,12 @@ export const getTracker = async (username: string, id: string) => {
             jobs: true,
             id: true,
             columnTitle: true,
-            jobIdx: true,
             idx: true,
           },
         },
       },
     });
-    let sortedData = tracker?.trackerColumn.map((col) => {
-      col.jobs.sort(
-        (a, b) =>
-          (col.jobIdx || []).indexOf(a.id) - (col.jobIdx || []).indexOf(b.id)
-      );
-      return col;
-    });
+    let sortedData = tracker?.trackerColumn ?? [];
 
     return { success: true, data: sortedData };
   } catch (err) {
@@ -47,14 +40,19 @@ export const getTracker = async (username: string, id: string) => {
   }
 };
 
-export const createColumn = async (username: string, body: Column) => {
+export const createColumn = async (
+  username: string,
+  body: { columnTitle: string }
+) => {
   try {
+    if (!body.columnTitle) {
+      throw new Error("Valid Column title");
+    }
     const column = await prisma.trackerColumn.create({
       data: {
         columnTitle: body.columnTitle,
         username: username,
-        idx: Number(body.idx),
-        jobIdx: [],
+        idx: Number(new Date().getTime()),
       },
     });
     return { success: true, data: column };
@@ -68,7 +66,7 @@ export const patchColumnTitle = async (
   body: { title: string }
 ) => {
   try {
-    if (!body.title) throw new Error("Title does not exist");
+    if (!body.title) throw new Error("Valid Column Title");
     const column = await prisma.trackerColumn.update({
       where: {
         id: columnId,
@@ -85,7 +83,7 @@ export const patchColumnTitle = async (
 
 export const deleteColumn = async (columnId: string) => {
   try {
-    if (!columnId || columnId.trim() === "" || columnId === "undefined") {
+    if (!columnId || !columnId.trim() || columnId === "undefined") {
       throw new Error("Invalid ColumnId");
     }
     const column = await prisma.trackerColumn.delete({
@@ -101,30 +99,14 @@ export const deleteColumn = async (columnId: string) => {
 
 export const createJob = async (columnId: string, body: Job) => {
   try {
-    if (!columnId || columnId.trim() === "" || columnId === "undefined") {
+    if (!columnId || !columnId.trim() || columnId === "undefined") {
       throw new Error("Invalid ColumnId");
     }
     const job = await prisma.trackerJob.create({
       data: {
         ...body,
+        idx: Number(new Date().getTime()),
         columnId,
-      },
-    });
-    const jobIds = await prisma.trackerColumn.findFirst({
-      where: {
-        id: columnId,
-      },
-      select: {
-        jobIdx: true,
-      },
-    });
-    jobIds?.jobIdx.unshift(job.id + "");
-    const update = await prisma.trackerColumn.update({
-      where: {
-        id: columnId,
-      },
-      data: {
-        jobIdx: jobIds?.jobIdx,
       },
     });
     return { success: true, data: job };
@@ -132,33 +114,11 @@ export const createJob = async (columnId: string, body: Job) => {
     return { success: false, error: errorFunction(err) };
   }
 };
-export const deleteJob = async (columnId: string, jobId: string) => {
+export const deleteJob = async (jobId: string) => {
   try {
-    if (!columnId || columnId.trim() === "" || columnId === "undefined") {
-      throw new Error("Invalid ColumnId");
-    }
     if (!jobId || jobId.trim() === "" || jobId === "undefined") {
       throw new Error("Invalid JobId");
     }
-
-    const jobIds = await prisma.trackerColumn.findFirst({
-      where: {
-        id: columnId,
-      },
-      select: {
-        jobIdx: true,
-      },
-    });
-    const newJobIds = jobIds?.jobIdx.filter((id) => id !== jobId);
-    const update = await prisma.trackerColumn.update({
-      where: {
-        id: columnId,
-      },
-      data: {
-        jobIdx: newJobIds,
-      },
-    });
-
     const job = await prisma.trackerJob.delete({
       where: {
         id: jobId,
@@ -170,22 +130,36 @@ export const deleteJob = async (columnId: string, jobId: string) => {
   }
 };
 
-export const swapColumn = async (
-  columnId1: string,
-  columnId2: string,
-  newIdx1: string,
-  newIdx2: string
-) => {
+export const swapColumn = async (columnId1: string, columnId2: string) => {
   try {
-    if (!columnId1 || !columnId2 || !newIdx1 || !newIdx2) {
+    if (!columnId1 || !columnId2) {
       throw new Error("Invalid column details");
     }
+    //Fetch Indexes
+    const idx1 = await prisma.trackerColumn.findFirst({
+      where: {
+        id: columnId1,
+      },
+      select: {
+        idx: true,
+      },
+    });
+
+    const idx2 = await prisma.trackerColumn.findFirst({
+      where: {
+        id: columnId2,
+      },
+      select: {
+        idx: true,
+      },
+    });
+    //Swap Indexes
     const update1 = await prisma.trackerColumn.update({
       where: {
         id: columnId1,
       },
       data: {
-        idx: Number(newIdx1),
+        idx: Number(idx2?.idx),
       },
     });
     const update2 = await prisma.trackerColumn.update({
@@ -193,112 +167,67 @@ export const swapColumn = async (
         id: columnId2,
       },
       data: {
-        idx: Number(newIdx2),
+        idx: Number(idx1?.idx),
       },
     });
-    return { success: true, data: { update1, update2 } };
+    return { success: true, data: { ...update1, update2 } };
   } catch (err) {
     return { success: false, error: errorFunction(err) };
   }
 };
 
-export const swapSameColumn = async (
-  columnId: string,
-  jobId1: string,
-  jobId2: string
-) => {
+export const swapSameColumn = async (jobId1: string, jobId2: string) => {
   //0-based indexs
   //keep original indexes only
   try {
-    const update = await prisma.trackerColumn.findFirst({
+    const idx1 = await prisma.trackerJob.findFirst({
       where: {
-        id: columnId,
+        id: jobId1,
       },
       select: {
-        jobIdx: true,
+        idx: true,
       },
     });
-    const newJobs = update?.jobIdx as string[];
-    let jobIdx1 = newJobs.findIndex((job) => job === jobId1);
-    let jobIdx2 = newJobs.findIndex((job) => job === jobId2);
-    newJobs[Number(jobIdx1)] = jobId2;
-    newJobs[Number(jobIdx2)] = jobId1;
-    console.log("Same column");
 
-    console.log(newJobs);
-    const column = await prisma.trackerColumn.update({
+    const idx2 = await prisma.trackerJob.findFirst({
       where: {
-        id: columnId,
+        id: jobId2,
+      },
+      select: {
+        idx: true,
+      },
+    });
+    //Swap Indexes
+    const update1 = await prisma.trackerJob.update({
+      where: {
+        id: jobId1,
       },
       data: {
-        jobIdx: newJobs,
+        idx: Number(idx2?.idx),
       },
     });
-    return { success: true, data: column };
+    const update2 = await prisma.trackerJob.update({
+      where: {
+        id: jobId2,
+      },
+      data: {
+        idx: Number(idx1?.idx),
+      },
+    });
+    return { success: true, data: { ...update1, ...update2 } };
   } catch (err) {
     return { success: false, error: errorFunction(err) };
   }
 };
 
-export const swapDifferentColumn = async (
-  columnId1: string,
-  columnId2: string,
-  jobId: string
-) => {
-  //0-based indexes
-  //kep original indexes
+export const swapDifferentColumn = async (columnId: string, jobId: string) => {
   try {
-    // change refrence in job
-    //disconnect
-
     const job = await prisma.trackerJob.update({
       where: {
         id: jobId,
       },
       data: {
-        columnId: columnId2,
-      },
-    });
-    // console.log(job);
-
-    //remove from column1
-    //remove from jobIdx array
-    const col1 = await prisma.trackerColumn.findFirst({
-      where: {
-        id: columnId1,
-      },
-      select: {
-        jobIdx: true,
-      },
-    });
-    const updatedArray = col1?.jobIdx.filter((id) => id !== jobId);
-    const update = await prisma.trackerColumn.update({
-      where: {
-        id: columnId1,
-      },
-      data: {
-        jobIdx: updatedArray,
-      },
-    });
-
-    //add to column2
-    //add to jobIdx array
-    const col2 = await prisma.trackerColumn.findFirst({
-      where: {
-        id: columnId2,
-      },
-      select: {
-        jobIdx: true,
-      },
-    });
-    const updatedArray2 = col2?.jobIdx;
-    updatedArray2?.push(jobId);
-    const update2 = await prisma.trackerColumn.update({
-      where: {
-        id: columnId2,
-      },
-      data: {
-        jobIdx: updatedArray2,
+        columnId: columnId,
       },
     });
     return { success: true, data: job };

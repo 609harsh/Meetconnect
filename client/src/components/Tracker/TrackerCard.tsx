@@ -1,20 +1,21 @@
 import { useState } from "react";
-import CloseIcon from "../../icons/CloseIcon";
-import { Job } from "../../types";
-import { useAppDispatch } from "../../redux/hooks";
-import { deleteJob } from "../../redux/jobsSlice";
+
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useDeleteJobMutation } from "../../redux/ApiSlice/trackerApi";
+import { Link } from "react-router-dom";
+import { UniqueIdentifier } from "@dnd-kit/core";
 import LinkIcon from "../../icons/LinkIcon";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import CloseIcon from "../../icons/CloseIcon";
+import { Job } from "../../types";
 
-const TrackerCard = ({ data }: { data: Job }) => {
+const KanbanTask = ({
+  data,
+  removeJob,
+}: {
+  data: Job;
+  removeJob: (id: UniqueIdentifier) => void;
+}) => {
   const [mouseIsOver, setIsMouseOver] = useState(false);
-  const dispatch = useAppDispatch();
-  const [deleteJobCard] = useDeleteJobMutation();
-  const navigation = useNavigate();
   const {
     setNodeRef,
     attributes,
@@ -44,25 +45,6 @@ const TrackerCard = ({ data }: { data: Job }) => {
       ></div>
     );
   }
-
-  const removejob = async (
-    id: string | undefined,
-    colId: string | undefined
-  ) => {
-    dispatch(deleteJob(id as string));
-    try {
-      await deleteJobCard({
-        columnId: colId as string,
-        jobId: id as string,
-      }).unwrap();
-    } catch (err: any) {
-      if (err.status === 401) {
-        navigation("/login");
-        return;
-      }
-      toast.error(err.error);
-    }
-  };
   return (
     <div
       ref={setNodeRef}
@@ -103,7 +85,7 @@ const TrackerCard = ({ data }: { data: Job }) => {
       {mouseIsOver && (
         <div
           className="self-start cursor-pointer"
-          onClick={() => removejob(data.id, data.columnId)}
+          onClick={() => removeJob(data.id)}
         >
           <CloseIcon />
         </div>
@@ -112,4 +94,4 @@ const TrackerCard = ({ data }: { data: Job }) => {
   );
 };
 
-export default TrackerCard;
+export default KanbanTask;
