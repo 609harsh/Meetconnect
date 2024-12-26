@@ -18,7 +18,9 @@ const resources = () => {
       <Navbar />
       <div className="max-w-5xl mx-auto">
         {isFetching ? (
-          <Loader />
+          <div className="min-h-[70vh] flex items-center">
+            <Loader />
+          </div>
         ) : (
           data?.map((ele, idx) => {
             return (
@@ -38,7 +40,7 @@ const resources = () => {
                       {ele.easy.map((list) => (
                         <div key={idx + "" + list.id}>
                           <SwiperSlide
-                            className="p-5 space-y-4 leading-6"
+                            className="swiper-slide-easy p-5 space-y-4 leading-6"
                             style={{
                               height: "320px",
                               overflow: "scroll",
@@ -66,7 +68,7 @@ const resources = () => {
                       {ele.medium.map((list) => (
                         <div key={idx + "" + list.id}>
                           <SwiperSlide
-                            className="p-5 space-y-4 leading-6"
+                            className="swiper-slide-medium p-5 space-y-4 leading-6"
                             style={{
                               height: "320px",
                               overflow: "scroll",
@@ -93,7 +95,7 @@ const resources = () => {
                       {ele.hard.map((list, idx) => (
                         <div key={idx + "" + list.id}>
                           <SwiperSlide
-                            className="p-5 space-y-4 leading-6"
+                            className="swiper-slide-hard p-5 space-y-4 leading-6"
                             style={{
                               height: "320px",
                               overflow: "scroll",

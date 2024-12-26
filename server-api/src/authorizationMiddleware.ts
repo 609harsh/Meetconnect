@@ -46,7 +46,6 @@ export const authorization = async (
     next();
   } catch (error) {
     const err = error as JWTError;
-    console.log(err.message);
     next(new CustomError(err.message + "", 401));
     return;
   }

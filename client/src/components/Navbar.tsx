@@ -31,8 +31,14 @@ const Navbar = () => {
         <div className="container flex flex-wrap items-center justify-between mx-auto text-slate-800">
           <Link
             to="/"
-            className="mr-4 block cursor-pointer py-1.5 text-xl text-slate-800 font-semibold"
+            className="mr-4 inline-flex items-center cursor-pointer py-1.5 text-xl text-slate-800 font-semibold gap-2"
           >
+            <picture>
+              <img
+                src="/Jobsy (1).svg"
+                className="h-10 w-10 object-fill scale-125"
+              />
+            </picture>
             JOBSY
           </Link>
           <div className="hidden md:block">

@@ -66,7 +66,6 @@ const Login = () => {
       localStorage.setItem("token", token);
       navigation("/dashboard");
     } catch (err: any) {
-      console.log(err);
       toast.error(err.error);
     }
   };

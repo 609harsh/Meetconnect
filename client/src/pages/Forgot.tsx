@@ -19,7 +19,7 @@ const Forgot = () => {
 
   const savePassword = () => {
     //make api call to save password
-    console.log(password);
+    // console.log(password);
   };
 
   return (

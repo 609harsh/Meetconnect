@@ -71,7 +71,11 @@ const KanbanTask = ({
           {data.note}
           {data.link && data.link.length > 0 ? (
             <Link
-              to={data.link}
+              to={
+                data.link.startsWith("https")
+                  ? data.link
+                  : "https://" + data.link
+              }
               target="_blank"
               className="text-blue-600 hover:cursor-pointer"
             >

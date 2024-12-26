@@ -2,8 +2,6 @@ import { Prisma, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 export const getInterviews = async (userId: string) => {
-  console.log(userId);
-
   try {
     const interviews = await prisma.interview.findMany({
       where: {

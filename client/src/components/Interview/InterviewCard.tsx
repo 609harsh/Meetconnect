@@ -4,7 +4,7 @@ import { useAppDispatch } from "../../redux/hooks";
 import { deleteInterview } from "../../redux/interviewsSlice";
 import { useDeleteInterviewsMutation } from "../../redux/ApiSlice/meetApi";
 import { Interview } from "../../types";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const InterviewCard = ({ data }: { data: Interview }) => {
   const [removeInterview, { error }] = useDeleteInterviewsMutation();
@@ -43,12 +43,16 @@ const InterviewCard = ({ data }: { data: Interview }) => {
         </p>
         <p className="text-slate-600 leading-normal font-light">{data.guest}</p>
       </div>
-      <div className=" h-full text-sm font-medium mx-3 border-t border-slate-200 pb-3 pt-2 px-1 flex justify-center items-center gap-1 text-slate-600 hover:text-blue-700/90 hover:cursor-pointer">
+      <Link
+        to={data.link.startsWith("https") ? data.link : "https://" + data.link}
+        target="_blank"
+        className=" h-full text-sm font-medium mx-3 border-t border-slate-200 pb-3 pt-2 px-1 flex justify-center items-center gap-1 text-slate-600 hover:text-blue-700/90 hover:cursor-pointer"
+      >
         <span>Meet Link</span>
         <span>
           <LinkIcon />
         </span>
-      </div>
+      </Link>
     </div>
   );
 };

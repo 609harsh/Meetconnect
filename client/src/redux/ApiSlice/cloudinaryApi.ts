@@ -19,7 +19,6 @@ export const cloudinaryApi = createApi({
         body: formData,
       }),
       transformResponse: (response: any) => {
-        console.log(response);
         return {
           success: response?.url ? true : false,
           data: response?.secure_url,
