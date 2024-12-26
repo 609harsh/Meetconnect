@@ -11,10 +11,11 @@ const InterviewCard = ({ data }: { data: Interview }) => {
   const navigation = useNavigate();
   const dispatch = useAppDispatch();
   const handleDelete = async (id: string) => {
-    await removeInterview(id).unwrap();
     dispatch(deleteInterview(id));
+    await removeInterview(id).unwrap();
     if (error) {
       navigation("/login");
+      return;
     }
   };
   return (

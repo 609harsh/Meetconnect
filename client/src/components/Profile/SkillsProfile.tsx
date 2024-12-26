@@ -63,9 +63,9 @@ const SkillsProfile = ({
   const addSkill = async (label: string, value: string) => {
     try {
       const newSkills = [...skills, { label, value }];
-      await patchSkills({ body: newSkills }).unwrap();
       setSkills(newSkills);
       setSkillsList([]);
+      patchSkills({ body: newSkills }).unwrap();
     } catch (err: any) {
       if (err.status === 401) {
         navigation("/login");
@@ -77,8 +77,8 @@ const SkillsProfile = ({
   const removeKey = async (label: string) => {
     try {
       const newSkills = skills.filter((skill) => skill.label !== label);
-      await patchSkills({ body: newSkills }).unwrap();
       setSkills(newSkills);
+      await patchSkills({ body: newSkills }).unwrap();
     } catch (err: any) {
       if (err.status === 401) {
         navigation("/login");
@@ -122,7 +122,7 @@ const SkillsProfile = ({
                   onChange={(e) => searchSkill(e.target.value)}
                 />
               </div>
-              {skillList.length > 0 && (
+              {
                 <div className="max-h-40 overflow-auto">
                   <ul>
                     {skillList.map((skill, idx) => (
@@ -136,7 +136,7 @@ const SkillsProfile = ({
                     ))}
                   </ul>
                 </div>
-              )}
+              }
             </div>
           </form>
         )}

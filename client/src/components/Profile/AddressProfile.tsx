@@ -46,6 +46,7 @@ const AddressProfile = ({
     //make api call
     add[activeAddress as keyof Address] = activeAddressData;
     try {
+      setAddress({ ...add });
       await updateAddressDetails({
         body: { ...add },
       }).unwrap();

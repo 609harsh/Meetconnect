@@ -72,11 +72,11 @@ const KanbanColumn = ({
         <div
           ref={setNodeRef}
           style={style}
-          {...attributes}
-          {...listeners}
           className="w-80 min-w-80 h-fit px-4 bg-[#f3f7f7] flex flex-col rounded-md"
         >
           <div
+            {...attributes}
+            {...listeners}
             onClick={() => setEditmode(true)}
             className="h-16 cursor-grab rounded-md rounded-b-none text-lg p-3 font-bold  flex items-center justify-between"
           >

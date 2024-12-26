@@ -25,9 +25,10 @@ export default function Profile() {
   const [preview, setPreview] = useState<string>("");
   const [disable, setDisable] = useState<boolean>(true);
   const { username } = useParams<{ username: string }>();
-  const { data: profileData, error } = useFetchProfileQuery({
+  const { data, error } = useFetchProfileQuery({
     username: username as string,
   });
+  const [profileData, setProfileData] = useState<User>();
   const [patchProfile] = useUpdateProfileMutation();
   // const [profileData, setProfileData] = useState<User>();
   const navigation = useNavigate();
@@ -49,7 +50,10 @@ export default function Profile() {
       toast.error("No User Exists");
       navigation("/dashboard");
     }
-  }, [error]);
+    if (data) {
+      setProfileData(data.data);
+    }
+  }, [error, data]);
   useEffect(() => {
     checkUpdateFeature();
   }, []);
@@ -96,6 +100,8 @@ export default function Profile() {
   };
   const updateProfile = async (body: User) => {
     try {
+      const newProfile = { ...profileData, ...body };
+      setProfileData(newProfile);
       await patchProfile({
         body,
       }).unwrap();
@@ -128,9 +134,7 @@ export default function Profile() {
             />
             <img
               src={
-                preview
-                  ? preview
-                  : profileData?.data.profileImg ?? "/profile.jpg"
+                preview ? preview : profileData?.profileImg ?? "/profile.jpg"
               }
               className="z-10 h-28 w-28 bg-cover"
               onClick={() => setImage()}
@@ -140,18 +144,18 @@ export default function Profile() {
         <div className="mt-6 border-t border-gray-100">
           <dl className="divide-y divide-gray-100">
             <NameProfile
-              data={profileData?.data?.name}
+              data={profileData?.name}
               updateProfile={updateProfile}
               disable={disable}
             />
-            <EmailProfile data={profileData?.data?.email} />
+            <EmailProfile data={profileData?.email} />
             <PhoneNumberProfile
-              data={profileData?.data?.phoneNumber}
+              data={profileData?.phoneNumber}
               updateProfile={updateProfile}
               disable={disable}
             />
             <AboutProfile
-              data={profileData?.data?.about}
+              data={profileData?.about}
               updateProfile={updateProfile}
               disable={disable}
             />
