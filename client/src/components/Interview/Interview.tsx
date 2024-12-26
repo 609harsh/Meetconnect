@@ -46,7 +46,7 @@ const InterviewSection = () => {
     if (error && "status" in error && error.status === 401) {
       toast.error("Unauthorized");
       navigation("/login");
-    } else if (interviews && interviews.length > 0) {
+    } else if (interviews) {
       dispatch(addAllInterviews(interviews));
     }
   }, [interviews, dispatch, isError]);
@@ -77,9 +77,8 @@ const InterviewSection = () => {
         setInterviewData(allInterviews);
       }
     };
-    if (allInterviews.length > 0) {
-      classifyInterviews(currId);
-    }
+
+    classifyInterviews(currId);
   }, [currId, allInterviews]);
   return (
     <>

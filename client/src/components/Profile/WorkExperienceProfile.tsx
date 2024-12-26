@@ -48,10 +48,9 @@ const WorkExperienceProfile = ({
   };
 
   const removeWorkExp = async (id: string | undefined) => {
-    const newEducations = experience.filter((exp) => exp.id !== id);
-
-    setExperience(newEducations);
     try {
+      const newEducations = experience.filter((exp) => exp.id !== id);
+      setExperience(newEducations);
       await deleteExperience({ id: id + "" }).unwrap();
     } catch (err: any) {
       if (err.status === 401) {
