@@ -48,10 +48,6 @@ export const publicApi = createApi({
           "content-type": "application/json",
         },
       }),
-      // transformResponse: (response) => {
-      //   console.log(response);
-      //   return response;
-      // },
     }),
     fetchAddressProfile: builder.mutation<
       ApiResponse<Address>,

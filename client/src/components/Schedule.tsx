@@ -18,7 +18,7 @@ const Schedule = () => {
     for (let element of e?.target.elements) {
       if (element.name) formData[element.name] = element.value;
     }
-    // console.log(formData);
+
     if (formData.title.length < 2) {
       toast.error("Enter Valid Job Title");
       return;
@@ -32,18 +32,15 @@ const Schedule = () => {
       return;
     }
     formData.date = formData.date.replace("T", " ");
-    // console.log(formData);
     try {
       const interview = await toast.promise(saveInterview(formData).unwrap(), {
         pending: "Creating Interview",
         success: "Interview Created",
       });
       if (interview.success) {
-        console.log("New Interview", interview.data);
         dispatch(addInterview(interview.data));
         dispatch(changeMenuTo(false));
       }
-      // console.log(interview);
     } catch (err: FetchBaseQueryError | SerializedError | any) {
       if (err.status === 401) {
         navigation("/login");

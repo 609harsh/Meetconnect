@@ -25,6 +25,10 @@ model User{
   profileImg  String?
   interview   Interview[]
   trackerColumn TrackerColumn[]
+  skill       UserSkills?
+  workExperience UserWorkExperience[]
+  address     UserAddress?
+  education   UserEducation[]
 }
 
 model TrackerColumn{
@@ -50,6 +54,7 @@ model TrackerJob{
 model UserAddress{
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   username    String   @unique
+  user          User?    @relation(fields: [username],references: [username])
   line1       String? 
   line2       String?
   state       String?
@@ -60,7 +65,8 @@ model UserAddress{
 
 model UserEducation{
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  username      String
+  username      String   @unique
+  user          User?    @relation(fields: [username],references: [username])
   school        String?
   degree        String?
   fieldOfStudy  String?
@@ -71,6 +77,7 @@ model UserEducation{
 model UserWorkExperience{
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   username      String
+  user          User?    @relation(fields: [username],references: [username])
   title         String?
   company       String?
   duration      String?
@@ -80,6 +87,7 @@ model UserWorkExperience{
 model UserSkills{
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   username      String  @unique
+  user          User?    @relation(fields: [username],references: [username])
   skills        Skills[]
 }
 model Resources {

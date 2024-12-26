@@ -30,6 +30,7 @@ import {
 import { Column, Job } from "../../types";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import Loader from "../Loader";
 
 const Tracker = () => {
   const [columns, setColumns] = useState<Column[]>([]);
@@ -44,7 +45,7 @@ const Tracker = () => {
   const [swapColumn] = useSwapColumnMutation();
   const [swapJobs] = useSwapSameColumnMutation();
   const [moveJob] = useSwapDifferentColumnMutation();
-  const { data: fetchColumn, error } = useGetTrackerDetailsQuery();
+  const { data: fetchColumn, error, isFetching } = useGetTrackerDetailsQuery();
   const navigation = useNavigate();
 
   useEffect(() => {
@@ -87,7 +88,7 @@ const Tracker = () => {
       columnTitle: `Column ${columns.length + 1}`,
     }).unwrap();
     if (response.success) {
-      setColumns((prevColumns) => [response.data, ...prevColumns]);
+      setColumns((prevColumns) => [...prevColumns, response.data]);
     }
   };
 
@@ -106,7 +107,7 @@ const Tracker = () => {
     removeCol({ columnId: id as string }).unwrap();
   }
   const newJob = async (data: Job) => {
-    setJobs([...jobs, data]);
+    setJobs([data, ...jobs]);
   };
   function removejob(id: UniqueIdentifier) {
     setJobs(jobs.filter((job) => job.id !== id));
@@ -219,14 +220,21 @@ const Tracker = () => {
       <Navbar />
       <div
         style={{ backgroundImage: "url(kanban4.jpg)" }}
-        className="bg-cover min-h-screen"
+        className="bg-cover h-[calc(100vh-40px)]"
       >
         <div className="max-w-7xl mx-auto px-5">
           <div className="flex flex-row justify-between items-center border-b-2 py-5 font-bold ">
             <h1 className="text-xl md:text-4xl ">Job Board</h1>
           </div>
-          {
-            <div className="m-auto flex h-screen w-full overflow-x-auto items-center overflow-y-hidden px-10 py-2">
+          {isFetching ? (
+            <div className="min-h-[50vh] flex items-center">
+              <Loader />
+            </div>
+          ) : (
+            <div
+              className="mt-10 flex w-full overflow-x-auto items-center overflow-y-hidden px-10 py-2 "
+              // style={{ scrollbarWidth: "thin" }}
+            >
               <DndContext
                 sensors={sensors}
                 onDragStart={onDragStart}
@@ -282,7 +290,7 @@ const Tracker = () => {
                 )}
               </DndContext>
             </div>
-          }
+          )}
         </div>
       </div>
     </>
