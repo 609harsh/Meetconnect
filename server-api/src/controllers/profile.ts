@@ -78,7 +78,7 @@ class Profile {
       next(new CustomError("UserName Does not exist", 400));
       return;
     }
-    const response = await getAddress(req.params.sername);
+    const response = await getAddress(req.params.username);
     if (!response.success) {
       next(new CustomError(response.error as string, 400));
       return;

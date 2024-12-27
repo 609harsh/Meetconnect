@@ -65,6 +65,9 @@ export const patchProfile = async (username: string, data: UserUpdate) => {
 
 export const getAddress = async (username: string) => {
   try {
+    if (!username) {
+      throw new Error("Invalid Username");
+    }
     const address = await prisma.userAddress.findFirst({
       where: {
         username,

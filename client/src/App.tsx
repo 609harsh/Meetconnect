@@ -103,7 +103,12 @@ function App() {
           </SwiperSlide>
           <SwiperSlide className="bg-center bg-cover w-full md:w-4/6 lg:w-3/6">
             <div className="flex flex-col flex-grow bg-white items-center text-black">
-              <img src={"/publicprofile.webp"} loading="lazy" />
+              <img
+                src={
+                  "https://res.cloudinary.com/dpklosu5v/image/upload/v1735282728/omng8n92l4ogiy2kji0h.png"
+                }
+                loading="lazy"
+              />
               <p className="py-5 text-xl font-semibold">Public Profile</p>
               <p className="py-1 px-2 text-base font-mono text-center font-light">
                 "Turn your resume into a sharable digital profile in seconds!"
