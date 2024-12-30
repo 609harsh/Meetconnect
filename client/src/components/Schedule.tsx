@@ -49,6 +49,7 @@ const Schedule = () => {
         dispatch(changeMenuTo(false));
       }
     } catch (err: FetchBaseQueryError | SerializedError | any) {
+      setIsButtonDisabled(false); // Enable the button after Failure
       if (err.status === 401) {
         navigation("/login");
         return;
