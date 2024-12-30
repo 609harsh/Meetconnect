@@ -45,6 +45,7 @@ const Schedule = () => {
       });
       if (interview.success) {
         dispatch(addInterview(interview.data));
+        setIsButtonDisabled(false); // Enable the button after Success
         dispatch(changeMenuTo(false));
       }
     } catch (err: FetchBaseQueryError | SerializedError | any) {
