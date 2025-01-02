@@ -7,16 +7,13 @@ import CloseIcon from "../icons/CloseIcon";
 import { useNavigate } from "react-router-dom";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { SerializedError } from "@reduxjs/toolkit";
-import React, { useState } from 'react';
 
 const Schedule = () => {
   const dispatch = useAppDispatch();
   const [saveInterview] = useCreateInterviewsMutation();
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const navigation = useNavigate();
   const changes = async (e: any) => {
     e.preventDefault();
-    setIsButtonDisabled(true); // Disable the button after clicking
     const formData: any = {};
     for (let element of e?.target.elements) {
       if (element.name) formData[element.name] = element.value;
@@ -24,17 +21,14 @@ const Schedule = () => {
 
     if (formData.title.length < 2) {
       toast.error("Enter Valid Job Title");
-      setIsButtonDisabled(false); // Enable the button if Error Occured
       return;
     }
     if (formData.company.length <= 2) {
       toast.error("Enter Valid Company Title");
-      setIsButtonDisabled(false); // Enable the button if Error Occured
       return;
     }
     if (formData.date <= 2) {
       toast.error("Enter Date");
-      setIsButtonDisabled(false); // Enable the button if Error Occured
       return;
     }
     formData.date = formData.date.replace("T", " ");
@@ -45,11 +39,9 @@ const Schedule = () => {
       });
       if (interview.success) {
         dispatch(addInterview(interview.data));
-        setIsButtonDisabled(false); // Enable the button after Success
         dispatch(changeMenuTo(false));
       }
     } catch (err: FetchBaseQueryError | SerializedError | any) {
-      setIsButtonDisabled(false); // Enable the button after Failure
       if (err.status === 401) {
         navigation("/login");
         return;
@@ -234,7 +226,6 @@ const Schedule = () => {
             <button
               type="submit"
               // onSubmit={(e) => changes(e)}
-              disabled={isButtonDisabled}
               className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Save
