@@ -12,7 +12,6 @@ const Login = () => {
   const [password, setPassword] = useState<string>("");
   const navigation = useNavigate();
   const [userLogin] = useUserLoginMutation();
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const submitForm = async () => {
     if (!email || !password) {
@@ -21,11 +20,11 @@ const Login = () => {
     }
     if (
       !email
-      .trim()
-      .toLowerCase()
-      .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      )
+        .trim()
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        )
     ) {
       toast.error("Please enter valid email");
       return;
@@ -51,7 +50,6 @@ const Login = () => {
       return;
     }
     //Write api call
-    setIsButtonDisabled(true); // Disable the button after vecrifying the credentials
     try {
       const token = await toast.promise(
         userLogin({ email, password }).unwrap(),
@@ -68,7 +66,6 @@ const Login = () => {
       localStorage.setItem("token", token);
       navigation("/dashboard");
     } catch (err: any) {
-      setIsButtonDisabled(false); // Enable the button if Error Occured
       toast.error(err.error);
     }
   };
@@ -171,7 +168,6 @@ const Login = () => {
             <div className="mt-6">
               <button
                 type="submit"
-                disabled={isButtonDisabled}
                 onClick={() => submitForm()}
                 className="w-full px-6 py-3 text-xs font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50"
               >
