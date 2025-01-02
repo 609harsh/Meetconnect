@@ -7,7 +7,7 @@ import CloseIcon from "../icons/CloseIcon";
 import { useNavigate } from "react-router-dom";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { SerializedError } from "@reduxjs/toolkit";
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const Schedule = () => {
   const dispatch = useAppDispatch();
