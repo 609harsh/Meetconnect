@@ -6,6 +6,7 @@ import { JobRoles } from "../../data";
 import { useCreateNewJobMutation } from "../../redux/ApiSlice/trackerApi";
 import { Column, Job } from "../../types";
 import { toast } from "react-toastify";
+import { useState } from "react";
 
 // const filterColors = (inputValue: string) => {
 //   return jobOptions.filter((i) =>
@@ -30,6 +31,7 @@ const AddJob = ({
   column: Column;
 }) => {
   const [addJob] = useCreateNewJobMutation();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const addNewJob = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData: Partial<Job> = {};
@@ -55,8 +57,12 @@ const AddJob = ({
       toast.error("Select List");
       return;
     }
+    setIsButtonDisabled(true); // Disable the button after clicking the save button
     const response = await addJob({ body: formData }).unwrap();
-    if (response.success) newJob(response.data as Job);
+    if (response.success) {
+      newJob(response.data as Job);
+      setIsButtonDisabled(false); // Enable the button after the job is added
+    } 
     closeJob();
     // newJob(formData as Job);
 
