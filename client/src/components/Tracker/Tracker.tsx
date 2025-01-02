@@ -47,6 +47,7 @@ const Tracker = () => {
   const [moveJob] = useSwapDifferentColumnMutation();
   const { data: fetchColumn, error, isFetching } = useGetTrackerDetailsQuery();
   const navigation = useNavigate();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   useEffect(() => {
     if (fetchColumn && fetchColumn.success) {
@@ -84,11 +85,13 @@ const Tracker = () => {
     }
   }, [fetchColumn]);
   const createNewColumn = async () => {
+    setIsButtonDisabled(true); // Disable the button after clicking
     const response = await newColumn({
       columnTitle: `Column ${columns.length + 1}`,
     }).unwrap();
     if (response.success) {
       setColumns((prevColumns) => [...prevColumns, response.data]);
+      setIsButtonDisabled(false); // Enable the button after creating column
     }
   };
 
@@ -262,6 +265,7 @@ const Tracker = () => {
                   <button
                     className="cursor-pointer rounded-lg w-80 min-w-80 h-16 border-2 p-4 ring-rose-500 hover:ring-2 bg-gray-100 flex gap-2 "
                     onClick={() => createNewColumn()}
+                    disabled={isButtonDisabled}
                   >
                     <PlusIcon />
                     Add New Column
