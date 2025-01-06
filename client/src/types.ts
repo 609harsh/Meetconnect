@@ -121,6 +121,7 @@ export interface Job {
   company: string;
   note?: string;
   link?: string;
+  logo_url?: string;
 }
 
 export interface Tabs {
@@ -158,4 +159,18 @@ export interface ApiSkillResponse {
     id: string;
     username: string;
   };
+}
+
+export interface CompanyOptions {
+  name: string;
+  domain: string;
+  logo_url: string;
+}
+
+export interface CompanyData {
+  value: string;
+  label: string;
+  color: string;
+  isFixed: boolean;
+  logo_url: string;
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -16,6 +16,23 @@ const KanbanTask = ({
   removeJob: (id: UniqueIdentifier) => void;
 }) => {
   const [mouseIsOver, setIsMouseOver] = useState(false);
+  const [url, setUrl] = useState("");
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    const getLogoURL = async () => {
+      const res = await fetch(`https://api.logo.dev/search?q=${data.company}`, {
+        headers: {
+          Authorization: `Bearer: ${import.meta.env.VITE_LOGO}`,
+        },
+      });
+      const result = await res.json();
+      setUrl(result[0].logo_url);
+      setName(result[0].name);
+    };
+    getLogoURL();
+  }, []);
+
   const {
     setNodeRef,
     attributes,
@@ -36,6 +53,7 @@ const KanbanTask = ({
     transition,
     transform: CSS.Transform.toString(transform),
   };
+
   if (isDragging) {
     return (
       <div
@@ -45,6 +63,7 @@ const KanbanTask = ({
       ></div>
     );
   }
+
   return (
     <div
       ref={setNodeRef}
@@ -55,16 +74,11 @@ const KanbanTask = ({
       onMouseEnter={() => setIsMouseOver(true)}
       onMouseLeave={() => setIsMouseOver(false)}
     >
-      {/* <figure>
-        <img
-          src={
-            "https://upload.wikimedia.org/wikipedia/sco/2/21/Nvidia_logo.svg"
-          }
-          width={"60px"}
-        />
-      </figure> */}
+      <figure>
+        <img src={url} width={"60px"} />
+      </figure>
       <div className="flex-grow">
-        <h2 className="text-lg font-bold mb-2">{data.company}</h2>
+        <h2 className="text-lg font-bold mb-2">{name}</h2>
         <h3 className="text-base font-light">{data.jobtitle}</h3>
         <p className="text-sm flex flex-row items-center gap-2">
           {data.note && data.note.length > 0 ? "Applied On: " : ""}
