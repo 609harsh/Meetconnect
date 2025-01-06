@@ -1,25 +1,51 @@
-// import { useState } from "react";
-import Select from "react-select";
-// import AsyncSelect from "react-select/async";
+import Select, { StylesConfig } from "react-select";
 import CloseIcon from "../../icons/CloseIcon";
 import { JobRoles } from "../../data";
 import { useCreateNewJobMutation } from "../../redux/ApiSlice/trackerApi";
-import { Column, Job } from "../../types";
+import { Column, CompanyData, CompanyOptions, Job } from "../../types";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import AsyncSelect from "react-select/async";
 
-// const filterColors = (inputValue: string) => {
-//   return jobOptions.filter((i) =>
-//     i.label.toLowerCase().includes(inputValue.toLowerCase())
-//   );
-// };
+const promiseOptions = async (inputValue: string): Promise<CompanyData[]> => {
+  const result = await fetch(`https://api.logo.dev/search?q=${inputValue}`, {
+    headers: {
+      Authorization: `Bearer: ${import.meta.env.VITE_LOGO}`,
+    },
+  });
+  const data = await result.json();
+  return data.map((comp: CompanyOptions) => {
+    return {
+      value: comp.domain,
+      label: comp.name,
+      logo_url: comp.logo_url,
+      color: "#00B8D9",
+      isFixed: true,
+    };
+  });
+};
 
-// const promiseOptions = (inputValue: string) =>
-//   new Promise<JobOption[]>((resolve) => {
-//     setTimeout(() => {
-//       resolve(filterColors(inputValue));
-//     }, 1000);
-//   });
+const imagesStyles: StylesConfig<CompanyData> = {
+  option: (styles, { data }) => ({
+    ...styles,
+    "::before": {
+      content: '""',
+      background: `url(${data.logo_url})`,
+      height: "32px",
+      width: "32px",
+      backgroundSize: "cover",
+    },
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: "10px",
+  }),
+};
+// new Promise<ColourOption[]>((resolve) => {
+//   setTimeout(() => {
+//     resolve(filterColors(inputValue));
+//   }, 1000);
+// });
 
 const AddJob = ({
   closeJob,
@@ -36,7 +62,6 @@ const AddJob = ({
     e.preventDefault();
     const formData: Partial<Job> = {};
     const form = e.target as HTMLFormElement;
-
     for (let element of form.elements) {
       const input = element as
         | HTMLInputElement
@@ -62,7 +87,7 @@ const AddJob = ({
     if (response.success) {
       newJob(response.data as Job);
       setIsButtonDisabled(false); // Enable the button after the job is added
-    } 
+    }
     closeJob();
     // newJob(formData as Job);
 
@@ -90,15 +115,14 @@ const AddJob = ({
                       Company
                     </label>
                     <div className="mt-2">
-                      <div className="flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                        <div className="shrink-0 select-none text-base text-gray-500 sm:text-sm/6"></div>
-                        <input
-                          name="company"
-                          type="text"
-                          placeholder="Amazon"
-                          className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                        />
-                      </div>
+                      <AsyncSelect
+                        className="basic-single"
+                        isClearable={true}
+                        isSearchable={true}
+                        name="company"
+                        loadOptions={promiseOptions}
+                        styles={imagesStyles}
+                      />
                     </div>
                   </div>
 
