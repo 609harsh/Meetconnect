@@ -7,7 +7,7 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "{src,apps,libs,test}/**/*.ts": [
+    "/*/{src,apps,libs,test}/**/*.ts": [
       "prettier --write --ignore-unknown",
       "eslint --fix"
     ]
