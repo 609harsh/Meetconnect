@@ -111,6 +111,16 @@ TOKEN_VALIDITY=
 DOCUMENTATION_URL=
 ```
 
+#### Run npm install
+```
+npm install
+
+cd .\Meetconnect\client\
+npm install
+
+cd .\Meetconnect\server-api\
+npm install
+```
 #### Go to client folder
 
 ```
